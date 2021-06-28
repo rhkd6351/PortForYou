@@ -30,7 +30,7 @@ public class UserService {
 
         AuthorityVO authorityVO =   AuthorityVO.builder()
                 .authorityName("ROLE_USER")
-                .build();
+                .build();;
 
         UserVO userVO = UserVO.builder()
                 .username(userDto.getUsername())
