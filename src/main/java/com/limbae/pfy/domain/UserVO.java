@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -30,6 +31,8 @@ public class UserVO {
 
     String site;
 
+    String name;
+
     @Column(name = "reg_date")
     @CreationTimestamp
     Date regDate;
@@ -47,6 +50,10 @@ public class UserVO {
             joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<AuthorityVO> authorities;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_uid")
+    private List<PortfolioVO> portfolio;
 
 
 }

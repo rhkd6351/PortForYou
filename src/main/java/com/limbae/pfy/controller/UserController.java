@@ -1,8 +1,10 @@
 package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.dto.UserDto;
 import com.limbae.pfy.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserVO> signup(
-            @Valid @RequestBody UserDto userDto
-    ) {
-        return ResponseEntity.ok(userService.signup(userDto));
+    public ResponseEntity<ResponseObjectDTO> signup(
+            @Valid @RequestBody UserDto userDto) {
+        try{
+            UserVO signup = userService.signup(userDto);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>(new ResponseObjectDTO("username duplicated"),null, HttpStatus.FORBIDDEN); //403
+        }
+        return new ResponseEntity<>(new ResponseObjectDTO("signup success"),null,HttpStatus.OK);
     }
 
     @GetMapping("/user")
@@ -34,6 +40,10 @@ public class UserController {
     @GetMapping("/user/{username}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<UserVO> getUserInfo(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
+        if(userService.getUserWithAuthorities(username).isPresent()){
+            return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
+        }else{
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+        }
     }
 }

@@ -30,11 +30,13 @@ public class UserService {
 
         AuthorityVO authorityVO =   AuthorityVO.builder()
                 .authorityName("ROLE_USER")
-                .build();;
+                .build();
 
         UserVO userVO = UserVO.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
+                .name(userDto.getName())
+                .phone(userDto.getPhone())
                 .authorities(Collections.singleton(authorityVO))
                 .activated(true)
                 .build();

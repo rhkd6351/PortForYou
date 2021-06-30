@@ -2,6 +2,7 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.dto.LoginDto;
+import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.dto.TokenDto;
 import com.limbae.pfy.jwt.JwtFilter;
 import com.limbae.pfy.jwt.TokenProvider;
@@ -25,7 +26,6 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final TokenProvider tokenProvider;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Autowired
@@ -34,8 +34,8 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto){
+    @PostMapping("/login")
+    public ResponseEntity<ResponseObjectDTO> authorize(@Valid @RequestBody LoginDto loginDto){
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 
@@ -46,9 +46,8 @@ public class AuthController {
         String jwt = tokenProvider.createToken(authentication);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObjectDTO(jwt), httpHeaders, HttpStatus.OK);
     }
-
 }
