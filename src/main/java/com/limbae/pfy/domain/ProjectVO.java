@@ -15,21 +15,21 @@ import java.util.Set;
 @Entity(name = "project")
 public class ProjectVO {
 
-    @Column(name = "uid")
+    @Column(name = "idx")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int uid;
+    int idx;
+
+    int portfolio_idx; //FK
 
     String title;
 
     String content;
 
-    int portfolio_uid;
-
     @ManyToMany
     @JoinTable(
             name = "project_stack",
-            joinColumns = {@JoinColumn(name = "project_uid", referencedColumnName = "uid")},
-            inverseJoinColumns = {@JoinColumn(name = "stack_name", referencedColumnName = "name")})
+            joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},
+            inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
     private List<StackVO> stack;
 }

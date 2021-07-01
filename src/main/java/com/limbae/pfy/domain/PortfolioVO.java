@@ -18,9 +18,9 @@ import java.util.Set;
 @Entity(name = "portfolio")
 public class PortfolioVO {
 
-    @Column(name = "uid")
+    @Column(name = "idx")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int uid;
+    int idx;
 
     String title;
 
@@ -28,11 +28,12 @@ public class PortfolioVO {
 
     int user_uid;
 
-    String site;
-
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "portfolio_uid")
     private List<ProjectVO> project;
+
+    @Column(name = "reg_date")
+    Date regDate;
 
 }
 

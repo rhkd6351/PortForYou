@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface PortfolioRepository extends JpaRepository<PortfolioVO, Long> {
 
     @EntityGraph(attributePaths = "project")
-    Optional<PortfolioVO> findOneWithProjectByUid(int uid);
+    Optional<PortfolioVO> findOneWithProjectByIdx(int uid);
 }

@@ -16,6 +16,8 @@ import javax.persistence.Id;
 public class AuthorityVO {
 
     @Id
+    private int idx;
+
     @Column(name = "authority_name", length = 50)
     private String authorityName;
 

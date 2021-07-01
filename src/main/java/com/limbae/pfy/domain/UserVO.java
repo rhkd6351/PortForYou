@@ -47,8 +47,8 @@ public class UserVO {
     @ManyToMany
     @JoinTable(
             name = "user_authority",
-            joinColumns = {@JoinColumn(name = "uid", referencedColumnName = "uid")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+            joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
     private Set<AuthorityVO> authorities;
 
     @OneToMany(cascade = CascadeType.ALL)

@@ -10,6 +10,10 @@ import javax.persistence.Id;
 public class StackVO {
 
     @Id
+    int idx;
+
     String name;
+
+    String content;
 
 }

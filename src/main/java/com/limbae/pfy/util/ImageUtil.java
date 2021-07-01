@@ -1,6 +1,7 @@
 package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.UiImageVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.nio.file.NoSuchFileException;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class ImageUtil {
 
     private final String originPath;
@@ -31,6 +33,7 @@ public class ImageUtil {
             byfile = Files.readAllBytes(file.toPath());
         }catch (NoSuchFileException e){
             System.out.println("There is no such file");
+            log.info("wow");
             throw e;
         }
 
