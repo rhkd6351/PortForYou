@@ -44,14 +44,15 @@ public class UserVO {
     @Column(name = "activated")
     private boolean activated;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
     private Set<AuthorityVO> authorities;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
     private List<PortfolioVO> portfolio;
 

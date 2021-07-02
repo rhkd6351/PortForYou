@@ -1,35 +1,36 @@
 package com.limbae.pfy.domain;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
-@Getter
-@Setter
+@Entity
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "project")
-public class ProjectVO {
+public class TechVO {
 
-    @Column(name = "idx")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
-    int portfolio_idx; //FK
-
-    String title;
+    @Column(name = "portfolio_idx")
+    int portfolioIdx;
 
     String content;
 
+    int ability;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "project_stack",
-            joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},
+            name = "tech_stack",
+            joinColumns = {@JoinColumn(name = "tech_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
     private List<StackVO> stack;
+
 }

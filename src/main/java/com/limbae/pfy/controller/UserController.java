@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 @Log4j2
 public class UserController {
     private final UserService userService;
@@ -24,7 +24,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/")
     public ResponseEntity<ResponseObjectDTO> signup(
             @Valid @RequestBody UserDto userDto) {
         try {
@@ -35,23 +35,18 @@ public class UserController {
         return new ResponseEntity<>(new ResponseObjectDTO("signup success"), null, HttpStatus.OK);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserVO> getMyUserInfo() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
     }
 
-    @GetMapping("/user/valid")
+    @GetMapping("/valid")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ResponseObjectDTO> userValidCheck() {
         return ResponseEntity.ok(new ResponseObjectDTO("true"));
     }
 
-    @GetMapping("/user/portfolio")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<PortfolioListDto>> getPortfolioList() {
-        return ResponseEntity.ok(userService.getMyPortfolios());
-    }
 
 
 //    @GetMapping("/user/{username}")

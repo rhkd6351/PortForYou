@@ -28,20 +28,18 @@ public class PortfolioVO {
 
     int user_uid;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "portfolio_uid")
-    private List<ProjectVO> project;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "portfolio_idx")
+    private Set<ProjectVO> project;
 
     @Column(name = "reg_date")
     Date regDate;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "portfolio_position",
+            joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
+            inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
+    private Set<PositionVO> position;
+
 }
-
-
-
-
-
-
-
-
-
