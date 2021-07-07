@@ -48,7 +48,6 @@ public class PortfolioService {
 
     public PortfolioVO savePortfolio(Long user_uid, PortfolioDTO portfolioDTO){
 
-
         Set<ProjectVO> projectSet = portfolioDTO.getProject().stream().map(
                 i -> ProjectVO.builder()
                         .title(i.getTitle())

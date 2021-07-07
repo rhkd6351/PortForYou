@@ -1,8 +1,6 @@
 package com.limbae.pfy.util;
 
-import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.domain.PositionVO;
-import com.limbae.pfy.domain.StackVO;
+import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.PortfolioDTO;
 import com.limbae.pfy.dto.PositionDTO;
 import com.limbae.pfy.dto.ProjectDTO;
@@ -17,6 +15,8 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class EntityUtil {
+
+
 
     public PortfolioDTO convertPortfolioVoToDto(PortfolioVO vo){
         Set<PositionDTO> positionDTO = vo.getPosition().stream().map(
@@ -51,6 +51,7 @@ public class EntityUtil {
                 .regDate(vo.getRegDate())
                 .build();
     }
+
 
     public StackDTO convertStackVoToDto(StackVO vo){
 

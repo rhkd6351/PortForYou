@@ -82,7 +82,7 @@ public class PortfolioController {
     public ResponseEntity<PortfolioDTO> updatePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
         Optional<UserVO> vo = userService.getMyUserWithAuthorities();
-        PortfolioVO pvo = portfolioService.savePortfolio(vo.get().getUid(), portfolioDTO);
+        PortfolioVO pvo = portfolioService.updatePortfolio(vo.get().getUid(), portfolioDTO);
 
         return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }
