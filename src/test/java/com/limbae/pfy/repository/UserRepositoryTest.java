@@ -25,7 +25,7 @@ public class UserRepositoryTest {
     void test_() {
         //given
         Optional<UserVO> vo = userRepository.findOneWithPortfolioByUsername("kwang");
-        UserVO vo2 = null;
+        UserVO vo2;
         PortfolioVO pvo = null;
 
         //when

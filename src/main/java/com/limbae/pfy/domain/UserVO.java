@@ -20,7 +20,7 @@ public class UserVO {
 
     @Column(name = "uid")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int userId;
+    Long uid;
 
     @Column(name = "username")
     String username;
@@ -55,6 +55,14 @@ public class UserVO {
             fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
     private List<PortfolioVO> portfolio;
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name="study_user",
+//            joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
+//            inverseJoinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")}
+//    )
+//    Set<StudyVO> study
 
 
 }

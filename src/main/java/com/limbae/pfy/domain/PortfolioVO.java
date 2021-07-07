@@ -4,6 +4,7 @@ package com.limbae.pfy.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,13 +27,16 @@ public class PortfolioVO {
 
     String content;
 
-    int user_uid;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_uid")
+    UserVO user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     private Set<ProjectVO> project;
 
     @Column(name = "reg_date")
+    @CreationTimestamp
     Date regDate;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -41,5 +45,11 @@ public class PortfolioVO {
             joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
     private Set<PositionVO> position;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "portfolio_idx")
+    Set<TechVO> tech;
 
 }

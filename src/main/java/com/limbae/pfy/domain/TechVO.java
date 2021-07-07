@@ -7,30 +7,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "tech")
 public class TechVO {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
-    @Column(name = "portfolio_idx")
-    int portfolioIdx;
+    @ManyToOne(targetEntity = PortfolioVO.class,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "portfolio_idx")
+    PortfolioVO portfolio;
 
     String content;
 
     int ability;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "tech_stack",
-            joinColumns = {@JoinColumn(name = "tech_idx", referencedColumnName = "idx")},
-            inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
-    private List<StackVO> stack;
+    @ManyToOne(targetEntity = StackVO.class,
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "stack_idx")
+    StackVO stack;
 
 }

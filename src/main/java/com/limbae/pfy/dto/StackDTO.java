@@ -5,25 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortfolioDTO {
-    int idx;
+public class StackDTO {
+    Long idx;
 
-    String title;
+    String name;
 
     String content;
-
-    Date regDate;
-
-    Set<ProjectDTO> project;
-
-    Set<PositionDTO> positions;
-
-    Set<TechDTO> tech;
 }

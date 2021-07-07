@@ -19,6 +19,7 @@ public class UiImageRepositoryTest {
         //given
         String name = "login-logo";
         //when
+
         Optional<UiImageVO> uvo = uiImageRepository.findOneByName("login-logo");
 
         //then

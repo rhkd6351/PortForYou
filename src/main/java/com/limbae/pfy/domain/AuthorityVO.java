@@ -3,9 +3,7 @@ package com.limbae.pfy.domain;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "authority")
 @Getter
@@ -16,6 +14,7 @@ import javax.persistence.Id;
 public class AuthorityVO {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idx;
 
     @Column(name = "authority_name", length = 50)

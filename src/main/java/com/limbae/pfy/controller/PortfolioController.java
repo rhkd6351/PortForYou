@@ -2,10 +2,14 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.dto.PortfolioDTO;
-import com.limbae.pfy.dto.PortfolioListDto;
+import com.limbae.pfy.domain.StackVO;
+import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.dto.*;
 import com.limbae.pfy.service.PortfolioService;
+import com.limbae.pfy.service.PositionService;
+import com.limbae.pfy.service.StackService;
 import com.limbae.pfy.service.UserService;
+import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,11 +27,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PortfolioController {
 
-    @Autowired
     UserService userService;
-
-    @Autowired
     PortfolioService portfolioService;
+    EntityUtil entityUtil;
+    StackService stackService;
+    PositionService positionService;
+
+    public PortfolioController(UserService userService, PortfolioService portfolioService,
+                               EntityUtil entityUtil, StackService stackService,
+                               PositionService positionService) {
+        this.userService = userService;
+        this.portfolioService = portfolioService;
+        this.entityUtil = entityUtil;
+        this.stackService = stackService;
+        this.positionService = positionService;
+    }
 
     @GetMapping("/portfolios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
@@ -39,38 +55,56 @@ public class PortfolioController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(@RequestParam(value = "portfolio_idx") int idx){
         List<PortfolioListDto> pfs = userService.getMyPortfolios();
-
         Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
+
         if(opvo.isEmpty()) return ResponseEntity.badRequest().build();
         PortfolioVO getvo = opvo.get();
 
-        PortfolioListDto any = null;
-
-        for(PortfolioListDto dto : pfs)
-            if(dto.getIdx() == getvo.getIdx()) any = dto;
-
-
-        if(any == null) return ResponseEntity.badRequest().build();
+        if(!portfolioService.checkPossessionOfPortfolio(getvo, pfs))
+            return ResponseEntity.badRequest().build();
         //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
 
-        PortfolioDTO pdto = PortfolioDTO.builder()
-                .idx(getvo.getIdx())
-                .content(getvo.getContent())
-                .positions(getvo.getPosition())
-                .project(getvo.getProject())
-                .title(getvo.getTitle())
-                .regDate(getvo.getRegDate())
-                .build();
-
-        return ResponseEntity.ok(pdto);
+        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(getvo));
     }
 
     @PostMapping("/portfolio")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PortfolioDTO> addPortfolio(
+    public ResponseEntity<PortfolioDTO> savePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
+        Optional<UserVO> vo = userService.getMyUserWithAuthorities();
+        PortfolioVO pvo = portfolioService.savePortfolio(vo.get().getUid(), portfolioDTO);
 
-        return null;
+        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }
+
+    @PutMapping("/portfolio")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<PortfolioDTO> updatePortfolio(
+            @RequestBody PortfolioDTO portfolioDTO){
+        Optional<UserVO> vo = userService.getMyUserWithAuthorities();
+        PortfolioVO pvo = portfolioService.savePortfolio(vo.get().getUid(), portfolioDTO);
+
+        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
+    }
+
+    @GetMapping("/portfolio/stacks")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<StackDTO>> getStackList() {
+        List<StackDTO> stackList = stackService.getStackList().stream().map(
+                entityUtil::convertStackVoToDto
+        ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(stackList);
+    }
+
+    @GetMapping("/portfolio/positions")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<List<PositionDTO>> getPositionList() {
+        List<PositionDTO> positionList = positionService.getPositionList().stream().map(
+                entityUtil::convertPositionVoToDto
+        ).collect(Collectors.toList());
+        return ResponseEntity.ok(positionList);
+    }
+
 
 }

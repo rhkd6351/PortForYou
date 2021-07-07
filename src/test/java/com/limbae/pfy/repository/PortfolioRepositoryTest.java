@@ -26,7 +26,7 @@ public class PortfolioRepositoryTest {
     @Test
     void test_1() {
         //given
-        Optional<PortfolioVO> pvo = portfolioRepository.findOneWithProjectByIdx(3);
+        Optional<PortfolioVO> pvo = portfolioRepository.findOneWithProjectByIdx(18);
 
         //when
         List<ProjectVO> list = new ArrayList<>(pvo.get().getProject());
@@ -36,22 +36,22 @@ public class PortfolioRepositoryTest {
         list.forEach(i -> System.out.println(i.getTitle()));
 
     }
-
-//    @Test
-//    void test_2() {
-//        //given
-//        Optional<PortfolioVO> pvo = portfolioRepository.findOneByIdx(3);
 //
-//        //when
-//        Set<PositionVO> positions = pvo.get().getPositions();
-//        List<ProjectVO> project = pvo.get().getProject();
-//
-//        //then
-//        for(PositionVO vo : positions){
-//            System.out.println("vo = " + vo.getName());
-//        }
-//        for(ProjectVO vo : project){
-//            System.out.println("vo.getTitle() = " + vo.getTitle());
-//        }
-//    }
+////    @Test
+////    void test_2() {
+////        //given
+////        Optional<PortfolioVO> pvo = portfolioRepository.findOneByIdx(3);
+////
+////        //when
+////        Set<PositionVO> positions = pvo.get().getPositions();
+////        List<ProjectVO> project = pvo.get().getProject();
+////
+////        //then
+////        for(PositionVO vo : positions){
+////            System.out.println("vo = " + vo.getName());
+////        }
+////        for(ProjectVO vo : project){
+////            System.out.println("vo.getTitle() = " + vo.getTitle());
+////        }
+////    }
 }

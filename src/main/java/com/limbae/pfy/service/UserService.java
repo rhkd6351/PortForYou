@@ -1,9 +1,9 @@
 package com.limbae.pfy.service;
 
-import com.limbae.pfy.domain.AuthorityVO;
-import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.PortfolioListDto;
+import com.limbae.pfy.dto.PositionDTO;
+import com.limbae.pfy.dto.StackDTO;
 import com.limbae.pfy.dto.UserDto;
 import com.limbae.pfy.repository.UserRepository;
 import com.limbae.pfy.util.SecurityUtil;
@@ -11,9 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,20 +69,38 @@ public class UserService {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
     }
 
-    @Transactional(readOnly = true)
     public List<PortfolioListDto> getMyPortfolios(){
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
-        List<PortfolioListDto> list;
         if(uvo.isPresent()){
-            list = uvo.get().getPortfolio()
+            return uvo.get().getPortfolio()
                     .stream()
-                    .map(i -> PortfolioListDto.builder()
-                            .title(i.getTitle())
-                            .content(i.getContent())
-                            .reg_date(i.getRegDate())
-                            .idx(i.getIdx())
-                            .build()).collect(Collectors.toList());
-            return list;
+                    .map(i -> {
+                        List<String> stacks = new ArrayList<>();
+                        for(ProjectVO vo : i.getProject()){
+                            Set<StackVO> stack = vo.getStack();
+                            for(StackVO stackVO : stack){
+                                if(!stacks.contains(stackVO.getName()))
+                                    stacks.add(stackVO.getName());
+                            }
+                        }
+                        return PortfolioListDto.builder()
+                                .title(i.getTitle())
+                                .content(i.getContent())
+                                .reg_date(i.getRegDate())
+                                .idx(i.getIdx())
+                                .position(i.getPosition().stream().map(
+                                        k -> PositionDTO.builder()
+                                                .idx(k.getIdx())
+                                                .name(k.getName())
+                                                .build()
+                                ).collect(Collectors.toList()))
+                                .stack(stacks.stream().map(
+                                        p -> StackDTO.builder()
+                                                .name(p)
+                                                .build()
+                                ).collect(Collectors.toList()))
+                                .build();
+                    }).collect(Collectors.toList());
         }else{
             return null;
         }

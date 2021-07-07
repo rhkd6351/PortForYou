@@ -24,7 +24,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<ResponseObjectDTO> signup(
             @Valid @RequestBody UserDto userDto) {
         try {
@@ -35,7 +35,7 @@ public class UserController {
         return new ResponseEntity<>(new ResponseObjectDTO("signup success"), null, HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserVO> getMyUserInfo() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());

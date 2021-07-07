@@ -1,4 +1,4 @@
-package com.limbae.pfy.domain;
+package com.limbae.pfy.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,20 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Data
-@Entity(name = "position")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PositionVO {
+public class PositionDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
     String name;
+
 }

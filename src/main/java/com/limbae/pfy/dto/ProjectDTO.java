@@ -1,5 +1,8 @@
 package com.limbae.pfy.dto;
 
+import com.limbae.pfy.domain.PositionVO;
+import com.limbae.pfy.domain.ProjectVO;
+import com.limbae.pfy.domain.StackVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,18 +15,12 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortfolioDTO {
+public class ProjectDTO {
     int idx;
 
     String title;
 
     String content;
 
-    Date regDate;
-
-    Set<ProjectDTO> project;
-
-    Set<PositionDTO> positions;
-
-    Set<TechDTO> tech;
+    Set<StackDTO> stack;
 }

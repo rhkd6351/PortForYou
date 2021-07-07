@@ -20,7 +20,9 @@ public class ProjectVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
-    int portfolio_idx; //FK
+    @ManyToOne(targetEntity = PortfolioVO.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "portfolio_idx")
+    PortfolioVO portfolio;
 
     String title;
 
@@ -31,5 +33,5 @@ public class ProjectVO {
             name = "project_stack",
             joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
-    private List<StackVO> stack;
+    Set<StackVO> stack;
 }
