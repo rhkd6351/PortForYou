@@ -68,41 +68,4 @@ public class UserService {
     public Optional<UserVO> getMyUserWithPortfolios(){
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
     }
-
-    public List<PortfolioListDto> getMyPortfolios(){
-        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
-        if(uvo.isPresent()){
-            return uvo.get().getPortfolio()
-                    .stream()
-                    .map(i -> {
-                        List<String> stacks = new ArrayList<>();
-                        for(ProjectVO vo : i.getProject()){
-                            Set<StackVO> stack = vo.getStack();
-                            for(StackVO stackVO : stack){
-                                if(!stacks.contains(stackVO.getName()))
-                                    stacks.add(stackVO.getName());
-                            }
-                        }
-                        return PortfolioListDto.builder()
-                                .title(i.getTitle())
-                                .content(i.getContent())
-                                .reg_date(i.getRegDate())
-                                .idx(i.getIdx())
-                                .position(i.getPosition().stream().map(
-                                        k -> PositionDTO.builder()
-                                                .idx(k.getIdx())
-                                                .name(k.getName())
-                                                .build()
-                                ).collect(Collectors.toList()))
-                                .stack(stacks.stream().map(
-                                        p -> StackDTO.builder()
-                                                .name(p)
-                                                .build()
-                                ).collect(Collectors.toList()))
-                                .build();
-                    }).collect(Collectors.toList());
-        }else{
-            return null;
-        }
-    }
 }

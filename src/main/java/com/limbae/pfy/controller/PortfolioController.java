@@ -46,7 +46,7 @@ public class PortfolioController {
     @GetMapping("/portfolios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<PortfolioListDto>> getPortfolioList() {
-        return ResponseEntity.ok(userService.getMyPortfolios());
+        return ResponseEntity.ok(portfolioService.getMyPortfolios());
     }
 
 
@@ -54,7 +54,7 @@ public class PortfolioController {
     @GetMapping("/portfolio")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(@RequestParam(value = "portfolio_idx") int idx){
-        List<PortfolioListDto> pfs = userService.getMyPortfolios();
+        List<PortfolioListDto> pfs = portfolioService.getMyPortfolios();
         Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
 
         if(opvo.isEmpty()) return ResponseEntity.badRequest().build();

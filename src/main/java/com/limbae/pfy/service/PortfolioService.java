@@ -3,13 +3,17 @@ package com.limbae.pfy.service;
 import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.PortfolioDTO;
 import com.limbae.pfy.dto.PortfolioListDto;
+import com.limbae.pfy.dto.PositionDTO;
+import com.limbae.pfy.dto.StackDTO;
 import com.limbae.pfy.repository.PortfolioRepository;
 import com.limbae.pfy.repository.PositionRepository;
 import com.limbae.pfy.repository.StackRepository;
 import com.limbae.pfy.repository.UserRepository;
+import com.limbae.pfy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -128,5 +132,42 @@ public class PortfolioService {
         portfolioRepository.save(portfolioVO);
 
         return portfolioVO;
+    }
+
+    public List<PortfolioListDto> getMyPortfolios(){
+        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
+        if(uvo.isPresent()){
+            return uvo.get().getPortfolio()
+                    .stream()
+                    .map(i -> {
+                        List<String> stacks = new ArrayList<>();
+                        for(ProjectVO vo : i.getProject()){
+                            Set<StackVO> stack = vo.getStack();
+                            for(StackVO stackVO : stack){
+                                if(!stacks.contains(stackVO.getName()))
+                                    stacks.add(stackVO.getName());
+                            }
+                        }
+                        return PortfolioListDto.builder()
+                                .title(i.getTitle())
+                                .content(i.getContent())
+                                .reg_date(i.getRegDate())
+                                .idx(i.getIdx())
+                                .position(i.getPosition().stream().map(
+                                        k -> PositionDTO.builder()
+                                                .idx(k.getIdx())
+                                                .name(k.getName())
+                                                .build()
+                                ).collect(Collectors.toList()))
+                                .stack(stacks.stream().map(
+                                        p -> StackDTO.builder()
+                                                .name(p)
+                                                .build()
+                                ).collect(Collectors.toList()))
+                                .build();
+                    }).collect(Collectors.toList());
+        }else{
+            return null;
+        }
     }
 }
