@@ -20,7 +20,7 @@ public class ProjectVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
-    @ManyToOne(targetEntity = PortfolioVO.class, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = PortfolioVO.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 
@@ -28,7 +28,7 @@ public class ProjectVO {
 
     String content;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_stack",
             joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},

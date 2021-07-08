@@ -27,7 +27,7 @@ public class PortfolioVO {
 
     String content;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
     UserVO user;
 

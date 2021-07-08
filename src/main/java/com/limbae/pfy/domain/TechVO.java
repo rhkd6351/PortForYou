@@ -21,7 +21,7 @@ public class TechVO {
     int idx;
 
     @ManyToOne(targetEntity = PortfolioVO.class,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 

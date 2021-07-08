@@ -135,19 +135,15 @@ public class PortfolioService {
     }
 
     public List<PortfolioListDto> getMyPortfolios(){
-        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
+        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
         if(uvo.isPresent()){
-            return uvo.get().getPortfolio()
+            Optional<List<PortfolioVO>> portfolioList = portfolioRepository.findByUserUid(uvo.get().getUid());
+            return portfolioList.get()
                     .stream()
                     .map(i -> {
                         List<String> stacks = new ArrayList<>();
-                        for(ProjectVO vo : i.getProject()){
-                            Set<StackVO> stack = vo.getStack();
-                            for(StackVO stackVO : stack){
-                                if(!stacks.contains(stackVO.getName()))
-                                    stacks.add(stackVO.getName());
-                            }
-                        }
+                        for(TechVO vo : i.getTech()) stacks.add(vo.getStack().getName());
+
                         return PortfolioListDto.builder()
                                 .title(i.getTitle())
                                 .content(i.getContent())
@@ -165,6 +161,7 @@ public class PortfolioService {
                                                 .build()
                                 ).collect(Collectors.toList()))
                                 .build();
+
                     }).collect(Collectors.toList());
         }else{
             return null;

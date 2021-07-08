@@ -5,6 +5,7 @@ import com.limbae.pfy.domain.UserVO;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PortfolioRepository extends JpaRepository<PortfolioVO, Long> {
@@ -16,4 +17,7 @@ public interface PortfolioRepository extends JpaRepository<PortfolioVO, Long> {
     Optional<PortfolioVO> findOneWithProjectAndPositionByIdx(int idx);
 
     Optional<PortfolioVO> findOneByIdx(int idx);
+
+    @EntityGraph(attributePaths = {"tech", "position"})
+    Optional<List<PortfolioVO>> findByUserUid(Long uid);
 }
