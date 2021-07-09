@@ -18,7 +18,7 @@ public class StudyVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     @ManyToOne(targetEntity = UserVO.class,
             fetch = FetchType.EAGER)

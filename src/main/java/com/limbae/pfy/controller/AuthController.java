@@ -1,6 +1,6 @@
 package com.limbae.pfy.controller;
 
-import com.limbae.pfy.dto.LoginDto;
+import com.limbae.pfy.dto.LoginDTO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.jwt.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseObjectDTO> authorize(@Valid @RequestBody LoginDto loginDto){
+    public ResponseEntity<ResponseObjectDTO> authorize(@Valid @RequestBody LoginDTO loginDto){
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
 

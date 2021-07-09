@@ -18,7 +18,7 @@ public class AnnouncementVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     String title;
 

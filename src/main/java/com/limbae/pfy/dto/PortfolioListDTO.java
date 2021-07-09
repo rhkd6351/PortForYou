@@ -14,7 +14,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortfolioListDto {
+public class PortfolioListDTO {
     int idx;
     String title;
     String content;

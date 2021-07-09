@@ -2,8 +2,6 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.domain.StackVO;
-import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.service.PortfolioService;
 import com.limbae.pfy.service.PositionService;
@@ -11,15 +9,12 @@ import com.limbae.pfy.service.StackService;
 import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,7 +40,7 @@ public class PortfolioController {
 
     @GetMapping("/portfolios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<PortfolioListDto>> getPortfolioList() {
+    public ResponseEntity<List<PortfolioListDTO>> getPortfolioList() {
         return ResponseEntity.ok(portfolioService.getMyPortfolios());
     }
 
@@ -71,8 +66,7 @@ public class PortfolioController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> savePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
-        Optional<UserVO> vo = userService.getMyUserWithAuthorities();
-        PortfolioVO pvo = portfolioService.savePortfolio(vo.get().getUid(), portfolioDTO);
+        PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
 
         return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }
@@ -81,8 +75,7 @@ public class PortfolioController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> updatePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
-        Optional<UserVO> vo = userService.getMyUserWithAuthorities();
-        PortfolioVO pvo = portfolioService.updatePortfolio(vo.get().getUid(), portfolioDTO);
+        PortfolioVO pvo = portfolioService.updatePortfolio(portfolioDTO);
 
         return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }

@@ -1,4 +1,4 @@
-package com.limbae.pfy.domain;
+package com.limbae.pfy.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,18 +11,12 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "demand_position")
-public class DemandPositionVO {
+public class DemandPositionDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
-    @Column(name = "position_idx")
     Long positionIdx;
 
-    @Column(name = "study_announcement_idx")
     Long studyAnnouncementIdx;
 
     int demand;

@@ -1,10 +1,7 @@
 package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.*;
-import com.limbae.pfy.dto.PortfolioListDto;
-import com.limbae.pfy.dto.PositionDTO;
-import com.limbae.pfy.dto.StackDTO;
-import com.limbae.pfy.dto.UserDto;
+import com.limbae.pfy.dto.UserDTO;
 import com.limbae.pfy.repository.UserRepository;
 import com.limbae.pfy.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,7 +21,7 @@ public class UserService {
     }
 
 //    @Transactional
-    public UserVO signup(UserDto userDto){
+    public UserVO signup(UserDTO userDto){
         if(userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null){
             throw new RuntimeException("이미 가입되어있는 유저입니다.");
         }

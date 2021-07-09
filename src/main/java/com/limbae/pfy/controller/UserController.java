@@ -1,9 +1,8 @@
 package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.UserVO;
-import com.limbae.pfy.dto.PortfolioListDto;
 import com.limbae.pfy.dto.ResponseObjectDTO;
-import com.limbae.pfy.dto.UserDto;
+import com.limbae.pfy.dto.UserDTO;
 import com.limbae.pfy.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,7 +24,7 @@ public class UserController {
 
     @PostMapping("")
     public ResponseEntity<ResponseObjectDTO> signup(
-            @Valid @RequestBody UserDto userDto) {
+            @Valid @RequestBody UserDTO userDto) {
         try {
             UserVO signup = userService.signup(userDto);
         } catch (RuntimeException e) {

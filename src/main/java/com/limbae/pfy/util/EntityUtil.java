@@ -1,10 +1,7 @@
 package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.*;
-import com.limbae.pfy.dto.PortfolioDTO;
-import com.limbae.pfy.dto.PositionDTO;
-import com.limbae.pfy.dto.ProjectDTO;
-import com.limbae.pfy.dto.StackDTO;
+import com.limbae.pfy.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -67,6 +64,66 @@ public class EntityUtil {
         return PositionDTO.builder()
                 .idx(vo.getIdx())
                 .name(vo.getName())
+                .build();
+    }
+
+    public StudyDTO convertStudyVoToDto(StudyVO vo){
+
+        return StudyDTO.builder()
+                .idx(vo.getIdx())
+                .user_uid(vo.getUser().getUid())
+                .content(vo.getContent())
+                .title(vo.getTitle())
+                .build();
+
+    }
+
+    public StudyVO convertStudyDtoToVo(StudyDTO vo){
+
+        return StudyVO.builder()
+                .content(vo.getContent())
+                .title(vo.getTitle())
+                .build();
+
+    }
+
+    public AnnouncementDTO convertAnnouncementVoToDto(AnnouncementVO announcementVO){
+
+        AnnouncementDTO build = AnnouncementDTO.builder()
+                .idx(announcementVO.getIdx())
+                .studyIdx(announcementVO.getStudy().getIdx())
+                .title(announcementVO.getTitle())
+                .content(announcementVO.getContent())
+                .build();
+
+        if(announcementVO.getDemandPositionVOSet() != null){
+            build.setDemandPosition(announcementVO.getDemandPositionVOSet().stream().map(
+                    i -> DemandPositionDTO.builder()
+                                .idx(i.getIdx())
+                                .studyAnnouncementIdx(i.getStudyAnnouncementIdx())
+                                .demand(i.getDemand())
+                                .positionIdx(i.getPositionIdx())
+                                .build()
+            ).collect(Collectors.toList()));
+        }
+
+        return build;
+    }
+
+    public AnnouncementVO convertAnnouncementDtoToVo(AnnouncementDTO announcementDTO){
+
+        Set<DemandPositionVO> demandPositionVOSet = announcementDTO.getDemandPosition().stream().map(
+                i -> DemandPositionVO.builder()
+                        .demand(i.getDemand())
+                        .studyAnnouncementIdx(0L) // 일단 0으로 저장
+                        .positionIdx(i.getPositionIdx())
+                        .build()
+        ).collect(Collectors.toSet());
+
+        return AnnouncementVO.builder()
+                .content(announcementDTO.getContent())
+                .title(announcementDTO.getTitle())
+                .demandPositionVOSet(demandPositionVOSet)
                 .build();
     }
 }

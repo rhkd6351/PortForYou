@@ -2,7 +2,7 @@ package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.PortfolioDTO;
-import com.limbae.pfy.dto.PortfolioListDto;
+import com.limbae.pfy.dto.PortfolioListDTO;
 import com.limbae.pfy.dto.PositionDTO;
 import com.limbae.pfy.dto.StackDTO;
 import com.limbae.pfy.repository.PortfolioRepository;
@@ -40,46 +40,47 @@ public class PortfolioService {
     }
 
     public boolean checkPossessionOfPortfolio(PortfolioVO pfvo,
-                                              List<PortfolioListDto> pfList){
-        PortfolioListDto any = null;
+                                              List<PortfolioListDTO> pfList){
+        PortfolioListDTO any = null;
 
 
-        for(PortfolioListDto dto : pfList)
+        for(PortfolioListDTO dto : pfList)
             if(dto.getIdx() == pfvo.getIdx()) any = dto;
 
         return any != null;
     }
 
-    public PortfolioVO savePortfolio(Long user_uid, PortfolioDTO portfolioDTO){
+    public PortfolioVO savePortfolio(PortfolioDTO portfolioDTO){
+        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
 
         Set<ProjectVO> projectSet = portfolioDTO.getProject().stream().map(
                 i -> ProjectVO.builder()
                         .title(i.getTitle())
                         .content(i.getContent())
-                        .stack(
+                        .stack(i.getStack() != null ?
                                 i.getStack().stream().map(
                                         t -> stackRepository.findOneByIdx(t.getIdx()).get()
                                 ).collect(Collectors.toSet())
-                        )
+                                : null)
                         .build()
         ).collect(Collectors.toSet());
 
-
-
-        Set<PositionVO> positionVOS = portfolioDTO.getPositions().stream().map(
+        Set<PositionVO> positionVOS =portfolioDTO.getPositions() != null ?
+                portfolioDTO.getPositions().stream().map(
                 i -> positionRepository.findOneByIdx(i.getIdx()).get()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toSet()) : null;
 
-        Set<TechVO> techVOS = portfolioDTO.getTech().stream().map(
+        Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
+        portfolioDTO.getTech().stream().map(
                 i -> TechVO.builder()
                         .content(i.getContent())
                         .ability(i.getAbility())
                         .stack(stackRepository.getById(i.getStackIdx()))
                         .build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toSet()) : null);
 
         PortfolioVO portfolioVO = PortfolioVO.builder()
-                .user(userRepository.getById(user_uid))
+                .user(uvo.get())
                 .title(portfolioDTO.getTitle())
                 .content(portfolioDTO.getContent())
                 .project(projectSet)
@@ -91,37 +92,38 @@ public class PortfolioService {
         return portfolioVO;
     }
 
-    public PortfolioVO updatePortfolio(Long user_uid, PortfolioDTO portfolioDTO){
+    public PortfolioVO updatePortfolio(PortfolioDTO portfolioDTO){
 
+        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
         Set<ProjectVO> projectSet = portfolioDTO.getProject().stream().map(
                 i -> ProjectVO.builder()
                         .title(i.getTitle())
                         .content(i.getContent())
-                        .stack(
+                        .stack(i.getStack() != null ?
                                 i.getStack().stream().map(
                                         t -> stackRepository.findOneByIdx(t.getIdx()).get()
                                 ).collect(Collectors.toSet())
-                        )
+                                : null)
                         .build()
         ).collect(Collectors.toSet());
 
+        Set<PositionVO> positionVOS =portfolioDTO.getPositions() != null ?
+                portfolioDTO.getPositions().stream().map(
+                        i -> positionRepository.findOneByIdx(i.getIdx()).get()
+                ).collect(Collectors.toSet()) : null;
 
-
-        Set<PositionVO> positionVOS = portfolioDTO.getPositions().stream().map(
-                i -> positionRepository.findOneByIdx(i.getIdx()).get()
-        ).collect(Collectors.toSet());
-
-        Set<TechVO> techVOS = portfolioDTO.getTech().stream().map(
-                i -> TechVO.builder()
-                        .content(i.getContent())
-                        .ability(i.getAbility())
-                        .stack(stackRepository.getById(i.getStackIdx()))
-                        .build()
-        ).collect(Collectors.toSet());
+        Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
+                portfolioDTO.getTech().stream().map(
+                        i -> TechVO.builder()
+                                .content(i.getContent())
+                                .ability(i.getAbility())
+                                .stack(stackRepository.getById(i.getStackIdx()))
+                                .build()
+                ).collect(Collectors.toSet()) : null);
 
         PortfolioVO portfolioVO = PortfolioVO.builder()
                 .idx(portfolioDTO.getIdx())
-                .user(userRepository.getById(user_uid))
+                .user(uvo.get())
                 .title(portfolioDTO.getTitle())
                 .content(portfolioDTO.getContent())
                 .project(projectSet)
@@ -134,7 +136,7 @@ public class PortfolioService {
         return portfolioVO;
     }
 
-    public List<PortfolioListDto> getMyPortfolios(){
+    public List<PortfolioListDTO> getMyPortfolios(){
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
         if(uvo.isPresent()){
             Optional<List<PortfolioVO>> portfolioList = portfolioRepository.findByUserUid(uvo.get().getUid());
@@ -144,7 +146,7 @@ public class PortfolioService {
                         List<String> stacks = new ArrayList<>();
                         for(TechVO vo : i.getTech()) stacks.add(vo.getStack().getName());
 
-                        return PortfolioListDto.builder()
+                        return PortfolioListDTO.builder()
                                 .title(i.getTitle())
                                 .content(i.getContent())
                                 .reg_date(i.getRegDate())
