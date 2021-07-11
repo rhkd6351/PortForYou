@@ -83,6 +83,13 @@ public class EntityUtil {
                 .build();
     }
 
+    public EducationDTO convertEducationVoToDto(EducationVO vo){
+        return EducationDTO.builder()
+                .idx(vo.getIdx())
+                .name(vo.getName())
+                .build();
+    }
+
     public StudyDTO convertStudyVoToDto(StudyVO vo){
 
         return StudyDTO.builder()

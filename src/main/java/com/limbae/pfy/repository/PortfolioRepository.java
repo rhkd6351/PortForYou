@@ -16,6 +16,7 @@ public interface PortfolioRepository extends JpaRepository<PortfolioVO, Long> {
     @EntityGraph(attributePaths = {"project", "position"})
     Optional<PortfolioVO> findOneWithProjectAndPositionByIdx(int idx);
 
+    @EntityGraph(attributePaths = {"project", "position", "tech", "education"})
     Optional<PortfolioVO> findOneByIdx(int idx);
 
     @EntityGraph(attributePaths = {"tech", "position"})

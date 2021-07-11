@@ -20,12 +20,17 @@ import java.util.Set;
 public class PortfolioVO {
 
     @Column(name = "idx")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
     String title;
 
     String content;
+
+    @Column(name = "reg_date")
+    @CreationTimestamp
+    Date regDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
@@ -35,11 +40,8 @@ public class PortfolioVO {
     @JoinColumn(name = "portfolio_idx")
     private Set<ProjectVO> project;
 
-    @Column(name = "reg_date")
-    @CreationTimestamp
-    Date regDate;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "portfolio_position",
             joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
@@ -53,7 +55,7 @@ public class PortfolioVO {
     Set<TechVO> tech;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="education_idx")
+    @JoinColumn(name = "education_idx")
     EducationVO education;
 
 }

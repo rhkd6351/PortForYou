@@ -3,6 +3,7 @@ package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.PortfolioVO;
 import com.limbae.pfy.dto.*;
+import com.limbae.pfy.repository.EducationRepository;
 import com.limbae.pfy.service.PortfolioService;
 import com.limbae.pfy.service.PositionService;
 import com.limbae.pfy.service.StackService;
@@ -27,15 +28,18 @@ public class PortfolioController {
     EntityUtil entityUtil;
     StackService stackService;
     PositionService positionService;
+    EducationRepository educationRepository;
 
     public PortfolioController(UserService userService, PortfolioService portfolioService,
                                EntityUtil entityUtil, StackService stackService,
-                               PositionService positionService) {
+                               PositionService positionService,
+                               EducationRepository educationRepository) {
         this.userService = userService;
         this.portfolioService = portfolioService;
         this.entityUtil = entityUtil;
         this.stackService = stackService;
         this.positionService = positionService;
+        this.educationRepository = educationRepository;
     }
 
     @GetMapping("/portfolios")
@@ -55,7 +59,7 @@ public class PortfolioController {
         if(opvo.isEmpty()) return ResponseEntity.badRequest().build();
         PortfolioVO getvo = opvo.get();
 
-        if(getvo.getUser().getUid() != userService.getMyUserWithAuthorities().get().getUid())
+        if(getvo.getUser() != userService.getMyUserWithAuthorities().get())
             return ResponseEntity.badRequest().build();
         //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
 
@@ -66,9 +70,14 @@ public class PortfolioController {
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> savePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
-        PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
+        try{
+            PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
+            return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
 
-        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }
 
     @PutMapping("/portfolio")
@@ -81,7 +90,6 @@ public class PortfolioController {
     }
 
     @GetMapping("/portfolio/stacks")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<StackDTO>> getStackList() {
         List<StackDTO> stackList = stackService.getStackList().stream().map(
                 entityUtil::convertStackVoToDto
@@ -91,12 +99,19 @@ public class PortfolioController {
     }
 
     @GetMapping("/portfolio/positions")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<List<PositionDTO>> getPositionList() {
         List<PositionDTO> positionList = positionService.getPositionList().stream().map(
                 entityUtil::convertPositionVoToDto
         ).collect(Collectors.toList());
         return ResponseEntity.ok(positionList);
+    }
+
+    @GetMapping("/portfolio/educations")
+    public ResponseEntity<List<EducationDTO>> getEducationList() {
+        List<EducationDTO> educationList = educationRepository.findAll().stream().map(
+                entityUtil::convertEducationVoToDto
+        ).collect(Collectors.toList());
+        return ResponseEntity.ok(educationList);
     }
 
 

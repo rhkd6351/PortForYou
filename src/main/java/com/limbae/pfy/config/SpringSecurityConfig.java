@@ -43,8 +43,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(
                         "/api/login",
-                        "/api/signup",
-                        "/api/img/*"
+                        "/api/user",
+                        "/api/img/*",
+                        "/api/user/portfolio/positions",
+                        "/api/user/portfolio/projects",
+                        "/api/user/portfolio/educations"
                 );
     }
 

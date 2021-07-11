@@ -28,9 +28,9 @@ public class UserController {
         try {
             UserVO signup = userService.signup(userDto);
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(new ResponseObjectDTO("username duplicated"), null, HttpStatus.FORBIDDEN); //403
+            return new ResponseEntity<>(new ResponseObjectDTO("duplicated"), null, HttpStatus.FORBIDDEN); //403
         }
-        return new ResponseEntity<>(new ResponseObjectDTO("signup success"), null, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObjectDTO("true"), null, HttpStatus.OK);
     }
 
     @GetMapping("")
