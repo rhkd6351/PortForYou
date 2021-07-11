@@ -1,14 +1,8 @@
 package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.*;
-import com.limbae.pfy.dto.PortfolioDTO;
-import com.limbae.pfy.dto.PortfolioListDTO;
-import com.limbae.pfy.dto.PositionDTO;
-import com.limbae.pfy.dto.StackDTO;
-import com.limbae.pfy.repository.PortfolioRepository;
-import com.limbae.pfy.repository.PositionRepository;
-import com.limbae.pfy.repository.StackRepository;
-import com.limbae.pfy.repository.UserRepository;
+import com.limbae.pfy.dto.*;
+import com.limbae.pfy.repository.*;
 import com.limbae.pfy.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,14 +20,17 @@ public class PortfolioService {
     PositionRepository positionRepository;
     UserRepository userRepository;
     StackRepository stackRepository;
+    EducationRepository educationRepository;
 
     @Autowired
-    public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository) {
+    public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository) {
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
         this.userRepository = userRepository;
         this.stackRepository = stackRepository;
+        this.educationRepository = educationRepository;
     }
+
 
     public Optional<PortfolioVO> getPortfolioByIdx(int idx){
         return portfolioRepository.findOneWithProjectAndPositionByIdx(idx);
@@ -79,6 +76,8 @@ public class PortfolioService {
                         .build()
         ).collect(Collectors.toSet()) : null);
 
+        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
+
         PortfolioVO portfolioVO = PortfolioVO.builder()
                 .user(uvo.get())
                 .title(portfolioDTO.getTitle())
@@ -86,6 +85,7 @@ public class PortfolioService {
                 .project(projectSet)
                 .tech(techVOS)
                 .position(positionVOS)
+                .education(education.get())
                 .build();
 
         portfolioRepository.save(portfolioVO);
@@ -121,6 +121,8 @@ public class PortfolioService {
                                 .build()
                 ).collect(Collectors.toSet()) : null);
 
+        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
+
         PortfolioVO portfolioVO = PortfolioVO.builder()
                 .idx(portfolioDTO.getIdx())
                 .user(uvo.get())
@@ -129,6 +131,7 @@ public class PortfolioService {
                 .project(projectSet)
                 .tech(techVOS)
                 .position(positionVOS)
+                .education(education.get())
                 .build();
 
         portfolioRepository.save(portfolioVO);
@@ -162,6 +165,10 @@ public class PortfolioService {
                                                 .name(p)
                                                 .build()
                                 ).collect(Collectors.toList()))
+                                .education(EducationDTO.builder()
+                                        .name(i.getEducation().getName())
+                                        .idx(i.getEducation().getIdx())
+                                        .build())
                                 .build();
 
                     }).collect(Collectors.toList());

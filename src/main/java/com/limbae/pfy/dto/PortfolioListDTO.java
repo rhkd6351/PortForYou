@@ -22,4 +22,5 @@ public class PortfolioListDTO {
 
     List<PositionDTO> position;
     List<StackDTO> stack;
+    EducationDTO education;
 }

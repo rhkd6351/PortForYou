@@ -38,6 +38,20 @@ public class EntityUtil {
                         .build()
         ).collect(Collectors.toSet());
 
+        EducationDTO educationDTO = EducationDTO.builder()
+                .idx(vo.getEducation().getIdx())
+                .name(vo.getEducation().getName())
+                .build();
+
+        Set<TechDTO> techDTOSet = vo.getTech().stream().map(
+                i -> TechDTO.builder()
+                        .idx(i.getIdx())
+                        .stackIdx(i.getStack().getIdx())
+                        .ability(i.getAbility())
+                        .content(i.getContent())
+                        .build()
+        ).collect(Collectors.toSet());
+
 
         return PortfolioDTO.builder()
                 .idx(vo.getIdx())
@@ -46,6 +60,8 @@ public class EntityUtil {
                 .positions(positionDTO)
                 .title(vo.getTitle())
                 .regDate(vo.getRegDate())
+                .education(educationDTO)
+                .tech(techDTOSet)
                 .build();
     }
 

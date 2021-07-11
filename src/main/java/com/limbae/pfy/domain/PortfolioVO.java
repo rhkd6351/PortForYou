@@ -52,4 +52,8 @@ public class PortfolioVO {
     @JoinColumn(name = "portfolio_idx")
     Set<TechVO> tech;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="education_idx")
+    EducationVO education;
+
 }

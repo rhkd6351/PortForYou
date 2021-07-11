@@ -1,5 +1,6 @@
 package com.limbae.pfy.dto;
 
+import com.limbae.pfy.domain.EducationVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,4 +27,6 @@ public class PortfolioDTO {
     Set<PositionDTO> positions;
 
     Set<TechDTO> tech;
+
+    EducationDTO education;
 }

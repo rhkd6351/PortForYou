@@ -18,7 +18,7 @@ public class TechVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     @ManyToOne(targetEntity = PortfolioVO.class,
             fetch = FetchType.LAZY)
