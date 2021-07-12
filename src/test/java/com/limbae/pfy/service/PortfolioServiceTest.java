@@ -1,6 +1,7 @@
 package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.PortfolioVO;
+import com.limbae.pfy.dto.EducationDTO;
 import com.limbae.pfy.dto.PortfolioDTO;
 import com.limbae.pfy.dto.PortfolioListDTO;
 import com.limbae.pfy.dto.ProjectDTO;
@@ -108,10 +109,13 @@ public class PortfolioServiceTest {
                 .content("dummy")
                 .build());
 
+        EducationDTO education = EducationDTO.builder().idx(1L).name("학부 졸업").build();
+
         PortfolioDTO dto = PortfolioDTO.builder()
                 .title("title")
                 .content("content")
                 .project(projectDTOSet)
+                .education(education)
                 .build();
 
         //when

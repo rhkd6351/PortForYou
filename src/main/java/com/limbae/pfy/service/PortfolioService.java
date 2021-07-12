@@ -155,12 +155,13 @@ public class PortfolioService {
                                 .content(i.getContent())
                                 .reg_date(i.getRegDate())
                                 .idx(i.getIdx())
-                                .position(i.getPosition().stream().map(
+                                .position(i.getPosition() != null
+                                        ? i.getPosition().stream().map(
                                         k -> PositionDTO.builder()
                                                 .idx(k.getIdx())
                                                 .name(k.getName())
                                                 .build()
-                                ).collect(Collectors.toList()))
+                                ).collect(Collectors.toList()) : null)
                                 .stack(stacks.stream().map(
                                         p -> StackDTO.builder()
                                                 .name(p)
