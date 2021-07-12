@@ -22,7 +22,7 @@ public class PortfolioVO {
     @Column(name = "idx")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     String title;
 

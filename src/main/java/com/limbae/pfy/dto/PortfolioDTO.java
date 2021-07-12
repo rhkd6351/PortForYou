@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PortfolioDTO {
-    int idx;
+    Long idx;
 
     String title;
 

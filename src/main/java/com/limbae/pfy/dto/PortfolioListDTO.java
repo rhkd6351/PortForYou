@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PortfolioListDTO {
-    int idx;
+    Long idx;
     String title;
     String content;
     Date reg_date;

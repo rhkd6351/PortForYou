@@ -11,13 +11,13 @@ import java.util.Optional;
 public interface PortfolioRepository extends JpaRepository<PortfolioVO, Long> {
 
     @EntityGraph(attributePaths = "project")
-    Optional<PortfolioVO> findOneWithProjectByIdx(int uid);
+    Optional<PortfolioVO> findOneWithProjectByIdx(Long uid);
 
     @EntityGraph(attributePaths = {"project", "position"})
     Optional<PortfolioVO> findOneWithProjectAndPositionByIdx(int idx);
 
     @EntityGraph(attributePaths = {"project", "position", "tech", "education"})
-    Optional<PortfolioVO> findOneByIdx(int idx);
+    Optional<PortfolioVO> findOneByIdx(Long idx);
 
     @EntityGraph(attributePaths = {"tech", "position"})
     Optional<List<PortfolioVO>> findByUserUid(Long uid);

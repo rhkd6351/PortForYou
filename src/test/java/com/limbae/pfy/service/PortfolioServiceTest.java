@@ -135,12 +135,12 @@ public class PortfolioServiceTest {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(12);
+        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(12L);
 
         //when
         portfolioByIdx.get().setTitle("changed title");
         portfolioService.updatePortfolio(entityUtil.convertPortfolioVoToDto(portfolioByIdx.get()));
-        Optional<PortfolioVO> portfolioByIdx1 = portfolioService.getPortfolioByIdx(12);
+        Optional<PortfolioVO> portfolioByIdx1 = portfolioService.getPortfolioByIdx(12L);
 
         //then
         Assertions.assertThat(portfolioByIdx1.get().getTitle()).isEqualTo("changed title");

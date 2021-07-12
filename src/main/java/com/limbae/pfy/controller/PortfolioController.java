@@ -10,6 +10,7 @@ import com.limbae.pfy.service.StackService;
 import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +53,7 @@ public class PortfolioController {
 
     @GetMapping("/portfolio")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(@RequestParam(value = "portfolio_idx") int idx){
+    public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(@RequestParam(value = "portfolio_idx") Long idx){
 
         Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
 
@@ -66,27 +67,34 @@ public class PortfolioController {
         return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(getvo));
     }
 
+//    @PostMapping("/portfolio")
+//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+//    public ResponseEntity<PortfolioDTO> savePortfolio(
+//            @RequestBody PortfolioDTO portfolioDTO){
+//        try{
+//            PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
+//            return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
+//        }catch (Exception e){
+//            log.warn(e.getMessage());
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//    }
+
+    @PutMapping("/portfolio")
     @PostMapping("/portfolio")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PortfolioDTO> savePortfolio(
+    public ResponseEntity<PortfolioDTO> updatePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){
         try{
-            PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
+            PortfolioVO pvo = portfolioService.updatePortfolio(portfolioDTO);
             return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
         }catch (Exception e){
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().build();
+
         }
 
-    }
-
-    @PutMapping("/portfolio")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PortfolioDTO> updatePortfolio(
-            @RequestBody PortfolioDTO portfolioDTO){
-        PortfolioVO pvo = portfolioService.updatePortfolio(portfolioDTO);
-
-        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
     }
 
     @GetMapping("/portfolio/stacks")

@@ -32,7 +32,7 @@ public class PortfolioService {
     }
 
 
-    public Optional<PortfolioVO> getPortfolioByIdx(int idx) {
+    public Optional<PortfolioVO> getPortfolioByIdx(Long idx) {
         return portfolioRepository.findOneByIdx(idx);
     }
 
@@ -48,6 +48,9 @@ public class PortfolioService {
 
     public PortfolioVO savePortfolio(PortfolioDTO portfolioDTO) {
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        if(uvo.isEmpty()) return null;
+        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
+        if(education.isEmpty()) return null;
 
         Set<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
@@ -76,7 +79,6 @@ public class PortfolioService {
                                 .build()
                 ).collect(Collectors.toSet()) : null);
 
-        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
 
         PortfolioVO portfolioVO = PortfolioVO.builder()
                 .user(uvo.get())
@@ -95,6 +97,10 @@ public class PortfolioService {
     public PortfolioVO updatePortfolio(PortfolioDTO portfolioDTO) {
 
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        if(uvo.isEmpty()) return null;
+
+        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
+        if(education.isEmpty()) return null;
 
         Set<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
@@ -123,18 +129,27 @@ public class PortfolioService {
                                 .build()
                 ).collect(Collectors.toSet()) : null);
 
-        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
+        if(portfolioDTO.getIdx() == 0){
+            PortfolioVO portfolioVO = PortfolioVO.builder()
+                    .user(uvo.get())
+                    .title(portfolioDTO.getTitle())
+                    .content(portfolioDTO.getContent())
+                    .project(projectSet)
+                    .tech(techVOS)
+                    .position(positionVOS)
+                    .education(education.get())
+                    .build();
+            portfolioRepository.save(portfolioVO);
+            return portfolioVO;
+        }
 
-        PortfolioVO portfolioVO = PortfolioVO.builder()
-                .idx(portfolioDTO.getIdx())
-                .user(uvo.get())
-                .title(portfolioDTO.getTitle())
-                .content(portfolioDTO.getContent())
-                .project(projectSet)
-                .tech(techVOS)
-                .position(positionVOS)
-                .education(education.get())
-                .build();
+        PortfolioVO portfolioVO = portfolioRepository.getById(portfolioDTO.getIdx());
+        portfolioVO.setTitle(portfolioDTO.getTitle());
+        portfolioVO.setContent(portfolioDTO.getContent());
+        portfolioVO.setProject(projectSet);
+        portfolioVO.setTech(techVOS);
+        portfolioVO.setPosition(positionVOS);
+        portfolioVO.setEducation(education.get());
 
         portfolioRepository.save(portfolioVO);
 

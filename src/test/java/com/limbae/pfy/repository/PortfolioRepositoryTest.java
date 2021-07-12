@@ -26,7 +26,7 @@ public class PortfolioRepositoryTest {
     @Test
     void test_1() {
         //given
-        Optional<PortfolioVO> pvo = portfolioRepository.findOneWithProjectByIdx(18);
+        Optional<PortfolioVO> pvo = portfolioRepository.findOneWithProjectByIdx(18L);
 
         //when
         List<ProjectVO> list = new ArrayList<>(pvo.get().getProject());
