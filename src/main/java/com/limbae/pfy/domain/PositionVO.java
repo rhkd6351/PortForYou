@@ -19,7 +19,7 @@ public class PositionVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     String name;
 }

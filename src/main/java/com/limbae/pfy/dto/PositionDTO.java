@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class PositionDTO {
 
-    int idx;
+    Long idx;
 
     String name;
 

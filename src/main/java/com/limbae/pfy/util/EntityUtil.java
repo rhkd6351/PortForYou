@@ -149,4 +149,25 @@ public class EntityUtil {
                 .demandPositionVOSet(demandPositionVOSet)
                 .build();
     }
+
+    public StudyApplicationDTO convertStudyApplicationVoToDto(StudyApplicationVO vo){
+
+
+        return StudyApplicationDTO.builder()
+                .idx(vo.getIdx())
+                .announcement(AnnouncementDTO.builder().idx(vo.getAnnouncement().getIdx()).build())
+                .portfolio(PortfolioDTO.builder().idx(vo.getPortfolio().getIdx()).build())
+                .position(PositionDTO.builder().idx(vo.getPosition().getIdx()).build())
+                .regDate(vo.getRegDate())
+                .build();
+    }
+
+    public UserDTO convertUserVoToDto(UserVO vo){
+        return UserDTO.builder()
+                .uid(vo.getUid())
+                .name(vo.getName())
+                .phone(vo.getPhone())
+                .site(vo.getSite())
+                .build();
+    }
 }

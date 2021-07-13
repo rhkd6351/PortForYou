@@ -18,6 +18,9 @@ public class ImageService {
         return uiImageRepository.findOneByName(name);
     }
 
+    public UiImageVO saveUiImage(UiImageVO uiImageVO){
+        return uiImageRepository.saveAndFlush(uiImageVO);
+    }
 
 
 

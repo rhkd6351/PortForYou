@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,11 +33,23 @@ public class ImageUtil {
         try{
             byfile = Files.readAllBytes(file.toPath());
         }catch (NoSuchFileException e){
-            System.out.println("There is no such file");
-            log.info("wow");
+            log.warn("There is no such file");
             throw e;
         }
 
         return Optional.of(byfile);
     }
+
+    public boolean saveImage(MultipartFile multipartFile, String name, String uploadPath) throws IOException {
+        try{
+            File file = new File(originPath + uploadPath + "/" + name);
+            multipartFile.transferTo(file);
+        }catch (Exception e){
+            throw e;
+        }
+
+        return true;
+
+    }
+
 }

@@ -81,8 +81,7 @@ public class PortfolioController {
 //
 //    }
 
-    @PutMapping("/portfolio")
-    @PostMapping("/portfolio")
+    @RequestMapping(value = "/portfolio", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> updatePortfolio(
             @RequestBody PortfolioDTO portfolioDTO){

@@ -28,6 +28,8 @@ public class ProjectVO {
 
     String content;
 
+    String site;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "project_stack",

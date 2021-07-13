@@ -4,7 +4,9 @@ import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.dto.UserDTO;
 import com.limbae.pfy.service.UserService;
+import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,10 @@ import javax.validation.Valid;
 public class UserController {
     private final UserService userService;
 
+    @Autowired
+    EntityUtil entityUtil;
+
+    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -35,8 +41,8 @@ public class UserController {
 
     @GetMapping("")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<UserVO> getMyUserInfo() {
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
+    public ResponseEntity<UserDTO> getMyUserInfo() {
+        return ResponseEntity.ok(entityUtil.convertUserVoToDto(userService.getMyUserWithAuthorities().get()));
     }
 
     @GetMapping("/valid")

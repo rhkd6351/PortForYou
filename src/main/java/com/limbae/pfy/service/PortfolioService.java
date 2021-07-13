@@ -129,7 +129,7 @@ public class PortfolioService {
                                 .build()
                 ).collect(Collectors.toSet()) : null);
 
-        if(portfolioDTO.getIdx() == 0){
+        if(portfolioDTO.getIdx() == null){
             PortfolioVO portfolioVO = PortfolioVO.builder()
                     .user(uvo.get())
                     .title(portfolioDTO.getTitle())

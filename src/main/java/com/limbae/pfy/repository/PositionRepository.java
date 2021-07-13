@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface PositionRepository extends JpaRepository<PositionVO, Long> {
 
-    Optional<PositionVO> findOneByIdx(int idx);
+    Optional<PositionVO> findOneByIdx(Long idx);
 }
