@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api")
 @Log4j2
 public class UserController {
     private final UserService userService;
@@ -28,7 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("")
+    @PostMapping("/user")
     public ResponseEntity<ResponseObjectDTO> signup(
             @Valid @RequestBody UserDTO userDto) {
         try {
@@ -39,7 +39,7 @@ public class UserController {
         return new ResponseEntity<>(new ResponseObjectDTO("true"), null, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @RequestMapping(value = "/userInfo", method = {RequestMethod.GET})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<UserDTO> getMyUserInfo() {
         return ResponseEntity.ok(entityUtil.convertUserVoToDto(userService.getMyUserWithAuthorities().get()));
@@ -48,6 +48,7 @@ public class UserController {
     @GetMapping("/valid")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<ResponseObjectDTO> userValidCheck() {
+
         return ResponseEntity.ok(new ResponseObjectDTO("true"));
     }
 
