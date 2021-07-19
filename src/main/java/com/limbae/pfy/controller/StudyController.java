@@ -82,6 +82,8 @@ public class StudyController {
             @RequestParam(name = "studyIdx") Long studyIdx) {
         Optional<List<AnnouncementVO>> announcementListByStudyIdx = studyService.getAnnouncementListByStudyIdx(studyIdx);
 
+        if(announcementListByStudyIdx.isEmpty()) return ResponseEntity.badRequest().build();
+
         return announcementListByStudyIdx.map(announcementVOS -> ResponseEntity.ok(announcementVOS.stream().map(
                 i -> entityUtil.convertAnnouncementVoToDto(i)
         ).collect(Collectors.toList()))).orElseGet(() -> ResponseEntity.badRequest().build());
@@ -103,11 +105,12 @@ public class StudyController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyApplicationDTO> applyPortfolioToAnnouncement(
             @RequestBody StudyApplicationDTO dto){
-        return ResponseEntity.ok(
-                entityUtil.convertStudyApplicationVoToDto(
-                        studyApplicationService.saveStudyApplication(dto)
-                )
-        );
+        StudyApplicationDTO studyApplicationDTO = entityUtil.convertStudyApplicationVoToDto(
+                studyApplicationService.saveStudyApplication(dto));
+        if(studyApplicationDTO == null)
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.ok(studyApplicationDTO);
     }
 
     @GetMapping("/study/announcement/applications")

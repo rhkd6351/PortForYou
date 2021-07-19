@@ -81,6 +81,24 @@ public class PortfolioController {
 //
 //    }
 
+    @DeleteMapping("/portfolio")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> deletePortfolioByIdx(@RequestParam(value = "portfolio_idx") Long idx){
+
+        Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
+
+        if(opvo.isEmpty()) return ResponseEntity.badRequest().build();
+        PortfolioVO getvo = opvo.get();
+
+        if(getvo.getUser() != userService.getMyUserWithAuthorities().get())
+            return ResponseEntity.badRequest().build();
+        //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
+
+        portfolioService.deletePortfolio(getvo);
+        return ResponseEntity.ok(ResponseObjectDTO.builder().message("success").build());
+
+    }
+
     @RequestMapping(value = "/portfolio", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> updatePortfolio(
@@ -91,9 +109,7 @@ public class PortfolioController {
         }catch (Exception e){
             log.warn(e.getMessage());
             return ResponseEntity.badRequest().build();
-
         }
-
     }
 
     @GetMapping("/portfolio/stacks")
@@ -120,6 +136,4 @@ public class PortfolioController {
         ).collect(Collectors.toList());
         return ResponseEntity.ok(educationList);
     }
-
-
 }

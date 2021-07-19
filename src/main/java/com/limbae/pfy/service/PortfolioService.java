@@ -46,6 +46,10 @@ public class PortfolioService {
         return any != null;
     }
 
+    public void deletePortfolio(PortfolioVO vo){ //TODO delete 리턴타입 다시정하기
+        portfolioRepository.delete(vo);
+    }
+
     public PortfolioVO savePortfolio(PortfolioDTO portfolioDTO) {
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
         if(uvo.isEmpty()) return null;
@@ -105,6 +109,7 @@ public class PortfolioService {
         Set<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
                         i -> ProjectVO.builder()
+                                .idx(i.getIdx())
                                 .title(i.getTitle())
                                 .content(i.getContent())
                                 .stack(i.getStack() != null ?
@@ -123,6 +128,7 @@ public class PortfolioService {
         Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
                 portfolioDTO.getTech().stream().map(
                         i -> TechVO.builder()
+                                .idx(i.getIdx())
                                 .content(i.getContent())
                                 .ability(i.getAbility())
                                 .stack(stackRepository.getById(i.getStackIdx()))
