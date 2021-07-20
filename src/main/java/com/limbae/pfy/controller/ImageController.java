@@ -49,7 +49,7 @@ public class ImageController {
         Optional<UiImageVO> img = imageService.getUiImageWithName(name);
         byte[] bfile = null;
 
-        if (img.isEmpty()) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        if (img.isEmpty()) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         try {
             bfile = imageUtil.getImageByteFromImageVO(img.get()).get();
@@ -70,6 +70,21 @@ public class ImageController {
 
         int i = multipartFile.getOriginalFilename().lastIndexOf(".");
         String extension = multipartFile.getOriginalFilename().substring(i);
+
+        //파일 확장자 제한
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".git")))
+            return new ResponseEntity<ResponseObjectDTO>(
+                    ResponseObjectDTO.builder().message("wrong file extension").build(),
+                    HttpStatus.BAD_REQUEST
+            );
+
+        //파일 용량 제한
+        if(multipartFile.getSize() > 7000000)
+            return new ResponseEntity<ResponseObjectDTO>(
+                    ResponseObjectDTO.builder().message("File size exceeded").build(),
+                    HttpStatus.BAD_REQUEST
+            );
+
         String saveName = user.get().getUid() + "_profile_img";
 
         try {
