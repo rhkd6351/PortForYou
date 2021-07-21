@@ -39,7 +39,7 @@ public class AnnouncementVO {
     @OneToMany(
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
-    @JoinColumn(name = "position_idx")
-    Set<DemandPositionVO> demandPositionVOSet;
+    @JoinColumn(name = "study_announcement_idx")
+    Set<DemandPositionVO> demandPosition;
 
 }

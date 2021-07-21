@@ -129,7 +129,7 @@ public class StudyService {
         announcementVO.setStudy(studyRepository.findById(announcementDTO.getStudyIdx()).get());
         announcementRepository.save(announcementVO);
 
-        for (DemandPositionVO vo : announcementVO.getDemandPositionVOSet())
+        for (DemandPositionVO vo : announcementVO.getDemandPosition())
             vo.setStudyAnnouncementIdx(announcementVO.getIdx());
         announcementRepository.save(announcementVO);
         //announcement 저장 뒤 idx를 가져와 announcement idx정보를 demandposition에 저장 후 재 커밋
