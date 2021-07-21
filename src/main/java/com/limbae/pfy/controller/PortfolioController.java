@@ -11,6 +11,7 @@ import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,7 @@ public class PortfolioController {
 
         Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
 
-        if(opvo.isEmpty()) return ResponseEntity.badRequest().build();
+        if(opvo.isEmpty()) return new ResponseEntity<PortfolioDTO>(HttpStatus.NOT_FOUND);
         PortfolioVO getvo = opvo.get();
 
         if(getvo.getUser() != userService.getMyUserWithAuthorities().get())
@@ -87,7 +88,7 @@ public class PortfolioController {
 
         Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
 
-        if(opvo.isEmpty()) return ResponseEntity.badRequest().build();
+        if(opvo.isEmpty()) return new ResponseEntity<ResponseObjectDTO>(HttpStatus.NOT_FOUND);
         PortfolioVO getvo = opvo.get();
 
         if(getvo.getUser() != userService.getMyUserWithAuthorities().get())

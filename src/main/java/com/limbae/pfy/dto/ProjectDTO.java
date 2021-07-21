@@ -23,4 +23,6 @@ public class ProjectDTO {
     String content;
 
     Set<StackDTO> stack;
+
+    String site;
 }
