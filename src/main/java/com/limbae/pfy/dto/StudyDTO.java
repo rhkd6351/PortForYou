@@ -18,4 +18,8 @@ public class StudyDTO {
     String title;
 
     String content;
+
+    StudyCategoryDTO studyCategory;
+
+    int members;
 }

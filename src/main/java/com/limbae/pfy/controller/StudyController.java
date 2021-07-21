@@ -13,7 +13,9 @@ import com.limbae.pfy.repository.StudyApplicationRepository;
 import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
 import com.limbae.pfy.util.SecurityUtil;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -51,10 +53,23 @@ public class StudyController {
 
     @GetMapping("/studies")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<StudyDTO>> getMyStudyList() {
+    public ResponseEntity<List<StudyDTO>> getMyStudyList(@RequestParam(required = false) boolean applied) {
+        if(applied){
+            return ResponseEntity.ok(studyService.getMyAppliedStudyList().stream().map(
+                    i -> {
+                        StudyDTO studyDTO = entityUtil.convertStudyVoToDto(i);
+                        studyDTO.setMembers(i.getMembers().size());
+                        return studyDTO;
+                    }
+            ).collect(Collectors.toList()));
+        }
         return studyService.getMyStudyList() != null ?
                 ResponseEntity.ok(studyService.getMyStudyList().stream().map(
-                        i -> entityUtil.convertStudyVoToDto(i)
+                        i -> {
+                            StudyDTO studyDTO = entityUtil.convertStudyVoToDto(i);
+                            studyDTO.setMembers(i.getMembers().size());
+                            return studyDTO;
+                        }
                 ).collect(Collectors.toList())) : ResponseEntity.badRequest().build();
     }
 
@@ -62,18 +77,28 @@ public class StudyController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyDTO> getMyStudyByIdx(@RequestParam(name = "studyIdx") Long studyIdx) {
         StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
-        if(studyByIdx == null || (studyByIdx.getUser() != userService.getMyUserWithAuthorities().get()))
-            return ResponseEntity.badRequest().build();
+
+        if(studyByIdx == null) //NOT FOUND
+            return new ResponseEntity<StudyDTO>(HttpStatus.NOT_FOUND);
+
+        if((studyByIdx.getUser() != userService.getMyUserWithAuthorities().get())) //UNAUTHORIZED
+            return new ResponseEntity<StudyDTO>(HttpStatus.UNAUTHORIZED);
 
         return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyByIdx));
-
     }
 
     @PostMapping("/study")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyDTO> saveStudy(
             @RequestBody StudyDTO studyDTO) {
-        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyService.saveStudy(studyDTO)));
+        StudyVO studyVO = null;
+        try {
+            studyVO = studyService.saveStudy(studyDTO);
+        } catch (NotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyVO));
     }
 
     @GetMapping("/study/announcements")

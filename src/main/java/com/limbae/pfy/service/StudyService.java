@@ -1,16 +1,15 @@
 package com.limbae.pfy.service;
 
-import com.limbae.pfy.domain.AnnouncementVO;
-import com.limbae.pfy.domain.DemandPositionVO;
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.AnnouncementDTO;
 import com.limbae.pfy.dto.StudyDTO;
 import com.limbae.pfy.repository.AnnouncementRepository;
+import com.limbae.pfy.repository.StudyCategoryRepository;
 import com.limbae.pfy.repository.StudyRepository;
 import com.limbae.pfy.repository.UserRepository;
 import com.limbae.pfy.util.EntityUtil;
 import com.limbae.pfy.util.SecurityUtil;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +23,15 @@ public class StudyService {
     UserRepository userRepository;
     EntityUtil entityUtil;
     AnnouncementRepository announcementRepository;
+    StudyCategoryRepository studyCategoryRepository;
 
     @Autowired
-    public StudyService(StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository) {
+    public StudyService(StudyCategoryRepository studyCategoryRepository, StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository) {
         this.studyRepository = studyRepository;
         this.userRepository = userRepository;
         this.entityUtil = entityUtil;
         this.announcementRepository = announcementRepository;
+        this.studyCategoryRepository = studyCategoryRepository;
     }
 
     public List<StudyVO> getMyStudyList() {
@@ -40,7 +41,17 @@ public class StudyService {
         } else {
             return null;
         }
-        return userVO.map(vo -> studyRepository.findByUserUid(vo.getUid())).orElse(null);
+        return userVO.map(vo -> studyRepository.findWithMembersByUserUid(vo.getUid())).orElse(null);
+    }
+
+    public List<StudyVO> getMyAppliedStudyList() {
+        Optional<UserVO> userVO;
+        if (SecurityUtil.getCurrentUsername().isPresent()) {
+            userVO = userRepository.findOneWithStudyByUsername(SecurityUtil.getCurrentUsername().get());
+        } else {
+            return null;
+        }
+        return userVO.get().getStudy().stream().toList();
     }
 
     public StudyVO getStudyByIdx(Long idx) {
@@ -48,7 +59,7 @@ public class StudyService {
         return studyVO.orElse(null);
     }
 
-    public StudyVO saveStudy(StudyDTO dto) {
+    public StudyVO saveStudy(StudyDTO dto) throws NotFoundException {
         Optional<UserVO> userVO;
         if (SecurityUtil.getCurrentUsername().isPresent()) {
             userVO = userRepository.findOneWithAuthoritiesByUsername(SecurityUtil.getCurrentUsername().get());
@@ -56,9 +67,14 @@ public class StudyService {
             return null;
         }
 
-        StudyVO studyVO = entityUtil.convertStudyDtoToVo(dto);
-        userVO.ifPresent(studyVO::setUser);
+        Optional<StudyCategoryVO> categoryRepositoryById = studyCategoryRepository.findById(dto.getStudyCategory().getIdx());
+        if(categoryRepositoryById.isEmpty())
+            throw new NotFoundException("invalid category");
 
+        StudyVO studyVO = entityUtil.convertStudyDtoToVo(dto);
+        studyVO.setStudyCategory(categoryRepositoryById.get());
+
+        userVO.ifPresent(studyVO::setUser);
         return studyRepository.save(studyVO);
     }
 

@@ -56,13 +56,13 @@ public class UserVO {
     @JoinColumn(name = "user_uid")
     private List<PortfolioVO> portfolio;
 
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name="study_user",
-//            joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
-//            inverseJoinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")}
-//    )
-//    Set<StudyVO> study
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name="study_user",
+            joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
+            inverseJoinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")}
+    )
+    Set<StudyVO> study;
 
 
 }

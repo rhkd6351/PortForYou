@@ -92,20 +92,36 @@ public class EntityUtil {
 
     public StudyDTO convertStudyVoToDto(StudyVO vo){
 
+        StudyCategoryVO studyCategory = vo.getStudyCategory();
+
+        StudyCategoryDTO studyCategoryBuild = StudyCategoryDTO.builder()
+                .idx(studyCategory.getIdx())
+                .title(studyCategory.getTitle())
+                .content(studyCategory.getContent())
+                .build();
+
         return StudyDTO.builder()
                 .idx(vo.getIdx())
                 .user_uid(vo.getUser().getUid())
                 .content(vo.getContent())
                 .title(vo.getTitle())
+                .studyCategory(studyCategoryBuild)
                 .build();
 
     }
 
     public StudyVO convertStudyDtoToVo(StudyDTO vo){
 
+//        StudyCategoryVO studyCategoryVO = StudyCategoryVO.builder()
+//                .idx(vo.getIdx())
+//                .title(vo.getTitle())
+//                .content(vo.getContent())
+//                .build();
+
         return StudyVO.builder()
                 .content(vo.getContent())
                 .title(vo.getTitle())
+//                .studyCategory(studyCategoryVO)
                 .build();
 
     }

@@ -72,7 +72,7 @@ public class ImageController {
         String extension = multipartFile.getOriginalFilename().substring(i);
 
         //파일 확장자 제한
-        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".git")))
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".gif")))
             return new ResponseEntity<ResponseObjectDTO>(
                     ResponseObjectDTO.builder().message("wrong file extension").build(),
                     HttpStatus.BAD_REQUEST
