@@ -128,25 +128,29 @@ public class EntityUtil {
 
     public AnnouncementDTO convertAnnouncementVoToDto(AnnouncementVO announcementVO){
 
-        AnnouncementDTO build = AnnouncementDTO.builder()
+        AnnouncementDTO announcementDTO = AnnouncementDTO.builder()
                 .idx(announcementVO.getIdx())
                 .studyIdx(announcementVO.getStudy().getIdx())
                 .title(announcementVO.getTitle())
                 .content(announcementVO.getContent())
                 .build();
 
+
         if(announcementVO.getDemandPositionVOSet() != null){
-            build.setDemandPosition(announcementVO.getDemandPositionVOSet().stream().map(
+            announcementDTO.setDemandPosition(announcementVO.getDemandPositionVOSet().stream().map(
                     i -> DemandPositionDTO.builder()
                                 .idx(i.getIdx())
                                 .studyAnnouncementIdx(i.getStudyAnnouncementIdx())
                                 .demand(i.getDemand())
-                                .positionIdx(i.getPositionIdx())
+                                .position(PositionDTO.builder()
+                                            .idx(i.getPosition().getIdx())
+                                            .name(i.getPosition().getName())
+                                            .build())
                                 .build()
             ).collect(Collectors.toList()));
         }
 
-        return build;
+        return announcementDTO;
     }
 
     public AnnouncementVO convertAnnouncementDtoToVo(AnnouncementDTO announcementDTO){
@@ -155,7 +159,10 @@ public class EntityUtil {
                 i -> DemandPositionVO.builder()
                         .demand(i.getDemand())
                         .studyAnnouncementIdx(0L) // 일단 0으로 저장
-                        .positionIdx(i.getPositionIdx())
+                        .position(PositionVO.builder()
+                                .idx(i.getPosition().getIdx())
+                                .name(i.getPosition().getName())
+                                .build())
                         .build()
         ).collect(Collectors.toSet());
 

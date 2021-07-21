@@ -19,8 +19,9 @@ public class DemandPositionVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
-    @Column(name = "position_idx")
-    Long positionIdx;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "position_idx")
+    PositionVO position;
 
     @Column(name = "study_announcement_idx")
     Long studyAnnouncementIdx;

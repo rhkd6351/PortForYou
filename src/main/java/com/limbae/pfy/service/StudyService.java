@@ -10,6 +10,7 @@ import com.limbae.pfy.repository.UserRepository;
 import com.limbae.pfy.util.EntityUtil;
 import com.limbae.pfy.util.SecurityUtil;
 import javassist.NotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class StudyService {
 
     StudyRepository studyRepository;
@@ -59,6 +61,11 @@ public class StudyService {
         return studyVO.orElse(null);
     }
 
+    public StudyVO getStudyWithAnnouncementsByIdx(Long idx) {
+        Optional<StudyVO> studyVO = studyRepository.findWithAnnouncementsByIdx(idx);
+        return studyVO.orElse(null);
+    }
+
     public StudyVO saveStudy(StudyDTO dto) throws NotFoundException {
         Optional<UserVO> userVO;
         if (SecurityUtil.getCurrentUsername().isPresent()) {
@@ -76,6 +83,16 @@ public class StudyService {
 
         userVO.ifPresent(studyVO::setUser);
         return studyRepository.save(studyVO);
+    }
+
+    public boolean deleteStudy(StudyVO vo){
+        try{
+            studyRepository.delete(vo);
+            return true;
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            return false;
+        }
     }
 
     public Optional<List<AnnouncementVO>> getAnnouncementListByStudyIdx(Long studyIdx) {

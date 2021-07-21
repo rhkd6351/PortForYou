@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -41,6 +42,12 @@ public class StudyVO {
                 fetch = FetchType.EAGER)
     @JoinColumn(name="study_category_idx")
     StudyCategoryVO studyCategory;
+
+    @OneToMany(targetEntity = AnnouncementVO.class,
+               cascade = CascadeType.ALL,
+               fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_idx")
+    List<AnnouncementVO> announcements;
 
 
 }

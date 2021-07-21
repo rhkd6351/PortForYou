@@ -15,4 +15,7 @@ public interface StudyRepository extends JpaRepository<StudyVO, Long> {
     @EntityGraph(attributePaths = "members")
     List<StudyVO> findWithMembersByUserUid(Long userUid);
 
+    @EntityGraph(attributePaths = "announcements")
+    Optional<StudyVO> findWithAnnouncementsByIdx(Long idx);
+
 }

@@ -4,17 +4,12 @@ package com.limbae.pfy.controller;
 import com.limbae.pfy.domain.AnnouncementVO;
 import com.limbae.pfy.domain.StudyApplicationVO;
 import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
-import com.limbae.pfy.dto.AnnouncementDTO;
-import com.limbae.pfy.dto.ApplyAnnouncementDTO;
-import com.limbae.pfy.dto.StudyApplicationDTO;
-import com.limbae.pfy.dto.StudyDTO;
-import com.limbae.pfy.repository.StudyApplicationRepository;
+import com.limbae.pfy.dto.*;
 import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
-import com.limbae.pfy.util.SecurityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,11 +31,13 @@ public class StudyController {
     PositionService positionService;
     StudyService studyService;
     StudyApplicationService studyApplicationService;
+    AnnouncementService announcementService;
 
     public StudyController(UserService userService, PortfolioService portfolioService,
                            EntityUtil entityUtil, StackService stackService,
                            PositionService positionService, StudyService studyService,
-                           StudyApplicationService studyApplicationService) {
+                           StudyApplicationService studyApplicationService,
+                           AnnouncementService announcementService) {
         this.userService = userService;
         this.portfolioService = portfolioService;
         this.entityUtil = entityUtil;
@@ -48,6 +45,7 @@ public class StudyController {
         this.positionService = positionService;
         this.studyService = studyService;
         this.studyApplicationService = studyApplicationService;
+        this.announcementService = announcementService;
     }
 
 
@@ -67,7 +65,7 @@ public class StudyController {
                 ResponseEntity.ok(studyService.getMyStudyList().stream().map(
                         i -> {
                             StudyDTO studyDTO = entityUtil.convertStudyVoToDto(i);
-                            studyDTO.setMembers(i.getMembers().size());
+                            studyDTO.setMembers(i.getMembers().size() + 1);
                             return studyDTO;
                         }
                 ).collect(Collectors.toList())) : ResponseEntity.badRequest().build();
@@ -101,24 +99,67 @@ public class StudyController {
         return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyVO));
     }
 
+    @DeleteMapping("/study")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> deleteStudy(
+            @RequestParam Long studyIdx
+    ){
+        StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
+        if(studyByIdx == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if(studyByIdx.getUser() != userService.getMyUserWithAuthorities().get())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        if(studyService.deleteStudy(studyByIdx)){
+            return ResponseEntity.ok(new ResponseObjectDTO("delete success"));
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+
     @GetMapping("/study/announcements")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList(
             @RequestParam(name = "studyIdx") Long studyIdx) {
-        Optional<List<AnnouncementVO>> announcementListByStudyIdx = studyService.getAnnouncementListByStudyIdx(studyIdx);
+        StudyVO studyWithAnnouncementsByIdx = studyService.getStudyWithAnnouncementsByIdx(studyIdx);
 
-        if(announcementListByStudyIdx.isEmpty()) return ResponseEntity.badRequest().build();
+        if(studyWithAnnouncementsByIdx == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        return announcementListByStudyIdx.map(announcementVOS -> ResponseEntity.ok(announcementVOS.stream().map(
+        if(studyWithAnnouncementsByIdx.getUser() != userService.getMyUserWithAuthorities().get())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        return new ResponseEntity<>(studyWithAnnouncementsByIdx.getAnnouncements().stream().map(
                 i -> entityUtil.convertAnnouncementVoToDto(i)
-        ).collect(Collectors.toList()))).orElseGet(() -> ResponseEntity.badRequest().build());
+        ).collect(Collectors.toList()), HttpStatus.OK);
+    }
+
+    @GetMapping("/study/announcement")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<AnnouncementDTO> getAnnouncement(@RequestParam(name = "announcementIdx") Long announcementIdx){
+        AnnouncementVO announcementVO = announcementService.getAnnouncementByIdx(announcementIdx);
+
+        if(announcementVO == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(entityUtil.convertAnnouncementVoToDto(announcementVO),HttpStatus.OK);
+
     }
 
     @PostMapping("/study/announcement")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AnnouncementDTO> saveAnnouncement(
             @RequestBody AnnouncementDTO announcementDTO) {
-        AnnouncementVO announcementVO = studyService.saveAnnouncement(announcementDTO);
+        AnnouncementVO announcementVO = null;
+        try{
+            announcementVO = studyService.saveAnnouncement(announcementDTO);
+        }catch (Exception e){
+            log.warn(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
 
         if(announcementVO == null)
             return ResponseEntity.badRequest().build();
