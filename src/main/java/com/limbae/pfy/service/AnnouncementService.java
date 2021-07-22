@@ -1,10 +1,12 @@
 package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.AnnouncementVO;
+import com.limbae.pfy.domain.StudyApplicationVO;
 import com.limbae.pfy.domain.StudyVO;
 import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.StudyDTO;
 import com.limbae.pfy.repository.AnnouncementRepository;
+import com.limbae.pfy.repository.StudyApplicationRepository;
 import com.limbae.pfy.util.EntityUtil;
 import com.limbae.pfy.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,9 @@ public class AnnouncementService {
 
     @Autowired
     AnnouncementRepository announcementRepository;
+
+    @Autowired
+    StudyApplicationRepository studyApplicationRepository;
 
     @Autowired
     EntityUtil entityUtil;

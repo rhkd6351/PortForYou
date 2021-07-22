@@ -58,4 +58,9 @@ public class PortfolioVO {
     @JoinColumn(name = "education_idx")
     EducationVO education;
 
+    @OneToMany(cascade = CascadeType.ALL,
+            targetEntity = StudyApplicationVO.class,
+                fetch = FetchType.LAZY)
+    @JoinColumn(name = "portfolio_idx")
+    List<StudyApplicationVO> studyApplications;
 }

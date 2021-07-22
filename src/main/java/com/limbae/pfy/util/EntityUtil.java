@@ -140,6 +140,9 @@ public class EntityUtil {
                 .studyIdx(announcementVO.getStudy().getIdx())
                 .title(announcementVO.getTitle())
                 .content(announcementVO.getContent())
+                .regDate(announcementVO.getRegDate())
+                .endDate(announcementVO.getEndDate())
+                .activated(announcementVO.isActivated())
                 .build();
 
 
@@ -170,6 +173,7 @@ public class EntityUtil {
                                 .idx(i.getPosition().getIdx())
                                 .name(i.getPosition().getName())
                                 .build())
+                        .applied(0)
                         .build()
         ).collect(Collectors.toSet());
 
@@ -177,6 +181,7 @@ public class EntityUtil {
                 .content(announcementDTO.getContent())
                 .title(announcementDTO.getTitle())
                 .demandPosition(demandPosition)
+                .activated(true)
                 .build();
     }
 
@@ -185,10 +190,21 @@ public class EntityUtil {
 
         return StudyApplicationDTO.builder()
                 .idx(vo.getIdx())
-                .announcement(AnnouncementDTO.builder().idx(vo.getAnnouncement().getIdx()).build())
-                .portfolio(PortfolioDTO.builder().idx(vo.getPortfolio().getIdx()).build())
-                .position(PositionDTO.builder().idx(vo.getPosition().getIdx()).build())
+                .announcement(AnnouncementDTO.builder()
+                        .idx(vo.getAnnouncement().getIdx())
+                        .title(vo.getAnnouncement().getTitle())
+                        .activated(vo.getAnnouncement().isActivated())
+                        .build())
+                .portfolio(PortfolioDTO.builder()
+                        .idx(vo.getPortfolio().getIdx())
+                        .title(vo.getPortfolio().getTitle())
+                        .build())
+                .position(PositionDTO.builder()
+                        .idx(vo.getPosition().getIdx())
+                        .name(vo.getPosition().getName())
+                        .build())
                 .regDate(vo.getRegDate())
+                .declined(vo.getDeclined())
                 .build();
     }
 

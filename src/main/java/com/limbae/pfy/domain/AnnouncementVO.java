@@ -1,11 +1,15 @@
 package com.limbae.pfy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,11 +29,11 @@ public class AnnouncementVO {
     String content;
 
 
-    @OneToMany(
+    @OneToMany(targetEntity = StudyApplicationVO.class,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "study_announcement_idx")
-    Set<StudyApplicationVO> studyApplications;
+    List<StudyApplicationVO> studyApplications;
 
     @ManyToOne(targetEntity = StudyVO.class,
             fetch = FetchType.LAZY)
@@ -41,5 +45,15 @@ public class AnnouncementVO {
             fetch = FetchType.LAZY)
     @JoinColumn(name = "study_announcement_idx")
     Set<DemandPositionVO> demandPosition;
+
+    @Column(name = "reg_date")
+    @CreationTimestamp
+    Date regDate;
+
+    @Column(name = "end_date")
+    Date endDate;
+
+
+    boolean activated;
 
 }

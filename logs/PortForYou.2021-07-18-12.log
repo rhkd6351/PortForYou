@@ -1,0 +1,33 @@
+2021-07-18 00:00:01,421 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:01,429 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:04,534 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:04,538 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:13,667 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:13,688 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:14,887 [http-nio-8080-exec-10] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:14,895 [http-nio-8080-exec-10] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:16,187 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:16,208 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:17,664 [http-nio-8080-exec-4] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:17,670 [http-nio-8080-exec-4] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:30,639 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:30,639 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:30,646 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:00:30,646 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:37,561 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:37,561 [http-nio-8080-exec-5] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:37,564 [http-nio-8080-exec-6] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:37,564 [http-nio-8080-exec-5] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:46,874 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:46,874 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:46,881 [http-nio-8080-exec-9] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:01:46,881 [http-nio-8080-exec-3] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:02:03,568 [http-nio-8080-exec-8] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:02:03,568 [http-nio-8080-exec-7] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:02:03,569 [http-nio-8080-exec-8] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:02:03,569 [http-nio-8080-exec-7] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
+2021-07-18 00:11:30,964 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool(run:788) - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=8m14s330ms).
+2021-07-18 00:12:25,557 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool(run:788) - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=54s585ms).
+2021-07-18 00:12:37,978 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(destroy:651) - Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-07-18 00:12:38,013 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:350) - HikariPool-1 - Shutdown initiated...
+2021-07-18 00:12:38,030 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:352) - HikariPool-1 - Shutdown completed.

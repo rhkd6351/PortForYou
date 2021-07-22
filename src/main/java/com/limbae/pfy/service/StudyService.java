@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +132,7 @@ public class StudyService {
 
         for (DemandPositionVO vo : announcementVO.getDemandPosition())
             vo.setStudyAnnouncementIdx(announcementVO.getIdx());
+        announcementVO.setEndDate(new Date(announcementVO.getRegDate().getTime() + (7 * 24 * 60 * 60 * 1000))); //7일 뒤 마감
         announcementRepository.save(announcementVO);
         //announcement 저장 뒤 idx를 가져와 announcement idx정보를 demandposition에 저장 후 재 커밋
 

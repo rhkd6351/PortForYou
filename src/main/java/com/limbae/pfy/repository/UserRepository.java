@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<UserVO, Long> {
 
     @EntityGraph(attributePaths = {"portfolio"})
     Optional<UserVO> findOneWithPortfolioByUsername(String username);
+
+    @EntityGraph(attributePaths = {"portfolio"})
+    Optional<UserVO> findOneWithPortfolioByUid(Long uid);
 }

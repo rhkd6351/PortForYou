@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -26,7 +27,8 @@ public class StudyApplicationVO {
     @CreationTimestamp
     Date regDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+                cascade = CascadeType.DETACH)
     @JoinColumn(name = "study_announcement_idx")
     AnnouncementVO announcement;
 
@@ -37,5 +39,8 @@ public class StudyApplicationVO {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_idx")
     PositionVO position;
+
+    @ColumnDefault("0")
+    Long declined;
 
 }

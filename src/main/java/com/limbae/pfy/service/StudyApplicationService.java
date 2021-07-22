@@ -6,6 +6,7 @@ import com.limbae.pfy.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,14 +18,19 @@ public class StudyApplicationService {
     PortfolioRepository portfolioRepository;
     PositionRepository positionRepository;
     StudyRepository studyRepository;
+    UserRepository userRepository;
 
     @Autowired
-    public StudyApplicationService(StudyApplicationRepository studyApplicationRepository, AnnouncementRepository announcementRepository, PortfolioRepository portfolioRepository, PositionRepository positionRepository, StudyRepository studyRepository) {
+    public StudyApplicationService(StudyApplicationRepository studyApplicationRepository,
+                                   AnnouncementRepository announcementRepository, PortfolioRepository portfolioRepository,
+                                   PositionRepository positionRepository, StudyRepository studyRepository,
+                                   UserRepository userRepository) {
         this.studyApplicationRepository = studyApplicationRepository;
         this.announcementRepository = announcementRepository;
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
         this.studyRepository = studyRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -45,10 +51,23 @@ public class StudyApplicationService {
     }
 
     public List<StudyApplicationVO> getStudyApplicationListByStudyIdx(Long studyIdx){
-        Optional<AnnouncementVO> announcementVO = announcementRepository.findByStudyIdx(studyIdx).stream().findAny();
-        if(announcementVO.isEmpty()) return null;
+        List<StudyApplicationVO> list = new ArrayList<>();
+        List<AnnouncementVO> announcementVOList = announcementRepository.findByStudyIdx(studyIdx);
+        for(AnnouncementVO vo : announcementVOList)
+            list.addAll(studyApplicationRepository.findByAnnouncementIdx(vo.getIdx()));
 
-        return studyApplicationRepository.findByAnnouncementIdx(announcementVO.get().getIdx());
+        return list;
+    }
+
+    public List<StudyApplicationVO> getStudyApplicationLIstByUid(Long uid){
+        UserVO userVO = userRepository.findOneWithPortfolioByUid(uid).get();
+        ArrayList<StudyApplicationVO> applicationList = new ArrayList<>();
+
+        for(PortfolioVO portfolioVO : userVO.getPortfolio())
+            applicationList.addAll(portfolioVO.getStudyApplications());
+
+        return applicationList;
+
     }
 
 }

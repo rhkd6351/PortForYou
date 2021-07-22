@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudyCategoryService {
@@ -18,5 +19,7 @@ public class StudyCategoryService {
     public List<StudyCategoryVO> getCategoryList(){
         return studyCategoryRepository.findAll();
     }
+
+    public Optional<StudyCategoryVO> getCategoryByIdx(Long idx) { return studyCategoryRepository.findById(idx);}
 
 }

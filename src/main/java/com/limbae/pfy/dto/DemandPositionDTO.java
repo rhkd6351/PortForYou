@@ -21,6 +21,8 @@ public class DemandPositionDTO {
 
     int demand;
 
+    int applied;
+
 
 
 

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -19,7 +21,8 @@ public class DemandPositionVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(
+            fetch = FetchType.EAGER)
     @JoinColumn(name = "position_idx")
     PositionVO position;
 
@@ -27,6 +30,9 @@ public class DemandPositionVO {
     Long studyAnnouncementIdx;
 
     int demand;
+
+    @ColumnDefault(value = "0")
+    int applied;
 
 
 

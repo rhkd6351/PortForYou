@@ -1,10 +1,7 @@
 package com.limbae.pfy.controller;
 
 
-import com.limbae.pfy.domain.AnnouncementVO;
-import com.limbae.pfy.domain.StudyApplicationVO;
-import com.limbae.pfy.domain.StudyCategoryVO;
-import com.limbae.pfy.domain.StudyVO;
+import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
@@ -183,16 +180,16 @@ public class StudyController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> deleteAnnouncement(
             @RequestParam(value = "announcementIdx") Long announcementIdx){
-        AnnouncementVO announcementByIdx = announcementService.getAnnouncementByIdx(announcementIdx);
+        AnnouncementVO announcementVO = announcementService.getAnnouncementByIdx(announcementIdx);
 
-        if(announcementByIdx == null)
+        if(announcementVO == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         //소유 announcement 확인
-        if(announcementByIdx.getStudy().getUser() != userService.getMyUserWithAuthorities().get())
+        if(announcementVO.getStudy().getUser() != userService.getMyUserWithAuthorities().get())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if(announcementService.deleteAnnouncement(announcementByIdx))
+        if(announcementService.deleteAnnouncement(announcementVO))
             return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.OK);
         else
             return ResponseEntity.badRequest().build();
@@ -203,6 +200,20 @@ public class StudyController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyApplicationDTO> applyPortfolioToAnnouncement(
             @RequestBody StudyApplicationDTO dto){
+
+        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(dto.getPortfolio().getIdx());
+        AnnouncementVO announcementByIdx = announcementService.getAnnouncementByIdx(dto.getAnnouncement().getIdx());
+        Optional<PositionVO> positionByIdx = positionService.getPositionByIdx(dto.getPosition().getIdx());
+
+        if(portfolioByIdx.isEmpty() || announcementByIdx == null || positionByIdx.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND); //객체 존재 확인
+
+        if(userService.getMyUserWithAuthorities().get() != portfolioByIdx.get().getUser())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); //포트폴리오 소유 확인
+
+        if(!announcementByIdx.isActivated())
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //공문 마감
+
+
         StudyApplicationDTO studyApplicationDTO = null;
         studyApplicationDTO = entityUtil.convertStudyApplicationVoToDto(
                     studyApplicationService.saveStudyApplication(dto));
@@ -213,19 +224,42 @@ public class StudyController {
         return ResponseEntity.ok(studyApplicationDTO);
     }
 
-    @GetMapping("/study/announcement/applications")
+    @GetMapping("/study/applications")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<StudyApplicationDTO>> getStudyApplicationListByStudyIdx(
             @RequestParam(name = "studyIdx") Long studyIdx){
+
+        StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
+
+        if(studyByIdx == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if(userService.getMyUserWithAuthorities().get() != studyService.getStudyByIdx(studyIdx).getUser())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); //스터디 자기소유 확인
+
         List<StudyApplicationVO> saVO = studyApplicationService.getStudyApplicationListByStudyIdx(studyIdx);
-        if(saVO == null)
-            return ResponseEntity.badRequest().build();
+        if(saVO.size() == 0)
+            return ResponseEntity.ok(null);
 
         List<StudyApplicationDTO> collect = saVO.stream().map(
                 i -> entityUtil.convertStudyApplicationVoToDto(i)
         ).collect(Collectors.toList());
 
         return ResponseEntity.ok(collect);
+    }
+
+    @GetMapping("/applications")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<StudyApplicationDTO>> getMyApplicationList(){
+        UserVO userVO = userService.getMyUserWithAuthorities().get();
+        List<StudyApplicationVO> applicationLIstByUid = studyApplicationService.getStudyApplicationLIstByUid(userVO.getUid());
+
+        List<StudyApplicationDTO> applicationDTOS = applicationLIstByUid.stream().map(
+                i -> entityUtil.convertStudyApplicationVoToDto(i)
+        ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(applicationDTOS);
+
     }
 }
 

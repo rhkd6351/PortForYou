@@ -28,4 +28,6 @@ public class StudyApplicationDTO {
 
     PositionDTO position;
 
+    Long declined;
+
 }

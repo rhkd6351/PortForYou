@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: jdbc:mysql://limbae.cztd1aqg0ruy.ap-northeast-2.rds.amazonaws.com/portforyou?serverTimezone=UTC
+#    url: jdbc:mysql://localhost/portforyou?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: waspy
+    password: saej1028
+#    username: board
+#    password: board
+  jpa:
+    show-sql: true
+    hibernate.ddl-auto: none
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:templates/
+    suffix: .html
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+#      location: /Users/lim/Desktop/pfy/temp
+      location: /home/ubuntu/Users/lim/Desktop/pfy/temp
+
+jwt:
+  header: Authorization
+  secret: aGVsbG8tbGltYmFlLXByb2plY3QtbXktbmFtZS1pcy1saW15ZWt3YW5nLW15LWNvd29ya2Vycy1uYW1lLWlzLWJhZXN1bmd5ZW9u
+  token-validity-in-seconds: 7200000
+
+
+img:
+  path: /home/ubuntu/Users/lim/Desktop/pfy/static/img
+#  path: /Users/lim/Desktop/pfy/static/img
+
+logging:
+  config: classpath:log4j2.xml
+
+server:
+  port: 8080
