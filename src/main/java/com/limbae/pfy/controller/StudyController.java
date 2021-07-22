@@ -3,6 +3,7 @@ package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.AnnouncementVO;
 import com.limbae.pfy.domain.StudyApplicationVO;
+import com.limbae.pfy.domain.StudyCategoryVO;
 import com.limbae.pfy.domain.StudyVO;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.service.*;
@@ -32,12 +33,13 @@ public class StudyController {
     StudyService studyService;
     StudyApplicationService studyApplicationService;
     AnnouncementService announcementService;
+    StudyCategoryService studyCategoryService;
 
     public StudyController(UserService userService, PortfolioService portfolioService,
                            EntityUtil entityUtil, StackService stackService,
                            PositionService positionService, StudyService studyService,
                            StudyApplicationService studyApplicationService,
-                           AnnouncementService announcementService) {
+                           AnnouncementService announcementService, StudyCategoryService studyCategoryService) {
         this.userService = userService;
         this.portfolioService = portfolioService;
         this.entityUtil = entityUtil;
@@ -46,9 +48,19 @@ public class StudyController {
         this.studyService = studyService;
         this.studyApplicationService = studyApplicationService;
         this.announcementService = announcementService;
+        this.studyCategoryService = studyCategoryService;
     }
 
+    @GetMapping("/study/categories")
+    public ResponseEntity<List<StudyCategoryDTO>> getCategoryList() {
+        List<StudyCategoryVO> categoryList = studyCategoryService.getCategoryList();
 
+        List<StudyCategoryDTO> studyCategoryDTOList = categoryList.stream().map(
+                i -> entityUtil.convertStudyCategoryVoToDto(i)
+        ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(studyCategoryDTOList);
+    }
     @GetMapping("/studies")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<StudyDTO>> getMyStudyList(@RequestParam(required = false) boolean applied) {
@@ -167,14 +179,36 @@ public class StudyController {
             return ResponseEntity.ok(entityUtil.convertAnnouncementVoToDto(announcementVO));
     }
 
+    @DeleteMapping("/study/announcement")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> deleteAnnouncement(
+            @RequestParam(value = "announcementIdx") Long announcementIdx){
+        AnnouncementVO announcementByIdx = announcementService.getAnnouncementByIdx(announcementIdx);
+
+        if(announcementByIdx == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        //소유 announcement 확인
+        if(announcementByIdx.getStudy().getUser() != userService.getMyUserWithAuthorities().get())
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        if(announcementService.deleteAnnouncement(announcementByIdx))
+            return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.OK);
+        else
+            return ResponseEntity.badRequest().build();
+
+    }
+
     @PostMapping("/study/announcement/application")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyApplicationDTO> applyPortfolioToAnnouncement(
             @RequestBody StudyApplicationDTO dto){
-        StudyApplicationDTO studyApplicationDTO = entityUtil.convertStudyApplicationVoToDto(
-                studyApplicationService.saveStudyApplication(dto));
+        StudyApplicationDTO studyApplicationDTO = null;
+        studyApplicationDTO = entityUtil.convertStudyApplicationVoToDto(
+                    studyApplicationService.saveStudyApplication(dto));
+
         if(studyApplicationDTO == null)
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return ResponseEntity.ok(studyApplicationDTO);
     }

@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
 public class EntityUtil {
 
 
+    public StudyCategoryDTO convertStudyCategoryVoToDto(StudyCategoryVO vo){
+        return StudyCategoryDTO.builder()
+                .idx(vo.getIdx())
+                .title(vo.getTitle())
+                .content(vo.getContent())
+                .build();
+    }
 
     public PortfolioDTO convertPortfolioVoToDto(PortfolioVO vo){
         Set<PositionDTO> positionDTO = vo.getPosition().stream().map(
