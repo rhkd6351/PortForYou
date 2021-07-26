@@ -119,7 +119,7 @@ public class StudyService {
     public AnnouncementVO saveAnnouncement(AnnouncementDTO announcementDTO) {
 
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-        Optional<StudyVO> studyVO = studyRepository.findById(announcementDTO.getStudyIdx());
+        Optional<StudyVO> studyVO = studyRepository.findById(announcementDTO.getStudy().getIdx());
         if (uvo.isPresent() && studyVO.isPresent()) {
             if (uvo.get() != studyVO.get().getUser())
                 return null; //소유권 확인
@@ -127,7 +127,7 @@ public class StudyService {
             return null;
 
         AnnouncementVO announcementVO = entityUtil.convertAnnouncementDtoToVo(announcementDTO);
-        announcementVO.setStudy(studyRepository.findById(announcementDTO.getStudyIdx()).get());
+        announcementVO.setStudy(studyRepository.findById(announcementDTO.getStudy().getIdx()).get());
         announcementRepository.save(announcementVO);
 
         for (DemandPositionVO vo : announcementVO.getDemandPosition())

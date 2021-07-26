@@ -17,4 +17,6 @@ public class TechDTO {
 
     Long stackIdx;
 
+    String stackName;
+
 }

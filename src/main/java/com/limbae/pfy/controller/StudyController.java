@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -146,6 +148,21 @@ public class StudyController {
         ).collect(Collectors.toList()), HttpStatus.OK);
     }
 
+    @GetMapping("/announcements")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList(
+            @RequestParam(name = "kind") String kind){
+
+        List<AnnouncementDTO> dto = null;
+
+        if(kind.equals("new")){
+            dto = announcementService.getAnnouncementOrderByDesc().stream().map(entityUtil::convertAnnouncementVoToDto)
+                    .collect(Collectors.toList());
+        }
+
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/study/announcement")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AnnouncementDTO> getAnnouncement(@RequestParam(name = "announcementIdx") Long announcementIdx){
@@ -196,69 +213,31 @@ public class StudyController {
 
     }
 
-    @PostMapping("/study/announcement/application")
+    @GetMapping("/study/members")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<StudyApplicationDTO> applyPortfolioToAnnouncement(
-            @RequestBody StudyApplicationDTO dto){
-
-        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(dto.getPortfolio().getIdx());
-        AnnouncementVO announcementByIdx = announcementService.getAnnouncementByIdx(dto.getAnnouncement().getIdx());
-        Optional<PositionVO> positionByIdx = positionService.getPositionByIdx(dto.getPosition().getIdx());
-
-        if(portfolioByIdx.isEmpty() || announcementByIdx == null || positionByIdx.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND); //객체 존재 확인
-
-        if(userService.getMyUserWithAuthorities().get() != portfolioByIdx.get().getUser())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); //포트폴리오 소유 확인
-
-        if(!announcementByIdx.isActivated())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //공문 마감
-
-
-        StudyApplicationDTO studyApplicationDTO = null;
-        studyApplicationDTO = entityUtil.convertStudyApplicationVoToDto(
-                    studyApplicationService.saveStudyApplication(dto));
-
-        if(studyApplicationDTO == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return ResponseEntity.ok(studyApplicationDTO);
-    }
-
-    @GetMapping("/study/applications")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<StudyApplicationDTO>> getStudyApplicationListByStudyIdx(
-            @RequestParam(name = "studyIdx") Long studyIdx){
+    public ResponseEntity<List<MemberDTO>> getMembersByStudyIdx(
+            @RequestParam("studyIdx") Long studyIdx){
 
         StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
+        if(studyByIdx == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        if(studyByIdx == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Set<MemberVO> membersInfo = studyByIdx.getMembersInfo();
+        UserVO manager = studyByIdx.getUser();
 
-        if(userService.getMyUserWithAuthorities().get() != studyService.getStudyByIdx(studyIdx).getUser())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); //스터디 자기소유 확인
+        UserVO loginUser = userService.getMyUserWithAuthorities().get();
+        if(!(loginUser == manager || membersInfo.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(loginUser)))
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        List<StudyApplicationVO> saVO = studyApplicationService.getStudyApplicationListByStudyIdx(studyIdx);
-        if(saVO.size() == 0)
-            return ResponseEntity.ok(null);
+        List<MemberDTO> membersWithManager = new ArrayList<>();
+        membersWithManager.add(MemberDTO.builder().user(entityUtil.convertUserVoToDto(manager)).build());
+        membersWithManager.addAll(membersInfo.stream().map(i ->
+                MemberDTO.builder()
+                        .user(entityUtil.convertUserVoToDto(i.getUser()))
+                        .position(entityUtil.convertPositionVoToDto(i.getPosition()))
+                        .build()
+        ).collect(Collectors.toList()));
 
-        List<StudyApplicationDTO> collect = saVO.stream().map(
-                i -> entityUtil.convertStudyApplicationVoToDto(i)
-        ).collect(Collectors.toList());
-
-        return ResponseEntity.ok(collect);
-    }
-
-    @GetMapping("/applications")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<StudyApplicationDTO>> getMyApplicationList(){
-        UserVO userVO = userService.getMyUserWithAuthorities().get();
-        List<StudyApplicationVO> applicationLIstByUid = studyApplicationService.getStudyApplicationLIstByUid(userVO.getUid());
-
-        List<StudyApplicationDTO> applicationDTOS = applicationLIstByUid.stream().map(
-                i -> entityUtil.convertStudyApplicationVoToDto(i)
-        ).collect(Collectors.toList());
-
-        return ResponseEntity.ok(applicationDTOS);
+        return new ResponseEntity<>(membersWithManager, HttpStatus.OK);
 
     }
 }

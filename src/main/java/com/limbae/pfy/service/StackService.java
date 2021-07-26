@@ -17,4 +17,8 @@ public class StackService {
         return stackRepository.findAll();
     }
 
+    public StackVO getStackByIdx(Long idx){
+        return stackRepository.getById(idx);
+    }
+
 }

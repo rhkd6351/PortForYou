@@ -1,5 +1,6 @@
 package com.limbae.pfy.dto;
 
+import com.limbae.pfy.domain.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class StudyDTO {
     Long idx;
 
-    Long user_uid;
+    UserDTO user;
 
     String title;
 

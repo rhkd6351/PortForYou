@@ -30,4 +30,5 @@ public class StudyApplicationDTO {
 
     Long declined;
 
+
 }

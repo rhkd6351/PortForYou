@@ -32,7 +32,7 @@ public class PortfolioVO {
     @CreationTimestamp
     Date regDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_uid")
     UserVO user;
 

@@ -21,7 +21,7 @@ public class AnnouncementDTO {
 
     Long idx;
 
-    Long studyIdx;
+    StudyDTO study;
 
     String title;
 

@@ -34,6 +34,10 @@ public class AnnouncementService {
         return announcementRepository.findById(idx).orElse(null);
     }
 
+    public List<AnnouncementVO> getAnnouncementOrderByDesc(){
+        return announcementRepository.findTop50ByOrderByIdxDesc();
+    }
+
     public boolean deleteAnnouncement(AnnouncementVO announcementVO){
 
         try{
@@ -44,6 +48,10 @@ public class AnnouncementService {
             return false;
         }
 
+    }
+
+    public AnnouncementVO saveAnnouncement(AnnouncementVO vo){
+        return announcementRepository.save(vo);
     }
 
 

@@ -55,6 +55,10 @@ public class UserService {
         return userRepository.findOneWithPortfolioByUsername(username);
     }
 
+    public Optional<UserVO> getUserByUid(Long uid){
+        return userRepository.findById(uid);
+    }
+
     @Transactional(readOnly = true)
     public Optional<UserVO> getMyUserWithAuthorities(){
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);

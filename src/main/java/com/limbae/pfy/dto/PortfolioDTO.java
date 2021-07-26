@@ -22,6 +22,8 @@ public class PortfolioDTO {
 
     Date regDate;
 
+    UserDTO user;
+
     Set<ProjectDTO> project;
 
     Set<PositionDTO> positions;

@@ -109,7 +109,7 @@ public class EntityUtil {
 
         return StudyDTO.builder()
                 .idx(vo.getIdx())
-                .user_uid(vo.getUser().getUid())
+                .user(this.convertUserVoToDto(vo.getUser()))
                 .content(vo.getContent())
                 .title(vo.getTitle())
                 .studyCategory(studyCategoryBuild)
@@ -135,9 +135,16 @@ public class EntityUtil {
 
     public AnnouncementDTO convertAnnouncementVoToDto(AnnouncementVO announcementVO){
 
+        StudyDTO studyDTO = StudyDTO.builder()
+                .title(announcementVO.getStudy().getTitle())
+                .user(this.convertUserVoToDto(announcementVO.getStudy().getUser()))
+                .content(announcementVO.getStudy().getContent())
+                .studyCategory(StudyCategoryDTO.builder().title(announcementVO.getStudy().getStudyCategory().getTitle()).build())
+                .build();
+
         AnnouncementDTO announcementDTO = AnnouncementDTO.builder()
                 .idx(announcementVO.getIdx())
-                .studyIdx(announcementVO.getStudy().getIdx())
+                .study(studyDTO)
                 .title(announcementVO.getTitle())
                 .content(announcementVO.getContent())
                 .regDate(announcementVO.getRegDate())
@@ -198,6 +205,10 @@ public class EntityUtil {
                 .portfolio(PortfolioDTO.builder()
                         .idx(vo.getPortfolio().getIdx())
                         .title(vo.getPortfolio().getTitle())
+                        .tech(vo.getPortfolio().getTech().stream().map(
+                                i -> TechDTO.builder().stackIdx(i.getStack().getIdx()).build()
+                        ).collect(Collectors.toSet()))
+                        .user(this.convertUserVoToDto(vo.getPortfolio().getUser()))
                         .build())
                 .position(PositionDTO.builder()
                         .idx(vo.getPosition().getIdx())

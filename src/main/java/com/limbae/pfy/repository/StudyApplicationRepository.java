@@ -5,6 +5,7 @@ import com.limbae.pfy.domain.StudyVO;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.persistence.NamedSubgraph;
 import java.util.List;
 import java.util.Optional;
 

@@ -15,15 +15,15 @@ public class UserDTO {
 
     Long uid;
 
-    private String username;
+    String username;
 
-    private String password;
+    String password;
 
-    private String site;
+    String site;
 
-    private String name;
+    String name;
 
-    private String phone;
+    String phone;
 
 
 

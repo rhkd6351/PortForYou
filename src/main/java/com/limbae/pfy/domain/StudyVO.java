@@ -38,6 +38,10 @@ public class StudyVO {
     )
     Set<UserVO> members;
 
+    @OneToMany
+    @JoinColumn(name = "study_idx")
+    Set<MemberVO> membersInfo;
+
     @ManyToOne(targetEntity = StudyCategoryVO.class,
                 fetch = FetchType.EAGER)
     @JoinColumn(name="study_category_idx")

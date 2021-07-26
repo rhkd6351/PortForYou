@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudyApplicationService {
@@ -33,6 +34,9 @@ public class StudyApplicationService {
         this.userRepository = userRepository;
     }
 
+    public Optional<StudyApplicationVO> getStudyApplicationByIdx(Long idx){
+        return studyApplicationRepository.findById(idx);
+    }
 
     public StudyApplicationVO saveStudyApplication(StudyApplicationDTO dto){
         Optional<AnnouncementVO> announcementVO = announcementRepository.findById(dto.getAnnouncement().getIdx());
@@ -45,16 +49,22 @@ public class StudyApplicationService {
                 .announcement(announcementVO.get())
                 .portfolio(portfolioVO.get())
                 .position(positionVO.get())
+                .declined(0L)
                 .build();
 
         return studyApplicationRepository.saveAndFlush(build);
     }
 
+    public StudyApplicationVO saveStudyApplication(StudyApplicationVO vo){
+        return studyApplicationRepository.saveAndFlush(vo);
+    }
+
     public List<StudyApplicationVO> getStudyApplicationListByStudyIdx(Long studyIdx){
         List<StudyApplicationVO> list = new ArrayList<>();
         List<AnnouncementVO> announcementVOList = announcementRepository.findByStudyIdx(studyIdx);
-        for(AnnouncementVO vo : announcementVOList)
+        for(AnnouncementVO vo : announcementVOList) {
             list.addAll(studyApplicationRepository.findByAnnouncementIdx(vo.getIdx()));
+        }
 
         return list;
     }

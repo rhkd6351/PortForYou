@@ -9,4 +9,6 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Lo
 
     public List<AnnouncementVO> findByStudyIdx(Long studyIdx);
 
+    public List<AnnouncementVO> findTop50ByOrderByIdxDesc();
+
 }
