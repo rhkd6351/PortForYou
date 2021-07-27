@@ -1,10 +1,12 @@
 package com.limbae.pfy.controller;
 
 
+import com.limbae.pfy.domain.PortfolioVO;
 import com.limbae.pfy.domain.UiImageVO;
 import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.service.ImageService;
+import com.limbae.pfy.service.PortfolioService;
 import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.ImageUtil;
 
@@ -37,6 +39,9 @@ public class ImageController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    PortfolioService portfolioService;
 
     @GetMapping(
             value = "/default",
@@ -108,6 +113,68 @@ public class ImageController {
             _image.setSize(multipartFile.getSize());
             _image.setOriginalName(multipartFile.getOriginalFilename());
             _image.setUploadPath("/user/profile");
+            imageService.saveUiImage(_image);
+        }
+
+        return ResponseEntity.ok(ResponseObjectDTO.builder().message("success").build());
+
+    }
+
+    @PostMapping(
+            value = "/portfolio"
+    )
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> savePortfolioImg(
+            @RequestParam("img") MultipartFile multipartFile,
+            @RequestParam("portfolio_idx") Long portfolioIdx) throws IOException {
+        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioIdx);
+        Optional<UserVO> myUserWithAuthorities = userService.getMyUserWithAuthorities();
+
+        if(portfolioByIdx.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(myUserWithAuthorities.isEmpty() || (portfolioByIdx.get().getUser() != myUserWithAuthorities.get()))
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+
+        int i = multipartFile.getOriginalFilename().lastIndexOf(".");
+        String extension = multipartFile.getOriginalFilename().substring(i);
+
+        //파일 확장자 제한
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".gif")))
+            return new ResponseEntity<ResponseObjectDTO>(
+                    ResponseObjectDTO.builder().message("wrong file extension").build(),
+                    HttpStatus.BAD_REQUEST
+            );
+
+        //파일 용량 제한
+        if(multipartFile.getSize() > 7000000)
+            return new ResponseEntity<ResponseObjectDTO>(
+                    ResponseObjectDTO.builder().message("File size exceeded").build(),
+                    HttpStatus.BAD_REQUEST
+            );
+
+        String saveName = portfolioIdx + "portfolio_img"; // TODO
+
+        try {
+            imageUtil.saveImage(multipartFile, saveName + extension, "/user/portfolio");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<UiImageVO> image = imageService.getUiImageWithName(saveName);
+        if(image.isEmpty()){
+            imageService.saveUiImage(UiImageVO.builder()
+                    .name(saveName)
+                    .saveName(saveName + extension)
+                    .originalName(multipartFile.getOriginalFilename())
+                    .size(multipartFile.getSize())
+                    .uploadPath("/user/portfolio")
+                    .build());
+        }else{
+            UiImageVO _image = image.get();
+            _image.setSaveName(saveName + extension);
+            _image.setSize(multipartFile.getSize());
+            _image.setOriginalName(multipartFile.getOriginalFilename());
+            _image.setUploadPath("/user/portfolio");
             imageService.saveUiImage(_image);
         }
 
