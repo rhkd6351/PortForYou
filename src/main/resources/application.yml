@@ -38,3 +38,4 @@ logging:
 
 server:
   port: 8080
+  uri: "http://3.37.208.251:8080"

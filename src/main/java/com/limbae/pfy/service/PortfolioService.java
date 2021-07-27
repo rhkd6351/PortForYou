@@ -145,6 +145,7 @@ public class PortfolioService {
                     .position(positionVOS)
                     .education(education.get())
                     .build();
+
             portfolioRepository.save(portfolioVO);
             return portfolioVO;
         }

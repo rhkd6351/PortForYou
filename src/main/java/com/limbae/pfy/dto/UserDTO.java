@@ -25,6 +25,6 @@ public class UserDTO {
 
     String phone;
 
-
+    String img;
 
 }
