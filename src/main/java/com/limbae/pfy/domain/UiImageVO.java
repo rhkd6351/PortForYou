@@ -18,17 +18,18 @@ public class UiImageVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
+    @Column(length = 255, nullable = false)
     String name;
 
-    @Column(name = "original_name")
+    @Column(name = "original_name", length = 255, nullable = false)
     String originalName;
 
-    @Column(name = "save_name")
+    @Column(name = "save_name", length = 255, nullable = false)
     String saveName;
 
     Long size;
 
-    @Column(name = "upload_path")
+    @Column(name = "upload_path", length = 255, nullable = false)
     String uploadPath;
 
 }

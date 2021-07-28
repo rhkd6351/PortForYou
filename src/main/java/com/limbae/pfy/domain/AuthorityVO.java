@@ -5,19 +5,20 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "authority")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class AuthorityVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idx;
+    int idx;
 
     @Column(name = "authority_name", length = 50)
-    private String authorityName;
+    @Enumerated(value = EnumType.STRING)
+    Authority authority;
 
 }

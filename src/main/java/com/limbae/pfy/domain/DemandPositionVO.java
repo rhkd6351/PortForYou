@@ -23,12 +23,15 @@ public class DemandPositionVO {
 
     @ManyToOne(
             fetch = FetchType.EAGER)
-    @JoinColumn(name = "position_idx")
+    @JoinColumn(name = "position_idx", nullable = false)
     PositionVO position;
 
-    @Column(name = "study_announcement_idx")
-    Long studyAnnouncementIdx;
+    @ManyToOne(
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "study_announcement_idx", nullable = false)
+    AnnouncementVO announcementVO;
 
+    @Column(nullable = false)
     int demand;
 
     @ColumnDefault(value = "0")

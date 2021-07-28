@@ -152,7 +152,7 @@ public class ImageController {
                     HttpStatus.BAD_REQUEST
             );
 
-        String saveName = portfolioIdx + "portfolio_img"; // TODO
+        String saveName = portfolioIdx + "_portfolio_img"; // TODO
 
         try {
             imageUtil.saveImage(multipartFile, saveName + extension, "/user/portfolio");

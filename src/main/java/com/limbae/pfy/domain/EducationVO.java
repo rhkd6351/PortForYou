@@ -5,21 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
-@Entity(name = "education")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class EducationVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
+    @Column(length = 45)
     String name;
 }

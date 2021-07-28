@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,10 +25,20 @@ public class AnnouncementVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
+    @Column(length = 200, nullable = false)
     String title;
 
+    @Lob
     String content;
 
+    @Column(name = "reg_date")
+    @CreationTimestamp
+    LocalDateTime regDate;
+
+    @Column(name = "end_date")
+    LocalDateTime endDate;
+    
+    boolean activated;
 
     @OneToMany(targetEntity = StudyApplicationVO.class,
             cascade = CascadeType.ALL,
@@ -45,15 +56,5 @@ public class AnnouncementVO {
             fetch = FetchType.LAZY)
     @JoinColumn(name = "study_announcement_idx")
     Set<DemandPositionVO> demandPosition;
-
-    @Column(name = "reg_date")
-    @CreationTimestamp
-    Date regDate;
-
-    @Column(name = "end_date")
-    Date endDate;
-
-
-    boolean activated;
 
 }

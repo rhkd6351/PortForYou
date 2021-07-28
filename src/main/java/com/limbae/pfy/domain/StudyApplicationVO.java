@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,10 +26,13 @@ public class StudyApplicationVO {
 
     @Column(name = "reg_date")
     @CreationTimestamp
-    Date regDate;
+    LocalDateTime regDate;
+
+    @ColumnDefault("0")
+    Long declined;
 
     @ManyToOne(fetch = FetchType.LAZY,
-                cascade = CascadeType.DETACH)
+            cascade = CascadeType.DETACH)
     @JoinColumn(name = "study_announcement_idx")
     AnnouncementVO announcement;
 
@@ -39,8 +43,5 @@ public class StudyApplicationVO {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_idx")
     PositionVO position;
-
-    @ColumnDefault("0")
-    Long declined;
 
 }

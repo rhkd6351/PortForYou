@@ -8,26 +8,26 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tech")
+@Entity
 public class TechVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
+    @Lob
+    String content;
+
+    int ability;
+
     @ManyToOne(targetEntity = PortfolioVO.class,
             fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
-
-    String content;
-
-    int ability;
 
     @ManyToOne(targetEntity = StackVO.class,
             fetch = FetchType.EAGER)

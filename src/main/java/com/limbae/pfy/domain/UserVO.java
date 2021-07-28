@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,31 +19,35 @@ import java.util.Set;
 @Entity(name = "user")
 public class UserVO {
 
-    @Column(name = "uid")
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long uid;
 
-    @Column(name = "username")
+    @Column(length = 50, unique = true, nullable = false)
     String username;
 
+    @Column(length = 200, nullable = false)
     String password;
 
+    @Column(length = 45)
     String phone;
 
+    @Column(length = 255)
     String site;
 
+    @Column(length = 45)
     String name;
 
     @Column(name = "reg_date")
     @CreationTimestamp
-    Date regDate;
+    LocalDateTime regDate;
 
     @Column(name = "del_date")
-    String delDate;
+    LocalDateTime delDate;
 
     @JsonIgnore
     @Column(name = "activated")
-    private boolean activated;
+    private boolean activated; // 0 or 1
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

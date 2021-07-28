@@ -12,23 +12,26 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "project")
+@Entity
 public class ProjectVO {
 
-    @Column(name = "idx")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idx;
 
+    @Column(length = 200, nullable = false)
+    String title;
+
+    @Lob
+    @Column(nullable = false)
+    String content;
+
+    @Column(length = 255)
+    String site;
+
     @ManyToOne(targetEntity = PortfolioVO.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
-
-    String title;
-
-    String content;
-
-    String site;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

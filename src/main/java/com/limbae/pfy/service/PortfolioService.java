@@ -193,6 +193,7 @@ public class PortfolioService {
                                         .name(i.getEducation().getName())
                                         .idx(i.getEducation().getIdx())
                                         .build())
+
                                 .build();
 
                     }).collect(Collectors.toList())).orElse(null);

@@ -31,4 +31,6 @@ public class PortfolioDTO {
     Set<TechDTO> tech;
 
     EducationDTO education;
+
+    String img;
 }

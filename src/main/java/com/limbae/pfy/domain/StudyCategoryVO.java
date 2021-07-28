@@ -14,15 +14,18 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "study_category")
+@Entity
+@Table(name = "study_category")
 public class StudyCategoryVO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
+    @Column(length = 100, nullable = false, unique = true)
     String title;
 
+    @Lob
     String content;
 
     @OneToMany(

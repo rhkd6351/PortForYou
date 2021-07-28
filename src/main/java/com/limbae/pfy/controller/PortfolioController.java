@@ -2,15 +2,14 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.domain.PortfolioVO;
+import com.limbae.pfy.domain.UiImageVO;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.repository.EducationRepository;
-import com.limbae.pfy.service.PortfolioService;
-import com.limbae.pfy.service.PositionService;
-import com.limbae.pfy.service.StackService;
-import com.limbae.pfy.service.UserService;
+import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,17 +30,22 @@ public class PortfolioController {
     StackService stackService;
     PositionService positionService;
     EducationRepository educationRepository;
+    ImageService imageService;
+    private final String serverUri;
 
     public PortfolioController(UserService userService, PortfolioService portfolioService,
                                EntityUtil entityUtil, StackService stackService,
                                PositionService positionService,
-                               EducationRepository educationRepository) {
+                               EducationRepository educationRepository, ImageService imageService,
+                               @Value(value = "${server.uri}") String serverUri) {
         this.userService = userService;
         this.portfolioService = portfolioService;
         this.entityUtil = entityUtil;
         this.stackService = stackService;
         this.positionService = positionService;
         this.educationRepository = educationRepository;
+        this.imageService = imageService;
+        this.serverUri = serverUri;
     }
 
     @GetMapping("/portfolios")
@@ -65,7 +69,13 @@ public class PortfolioController {
             return ResponseEntity.badRequest().build();
         //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
 
-        return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(getvo));
+        PortfolioDTO portfolioDTO = entityUtil.convertPortfolioVoToDto(getvo);
+        Optional<UiImageVO> uiImageWithName = imageService.getUiImageWithName(portfolioDTO.getIdx() + "_portfolio_img");
+        if(uiImageWithName.isPresent()){
+            String uri = serverUri + "/api/img/default?name=" + uiImageWithName.get().getName();
+            portfolioDTO.setImg(uri);
+        }
+        return ResponseEntity.ok(portfolioDTO);
     }
 
 //    @PostMapping("/portfolio")
