@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "authority")
 public class AuthorityVO {
 
     @Id

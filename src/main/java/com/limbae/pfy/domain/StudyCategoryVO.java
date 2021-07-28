@@ -28,10 +28,7 @@ public class StudyCategoryVO {
     @Lob
     String content;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_category_idx")
+    @OneToMany(mappedBy = "studyCategory")
     List<StudyVO> studyList;
 
 }

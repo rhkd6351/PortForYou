@@ -16,7 +16,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "user")
+@Entity
+@Table(name = "user")
 public class UserVO {
 
     @Id
@@ -56,9 +57,7 @@ public class UserVO {
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
     private Set<AuthorityVO> authorities;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_uid")
+    @OneToMany(mappedBy = "user")
     private List<PortfolioVO> portfolio;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

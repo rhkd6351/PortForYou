@@ -17,6 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "study")
 public class StudyVO {
 
     @Id
@@ -33,8 +34,7 @@ public class StudyVO {
     @Column(name = "reg_date")
     LocalDateTime regDate;
 
-    @ManyToOne(targetEntity = UserVO.class,
-            fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_uid")
     UserVO user;
 
@@ -46,20 +46,13 @@ public class StudyVO {
     )
     Set<UserVO> members;
 
-    @OneToMany
-    @JoinColumn(name = "study_idx")
-    Set<MemberVO> membersInfo;
-
-    @ManyToOne(targetEntity = StudyCategoryVO.class,
-                fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="study_category_idx")
     StudyCategoryVO studyCategory;
 
-    @OneToMany(targetEntity = AnnouncementVO.class,
-               cascade = CascadeType.ALL,
-               fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_idx")
+    @OneToMany(mappedBy = "study")
+    Set<MemberVO> membersInfo;
+
+    @OneToMany(mappedBy = "study")
     List<AnnouncementVO> announcements;
-
-
 }

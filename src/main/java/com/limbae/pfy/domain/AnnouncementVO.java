@@ -40,21 +40,14 @@ public class AnnouncementVO {
     
     boolean activated;
 
-    @OneToMany(targetEntity = StudyApplicationVO.class,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_announcement_idx")
-    List<StudyApplicationVO> studyApplications;
-
-    @ManyToOne(targetEntity = StudyVO.class,
-            fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "study_idx")
     StudyVO study;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_announcement_idx")
-    Set<DemandPositionVO> demandPosition;
+    @OneToMany(mappedBy = "announcement")
+    List<StudyApplicationVO> studyApplications;
+
+    @OneToMany(mappedBy = "announcement")
+    List<DemandPositionVO> demandPosition;
 
 }

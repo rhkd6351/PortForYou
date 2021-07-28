@@ -1,5 +1,5 @@
 package com.limbae.pfy.domain;
 
 public enum Authority {
-    USER, ADMIN
+    ROLE_USER, ROLE_ADMIN
 }

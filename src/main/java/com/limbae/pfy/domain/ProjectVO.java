@@ -13,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "project")
 public class ProjectVO {
 
     @Id
@@ -29,7 +30,7 @@ public class ProjectVO {
     @Column(length = 255)
     String site;
 
-    @ManyToOne(targetEntity = PortfolioVO.class, fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 

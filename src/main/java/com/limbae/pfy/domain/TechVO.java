@@ -13,6 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "tech")
 public class TechVO {
 
     @Id
@@ -24,13 +25,11 @@ public class TechVO {
 
     int ability;
 
-    @ManyToOne(targetEntity = PortfolioVO.class,
-            fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 
-    @ManyToOne(targetEntity = StackVO.class,
-            fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "stack_idx")
     StackVO stack;
 

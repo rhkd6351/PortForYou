@@ -152,12 +152,10 @@ public class EntityUtil {
                 .activated(announcementVO.isActivated())
                 .build();
 
-
         if(announcementVO.getDemandPosition() != null){
             announcementDTO.setDemandPosition(announcementVO.getDemandPosition().stream().map(
                     i -> DemandPositionDTO.builder()
                                 .idx(i.getIdx())
-                                .studyAnnouncementIdx(i.getStudyAnnouncementIdx())
                                 .demand(i.getDemand())
                                 .position(PositionDTO.builder()
                                             .idx(i.getPosition().getIdx())
@@ -172,17 +170,17 @@ public class EntityUtil {
 
     public AnnouncementVO convertAnnouncementDtoToVo(AnnouncementDTO announcementDTO){
 
-        Set<DemandPositionVO> demandPosition = announcementDTO.getDemandPosition().stream().map(
+        List<DemandPositionVO> demandPosition = announcementDTO.getDemandPosition().stream().map(
                 i -> DemandPositionVO.builder()
                         .demand(i.getDemand())
-                        .studyAnnouncementIdx(0L) // 일단 0으로 저장
+                        .announcement(null) // 일단 0으로 저장
                         .position(PositionVO.builder()
                                 .idx(i.getPosition().getIdx())
                                 .name(i.getPosition().getName())
                                 .build())
                         .applied(0)
                         .build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
 
         return AnnouncementVO.builder()
                 .content(announcementDTO.getContent())

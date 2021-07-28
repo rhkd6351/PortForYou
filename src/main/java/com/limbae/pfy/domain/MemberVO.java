@@ -29,15 +29,15 @@ public class MemberVO {
     @CreationTimestamp
     LocalDateTime regDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="user_uid")
     UserVO user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="study_idx")
     StudyVO study;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "position_idx")
     PositionVO position;
 }

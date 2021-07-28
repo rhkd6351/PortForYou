@@ -18,6 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "portfolio")
 public class PortfolioVO {
 
     @Id
@@ -34,14 +35,13 @@ public class PortfolioVO {
     @CreationTimestamp
     LocalDateTime regDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_uid")
     UserVO user;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_idx")
-    private Set<ProjectVO> project;
-
+    @ManyToOne
+    @JoinColumn(name = "education_idx")
+    EducationVO education;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -50,19 +50,12 @@ public class PortfolioVO {
             inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
     private Set<PositionVO> position;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_idx")
+    @OneToMany(mappedBy = "portfolio")
+    private Set<ProjectVO> project;
+
+    @OneToMany(mappedBy = "portfolio")
     Set<TechVO> tech;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "education_idx")
-    EducationVO education;
-
-    @OneToMany(cascade = CascadeType.ALL,
-            targetEntity = StudyApplicationVO.class,
-                fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_idx")
+    @OneToMany(mappedBy = "portfolio")
     List<StudyApplicationVO> studyApplications;
 }

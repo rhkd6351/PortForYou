@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,7 +21,7 @@ public class StudyApplicationDTO {
 
     Long idx;
 
-    Date regDate;
+    LocalDateTime regDate;
 
     AnnouncementDTO announcement;
 

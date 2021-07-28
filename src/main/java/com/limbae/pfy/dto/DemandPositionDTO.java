@@ -17,7 +17,7 @@ public class DemandPositionDTO {
 
     PositionDTO position;
 
-    Long studyAnnouncementIdx;
+    AnnouncementDTO announcement;
 
     int demand;
 

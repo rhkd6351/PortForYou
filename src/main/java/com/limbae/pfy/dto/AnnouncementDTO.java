@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -29,9 +30,9 @@ public class AnnouncementDTO {
 
     List<DemandPositionDTO> demandPosition;
 
-    Date regDate;
+    LocalDateTime regDate;
 
-    Date endDate;
+    LocalDateTime endDate;
 
     boolean activated;
 

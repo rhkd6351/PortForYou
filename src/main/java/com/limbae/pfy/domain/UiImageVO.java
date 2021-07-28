@@ -11,7 +11,8 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "ui_image")
+@Entity
+@Table(name = "ui_image")
 public class UiImageVO {
 
     @Id

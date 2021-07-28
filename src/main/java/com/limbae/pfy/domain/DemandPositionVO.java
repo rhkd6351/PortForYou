@@ -21,22 +21,19 @@ public class DemandPositionVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
-    @ManyToOne(
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "position_idx", nullable = false)
-    PositionVO position;
-
-    @ManyToOne(
-            fetch = FetchType.EAGER)
-    @JoinColumn(name = "study_announcement_idx", nullable = false)
-    AnnouncementVO announcementVO;
-
     @Column(nullable = false)
     int demand;
 
     @ColumnDefault(value = "0")
     int applied;
 
+    @ManyToOne
+    @JoinColumn(name = "position_idx", nullable = false)
+    PositionVO position;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "study_announcement_idx", nullable = false)
+    AnnouncementVO announcement;
 
 
 

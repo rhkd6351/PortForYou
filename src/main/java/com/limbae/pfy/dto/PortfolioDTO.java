@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class PortfolioDTO {
 
     String content;
 
-    Date regDate;
+    LocalDateTime regDate;
 
     UserDTO user;
 

@@ -27,7 +27,7 @@ public class UserService {
         }
 
         AuthorityVO authorityVO =   AuthorityVO.builder()
-                .authorityName("ROLE_USER")
+                .authority(Authority.ROLE_USER)
                 .idx(1)
                 .build();
 
