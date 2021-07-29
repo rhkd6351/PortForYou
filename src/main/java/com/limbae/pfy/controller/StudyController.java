@@ -143,7 +143,7 @@ public class StudyController {
         if(studyWithAnnouncementsByIdx.getUser() != userService.getMyUserWithAuthorities().get())
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        return new ResponseEntity<>(studyWithAnnouncementsByIdx.getAnnouncements().stream().map(
+        return new ResponseEntity<>(announcementService.getAnnouncementByStudyIdx(studyWithAnnouncementsByIdx.getIdx()).stream().map(
                 i -> entityUtil.convertAnnouncementVoToDto(i)
         ).collect(Collectors.toList()), HttpStatus.OK);
     }
@@ -221,7 +221,7 @@ public class StudyController {
         StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
         if(studyByIdx == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        List<MemberVO> membersInfo = studyByIdx.getMembersInfo();
+        List<MemberVO> membersInfo = studyByIdx.getMembers();
         UserVO manager = studyByIdx.getUser();
 
         UserVO loginUser = userService.getMyUserWithAuthorities().get();

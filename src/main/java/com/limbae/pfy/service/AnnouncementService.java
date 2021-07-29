@@ -47,7 +47,10 @@ public class AnnouncementService {
             log.warn(e.getMessage());
             return false;
         }
+    }
 
+    public List<AnnouncementVO> getAnnouncementByStudyIdx(Long studyIdx){
+        return announcementRepository.findByStudyIdx(studyIdx);
     }
 
     public AnnouncementVO saveAnnouncement(AnnouncementVO vo){

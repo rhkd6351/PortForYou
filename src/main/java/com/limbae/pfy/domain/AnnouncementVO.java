@@ -46,9 +46,6 @@ public class AnnouncementVO {
     StudyVO study;
 
     @OneToMany(mappedBy = "announcement")
-    List<StudyApplicationVO> studyApplications;
-
-    @OneToMany(mappedBy = "announcement")
     List<DemandPositionVO> demandPosition;
 
 }

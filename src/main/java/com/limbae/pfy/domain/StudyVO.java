@@ -39,21 +39,10 @@ public class StudyVO {
     @JoinColumn(name = "user_uid")
     UserVO user;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name="study_user",
-            joinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")},
-            inverseJoinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")}
-    )
-    List<UserVO> members;
-
     @ManyToOne
     @JoinColumn(name="study_category_idx")
     StudyCategoryVO studyCategory;
 
     @OneToMany(mappedBy = "study")
-    List<MemberVO> membersInfo;
-
-    @OneToMany(mappedBy = "study")
-    List<AnnouncementVO> announcements;
+    List<MemberVO> members;
 }

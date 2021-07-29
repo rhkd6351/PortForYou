@@ -37,7 +37,7 @@ public class MemberVO {
     @JoinColumn(name="study_idx")
     StudyVO study;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "position_idx")
     PositionVO position;
 }

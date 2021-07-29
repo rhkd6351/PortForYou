@@ -35,7 +35,9 @@ public class ProjectVO {
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+
+    //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
+    @ManyToMany
     @JoinTable(
             name = "project_stack",
             joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},

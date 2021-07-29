@@ -18,20 +18,15 @@ public class StudyApplicationService {
     AnnouncementRepository announcementRepository;
     PortfolioRepository portfolioRepository;
     PositionRepository positionRepository;
-    StudyRepository studyRepository;
-    UserRepository userRepository;
 
     @Autowired
     public StudyApplicationService(StudyApplicationRepository studyApplicationRepository,
                                    AnnouncementRepository announcementRepository, PortfolioRepository portfolioRepository,
-                                   PositionRepository positionRepository, StudyRepository studyRepository,
-                                   UserRepository userRepository) {
+                                   PositionRepository positionRepository) {
         this.studyApplicationRepository = studyApplicationRepository;
         this.announcementRepository = announcementRepository;
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
-        this.studyRepository = studyRepository;
-        this.userRepository = userRepository;
     }
 
     public Optional<StudyApplicationVO> getStudyApplicationByIdx(Long idx){
@@ -70,10 +65,10 @@ public class StudyApplicationService {
     }
 
     public List<StudyApplicationVO> getStudyApplicationLIstByUid(Long uid){
-        UserVO userVO = userRepository.findOneWithPortfolioByUid(uid).get();
+        List<PortfolioVO> portfolios = portfolioRepository.findByUserUid(uid).get();
         ArrayList<StudyApplicationVO> applicationList = new ArrayList<>();
 
-        for(PortfolioVO portfolioVO : userVO.getPortfolio())
+        for(PortfolioVO portfolioVO : portfolios)
             applicationList.addAll(portfolioVO.getStudyApplications());
 
         return applicationList;

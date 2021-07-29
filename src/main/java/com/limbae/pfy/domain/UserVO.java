@@ -49,27 +49,15 @@ public class UserVO {
 
     @JsonIgnore
     @Column(name = "activated")
-    private boolean activated; // 0 or 1
+    boolean activated; // 0 or 1
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
+    @ManyToMany
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
-    private List<AuthorityVO> authorities;
-
-    @OneToMany(mappedBy = "user")
-    private List<PortfolioVO> portfolio ;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name="study_user",
-            joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
-            inverseJoinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")}
-    )
-    List<StudyVO> study ;
-
-
+    List<AuthorityVO> authorities;
 }
 
 

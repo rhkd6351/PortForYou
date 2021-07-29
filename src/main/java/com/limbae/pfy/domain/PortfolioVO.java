@@ -47,23 +47,21 @@ public class PortfolioVO {
     @JoinColumn(name = "education_idx")
     EducationVO education;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "portfolio")
+    List<ProjectVO> project;
+
+    @OneToMany(mappedBy = "portfolio")
+    Set<TechVO> tech;
+
+    @OneToMany(mappedBy = "portfolio")
+    List<StudyApplicationVO> studyApplications;
+
+
+    //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
+    @ManyToMany
     @JoinTable(
             name = "portfolio_position",
             joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
     Set<PositionVO> position;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "portfolio")
-    List<ProjectVO> project;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "portfolio")
-    Set<TechVO> tech;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "portfolio")
-    List<StudyApplicationVO> studyApplications;
 }

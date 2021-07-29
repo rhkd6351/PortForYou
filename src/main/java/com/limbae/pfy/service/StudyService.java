@@ -28,7 +28,8 @@ public class StudyService {
     DemandPositionRepository demandPositionRepository;
 
     @Autowired
-    public StudyService(StudyCategoryRepository studyCategoryRepository, DemandPositionRepository demandPositionRepository, StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository) {
+    public StudyService(StudyCategoryRepository studyCategoryRepository,
+                        DemandPositionRepository demandPositionRepository, StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository) {
         this.studyRepository = studyRepository;
         this.userRepository = userRepository;
         this.entityUtil = entityUtil;
@@ -55,7 +56,8 @@ public class StudyService {
         } else {
             return null;
         }
-        return userVO.get().getStudy().stream().toList();
+
+        return studyRepository.findByUserUid(userVO.get().getUid());
     }
 
     public StudyVO getStudyByIdx(Long idx) {

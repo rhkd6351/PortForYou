@@ -29,7 +29,4 @@ public class StudyCategoryVO {
     @Lob
     String content;
 
-    @OneToMany(mappedBy = "studyCategory")
-    List<StudyVO> studyList;
-
 }
