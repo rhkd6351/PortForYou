@@ -13,6 +13,6 @@ public interface StudyApplicationRepository extends JpaRepository<StudyApplicati
 
 
     @EntityGraph(attributePaths = {"position", "announcement", "portfolio"})
-    public List<StudyApplicationVO> findByAnnouncementIdx(Long studyAnnouncementIdx);
+    List<StudyApplicationVO> findByAnnouncementIdx(Long studyAnnouncementIdx);
 
 }

@@ -24,12 +24,6 @@ public class AnnouncementService {
     @Autowired
     AnnouncementRepository announcementRepository;
 
-    @Autowired
-    StudyApplicationRepository studyApplicationRepository;
-
-    @Autowired
-    EntityUtil entityUtil;
-
     public AnnouncementVO getAnnouncementByIdx(Long idx){
         return announcementRepository.findById(idx).orElse(null);
     }

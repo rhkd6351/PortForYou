@@ -8,7 +8,4 @@ import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<ProjectVO, Long> {
 
-    @EntityGraph(attributePaths = "stack")
-    Optional<ProjectVO> findOneWithStackByIdx(int idx);
-
 }

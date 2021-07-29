@@ -16,23 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class MemberService {
 
-    PortfolioRepository portfolioRepository;
-    PositionRepository positionRepository;
-    UserRepository userRepository;
-    StackRepository stackRepository;
-    EducationRepository educationRepository;
     MemberRepository memberRepository;
 
-    @Autowired
-    public MemberService(MemberRepository memberRepository, PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository) {
-        this.portfolioRepository = portfolioRepository;
-        this.positionRepository = positionRepository;
-        this.userRepository = userRepository;
-        this.stackRepository = stackRepository;
-        this.educationRepository = educationRepository;
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
-
 
     public MemberVO saveMember(MemberVO vo){
         return memberRepository.save(vo);

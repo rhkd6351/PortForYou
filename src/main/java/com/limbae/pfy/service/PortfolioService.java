@@ -16,13 +16,6 @@ import java.util.stream.Collectors;
 @Service
 public class PortfolioService {
 
-    PortfolioRepository portfolioRepository;
-    PositionRepository positionRepository;
-    UserRepository userRepository;
-    StackRepository stackRepository;
-    EducationRepository educationRepository;
-
-    @Autowired
     public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository) {
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
@@ -30,6 +23,12 @@ public class PortfolioService {
         this.stackRepository = stackRepository;
         this.educationRepository = educationRepository;
     }
+
+    PortfolioRepository portfolioRepository;
+    PositionRepository positionRepository;
+    UserRepository userRepository;
+    StackRepository stackRepository;
+    EducationRepository educationRepository;
 
 
     public Optional<PortfolioVO> getPortfolioByIdx(Long idx) {

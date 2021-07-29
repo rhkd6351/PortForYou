@@ -12,15 +12,15 @@ import java.util.*;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-//    @Transactional
+    //    @Transactional
     public UserVO signup(UserDTO userDto){
         if(userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null){
             throw new RuntimeException("이미 가입되어있는 유저입니다.");

@@ -19,10 +19,7 @@ public class StudyApplicationService {
     PortfolioRepository portfolioRepository;
     PositionRepository positionRepository;
 
-    @Autowired
-    public StudyApplicationService(StudyApplicationRepository studyApplicationRepository,
-                                   AnnouncementRepository announcementRepository, PortfolioRepository portfolioRepository,
-                                   PositionRepository positionRepository) {
+    public StudyApplicationService(StudyApplicationRepository studyApplicationRepository, AnnouncementRepository announcementRepository, PortfolioRepository portfolioRepository, PositionRepository positionRepository) {
         this.studyApplicationRepository = studyApplicationRepository;
         this.announcementRepository = announcementRepository;
         this.portfolioRepository = portfolioRepository;
@@ -39,6 +36,7 @@ public class StudyApplicationService {
         Optional<PositionVO> positionVO = positionRepository.findById(dto.getPosition().getIdx());
         if(announcementVO.isEmpty() || portfolioVO.isEmpty() || positionVO.isEmpty())
             return null;
+
 
         StudyApplicationVO build = StudyApplicationVO.builder()
                 .announcement(announcementVO.get())
