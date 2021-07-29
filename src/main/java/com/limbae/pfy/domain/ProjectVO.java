@@ -4,6 +4,7 @@ package com.limbae.pfy.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,5 +40,5 @@ public class ProjectVO {
             name = "project_stack",
             joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
-    Set<StackVO> stack;
+    List<StackVO> stack;
 }

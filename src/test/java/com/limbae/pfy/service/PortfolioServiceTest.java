@@ -46,22 +46,22 @@ public class PortfolioServiceTest {
     }
 
 
-    @Test
-    void getOnePortfolioTest() {
-        //given
-        Optional<PortfolioVO> portfolioVO = portfolioRepository.findAll().stream().findAny();
-
-        //when
-        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioVO.get().getIdx());
-
-        //then
+//    @Test
+//    void getOnePortfolioTest() {
+//        //given
+//        Optional<PortfolioVO> portfolioVO = portfolioRepository.findAll().stream().findAny();
+//
+//        //when
+//        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioVO.get().getIdx());
+//
+//        //then
 //        Assertions.assertThat(portfolioByIdx).isNotEmpty();
-        System.out.println("portfolioByIdx.get().getIdx() = " + portfolioByIdx.get().getIdx());
-        portfolioByIdx.get().setContent("wow22");
-        portfolioRepository.flush();
-
-
-    }
+//        System.out.println("portfolioByIdx.get().getIdx() = " + portfolioByIdx.get().getIdx());
+//        portfolioByIdx.get().setContent("wow22");
+//        portfolioRepository.flush();
+//
+//
+//    }
 //
 //    @Test
 //    void getPortfolioListTest() {

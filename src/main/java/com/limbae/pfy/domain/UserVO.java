@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -55,10 +56,10 @@ public class UserVO {
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
-    private Set<AuthorityVO> authorities;
+    private List<AuthorityVO> authorities;
 
     @OneToMany(mappedBy = "user")
-    private List<PortfolioVO> portfolio;
+    private List<PortfolioVO> portfolio ;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
@@ -66,7 +67,7 @@ public class UserVO {
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "study_idx", referencedColumnName = "idx")}
     )
-    Set<StudyVO> study;
+    List<StudyVO> study ;
 
 
 }

@@ -8,7 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -22,7 +24,7 @@ public class ProjectDTO {
 
     String content;
 
-    Set<StackDTO> stack;
+    List<StackDTO> stack ;
 
     String site;
 }

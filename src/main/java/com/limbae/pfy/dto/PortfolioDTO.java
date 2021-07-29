@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,11 +27,11 @@ public class PortfolioDTO {
 
     UserDTO user;
 
-    Set<ProjectDTO> project;
+    List<ProjectDTO> project;
 
-    Set<PositionDTO> positions;
+    List<PositionDTO> positions;
 
-    Set<TechDTO> tech;
+    List<TechDTO> tech;
 
     EducationDTO education;
 

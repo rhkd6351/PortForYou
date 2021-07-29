@@ -221,7 +221,7 @@ public class StudyController {
         StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
         if(studyByIdx == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        Set<MemberVO> membersInfo = studyByIdx.getMembersInfo();
+        List<MemberVO> membersInfo = studyByIdx.getMembersInfo();
         UserVO manager = studyByIdx.getUser();
 
         UserVO loginUser = userService.getMyUserWithAuthorities().get();

@@ -32,11 +32,13 @@ public class ApplicationController {
     StudyApplicationService studyApplicationService;
     AnnouncementService announcementService;
     StudyCategoryService studyCategoryService;
+    MemberService memberService;
 
 
     @Autowired
     public ApplicationController(UserService userService, PortfolioService portfolioService,
                                  EntityUtil entityUtil, StackService stackService,
+                                 MemberService memberService,
                                  PositionService positionService, StudyService studyService,
                                  StudyApplicationService studyApplicationService,
                                  AnnouncementService announcementService, StudyCategoryService studyCategoryService) {
@@ -49,6 +51,7 @@ public class ApplicationController {
         this.studyApplicationService = studyApplicationService;
         this.announcementService = announcementService;
         this.studyCategoryService = studyCategoryService;
+        this.memberService = memberService;
     }
 
     @PostMapping("/study/announcement/application")
@@ -149,9 +152,14 @@ public class ApplicationController {
                 break;
             }
         }
+        UserVO user = studyApplicationVO.getPortfolio().getUser();
+        MemberVO member = MemberVO.builder()
+                .user(user)
+                .position(studyApplicationVO.getPosition())
+                .study(studyApplicationVO.getAnnouncement().getStudy())
+                .build();
 
-        studyApplicationVO.getAnnouncement().getStudy().getMembers().add(
-                studyApplicationVO.getPortfolio().getUser() );
+        memberService.saveMember(member);
         studyApplicationService.saveStudyApplication(studyApplicationVO);
 
         return new ResponseEntity<>(new ResponseObjectDTO("accept success"), HttpStatus.OK);

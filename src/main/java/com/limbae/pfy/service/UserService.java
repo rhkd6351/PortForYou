@@ -36,7 +36,7 @@ public class UserService {
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .name(userDto.getName())
                 .phone(userDto.getPhone())
-                .authorities(Collections.singleton(authorityVO))
+                .authorities(Collections.singletonList(authorityVO))
                 .activated(true)
                 .build();
 

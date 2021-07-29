@@ -23,14 +23,14 @@ public class EntityUtil {
     }
 
     public PortfolioDTO convertPortfolioVoToDto(PortfolioVO vo){
-        Set<PositionDTO> positionDTO = vo.getPosition().stream().map(
+        List<PositionDTO> positionDTO = vo.getPosition().stream().map(
                 i -> PositionDTO.builder()
                         .idx(i.getIdx())
                         .name(i.getName())
                         .build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
 
-        Set<ProjectDTO> projectDTO = vo.getProject().stream().map(
+        List<ProjectDTO> projectDTO = vo.getProject().stream().map(
                 i -> ProjectDTO.builder()
                         .idx(i.getIdx())
                         .title(i.getTitle())
@@ -41,23 +41,23 @@ public class EntityUtil {
                                         .name(t.getName())
                                         .content(t.getContent())
                                         .build()
-                        ).collect(Collectors.toSet()))
+                        ).collect(Collectors.toList()))
                         .build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
 
         EducationDTO educationDTO = EducationDTO.builder()
                 .idx(vo.getEducation().getIdx())
                 .name(vo.getEducation().getName())
                 .build();
 
-        Set<TechDTO> techDTOSet = vo.getTech().stream().map(
+        List<TechDTO> techDTOSet = vo.getTech().stream().map(
                 i -> TechDTO.builder()
                         .idx(i.getIdx())
                         .stackIdx(i.getStack().getIdx())
                         .ability(i.getAbility())
                         .content(i.getContent())
                         .build()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toList());
 
 
         return PortfolioDTO.builder()
@@ -205,7 +205,7 @@ public class EntityUtil {
                         .title(vo.getPortfolio().getTitle())
                         .tech(vo.getPortfolio().getTech().stream().map(
                                 i -> TechDTO.builder().stackIdx(i.getStack().getIdx()).build()
-                        ).collect(Collectors.toSet()))
+                        ).collect(Collectors.toList()))
                         .user(this.convertUserVoToDto(vo.getPortfolio().getUser()))
                         .build())
                 .position(PositionDTO.builder()

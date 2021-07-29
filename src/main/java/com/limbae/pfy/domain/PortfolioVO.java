@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,9 @@ import java.util.Set;
 @Entity
 @Table(name = "portfolio")
 public class PortfolioVO {
+
+    //Multiple bag 문제가 발생 (2개 이상의 OneToMany or ManyToMany를 담는 List 존재시 에러발생)
+    //두개(tech, position)를 set으로 변경
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,19 +47,23 @@ public class PortfolioVO {
     @JoinColumn(name = "education_idx")
     EducationVO education;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY)
     @JoinTable(
             name = "portfolio_position",
             joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
-    private Set<PositionVO> position;
+    Set<PositionVO> position;
 
-    @OneToMany(mappedBy = "portfolio")
-    private Set<ProjectVO> project;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "portfolio")
+    List<ProjectVO> project;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "portfolio")
     Set<TechVO> tech;
 
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "portfolio")
     List<StudyApplicationVO> studyApplications;
 }

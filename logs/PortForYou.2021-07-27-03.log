@@ -1,0 +1,183 @@
+2021-07-27 15:16:17,839 [http-nio-8080-exec-8] WARN  org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver(logException:207) - Resolved [org.springframework.web.multipart.support.MissingServletRequestPartException: Required request part 'img' is not present]
+2021-07-27 15:17:30,221 [http-nio-8080-exec-6] WARN  org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver(logException:207) - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'portfolio_idx' for method parameter type Long is not present]
+2021-07-27 15:18:05,311 [http-nio-8080-exec-5] WARN  org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver(logException:207) - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'portfolio_idx' for method parameter type Long is not present]
+2021-07-27 15:18:52,285 [http-nio-8080-exec-9] WARN  org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver(logException:207) - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'portfolio_idx' for method parameter type Long is not present]
+2021-07-27 15:19:40,527 [http-nio-8080-exec-2] WARN  org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver(logException:207) - Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'portfolio_idx' for method parameter type Long is not present]
+2021-07-27 15:21:51,191 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(destroy:651) - Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:21:51,242 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:350) - HikariPool-1 - Shutdown initiated...
+2021-07-27 15:21:51,344 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:352) - HikariPool-1 - Shutdown completed.
+2021-07-27 15:22:05,888 [background-preinit] INFO  org.hibernate.validator.internal.util.Version(<clinit>:21) - HV000001: Hibernate Validator 6.2.0.Final
+2021-07-27 15:22:05,962 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarting:55) - Starting PortForYouApplication using Java 16.0.2 on im-yegwang-ui-MacBookAir.local with PID 49557 (/Users/lim/Desktop/study/PortForYou/build/classes/java/main started by lim in /Users/lim/Desktop/study/PortForYou)
+2021-07-27 15:22:05,968 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStartupProfileInfo:659) - No active profile set, falling back to default profiles: default
+2021-07-27 15:22:06,027 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-27 15:22:06,030 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-27 15:22:06,824 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:132) - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-07-27 15:22:06,925 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:201) - Finished Spring Data repository scanning in 93 ms. Found 11 JPA repository interfaces.
+2021-07-27 15:22:07,247 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@2941950a' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:22:07,251 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:22:07,474 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(initialize:108) - Tomcat initialized with port(s): 8080 (http)
+2021-07-27 15:22:07,480 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Initializing ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:22:07,481 [restartedMain] INFO  org.apache.catalina.core.StandardService(log:173) - Starting service [Tomcat]
+2021-07-27 15:22:07,481 [restartedMain] INFO  org.apache.catalina.core.StandardEngine(log:173) - Starting Servlet engine: [Apache Tomcat/9.0.46]
+2021-07-27 15:22:07,534 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring embedded WebApplicationContext
+2021-07-27 15:22:07,535 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext(prepareWebApplicationContext:290) - Root WebApplicationContext: initialization completed in 1503 ms
+2021-07-27 15:22:07,634 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:110) - HikariPool-1 - Starting...
+2021-07-27 15:22:08,105 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:123) - HikariPool-1 - Start completed.
+2021-07-27 15:22:08,189 [restartedMain] INFO  org.hibernate.jpa.internal.util.LogHelper(logPersistenceUnitInformation:31) - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-07-27 15:22:08,217 [restartedMain] INFO  org.hibernate.Version(logVersion:44) - HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-07-27 15:22:08,284 [restartedMain] INFO  org.hibernate.annotations.common.Version(<clinit>:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-07-27 15:22:08,334 [restartedMain] INFO  org.hibernate.dialect.Dialect(<init>:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2021-07-27 15:22:09,128 [restartedMain] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator(initiateService:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-07-27 15:22:09,134 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(buildNativeEntityManagerFactory:437) - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:22:09,208 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration(openEntityManagerInViewInterceptor:219) - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-07-27 15:22:09,987 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/login'] with []
+2021-07-27 15:22:09,988 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user'] with []
+2021-07-27 15:22:09,988 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/img/default'] with []
+2021-07-27 15:22:09,989 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/positions'] with []
+2021-07-27 15:22:09,990 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/projects'] with []
+2021-07-27 15:22:09,991 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/educations'] with []
+2021-07-27 15:22:09,992 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/stacks'] with []
+2021-07-27 15:22:10,017 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@382f2e6b, org.springframework.security.web.context.SecurityContextPersistenceFilter@407c543c, org.springframework.security.web.header.HeaderWriterFilter@73a4009b, org.springframework.security.web.authentication.logout.LogoutFilter@25c19b6a, org.springframework.web.filter.CorsFilter@47499afc, com.limbae.pfy.jwt.JwtFilter@6bae7802, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@f2799f9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@24f92f2b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6ca3d3ca, org.springframework.security.web.session.SessionManagementFilter@7ae4fe54, org.springframework.security.web.access.ExceptionTranslationFilter@5017654f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@184681a6]
+2021-07-27 15:22:10,216 [restartedMain] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping(<init>:57) - Adding welcome page template: index
+2021-07-27 15:22:10,443 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer(startServer:58) - LiveReload server is running on port 35729
+2021-07-27 15:22:10,471 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Starting ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:22:10,489 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(start:220) - Tomcat started on port(s): 8080 (http) with context path ''
+2021-07-27 15:22:10,507 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarted:61) - Started PortForYouApplication in 5.16 seconds (JVM running for 11.791)
+2021-07-27 15:22:15,779 [http-nio-8080-exec-4] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-27 15:22:15,781 [http-nio-8080-exec-4] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:525) - Initializing Servlet 'dispatcherServlet'
+2021-07-27 15:22:15,785 [http-nio-8080-exec-4] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:547) - Completed initialization in 4 ms
+2021-07-27 15:25:42,680 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(destroy:651) - Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:25:42,701 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:350) - HikariPool-1 - Shutdown initiated...
+2021-07-27 15:25:42,805 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:352) - HikariPool-1 - Shutdown completed.
+2021-07-27 15:25:52,155 [background-preinit] INFO  org.hibernate.validator.internal.util.Version(<clinit>:21) - HV000001: Hibernate Validator 6.2.0.Final
+2021-07-27 15:25:52,175 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarting:55) - Starting PortForYouApplication using Java 16.0.2 on im-yegwang-ui-MacBookAir.local with PID 49634 (/Users/lim/Desktop/study/PortForYou/build/classes/java/main started by lim in /Users/lim/Desktop/study/PortForYou)
+2021-07-27 15:25:52,180 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStartupProfileInfo:659) - No active profile set, falling back to default profiles: default
+2021-07-27 15:25:52,232 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-27 15:25:52,234 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-27 15:25:53,002 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:132) - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-07-27 15:25:53,099 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:201) - Finished Spring Data repository scanning in 89 ms. Found 11 JPA repository interfaces.
+2021-07-27 15:25:53,407 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@13bfde07' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:25:53,414 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:25:53,634 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(initialize:108) - Tomcat initialized with port(s): 8080 (http)
+2021-07-27 15:25:53,642 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Initializing ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:25:53,643 [restartedMain] INFO  org.apache.catalina.core.StandardService(log:173) - Starting service [Tomcat]
+2021-07-27 15:25:53,643 [restartedMain] INFO  org.apache.catalina.core.StandardEngine(log:173) - Starting Servlet engine: [Apache Tomcat/9.0.46]
+2021-07-27 15:25:53,709 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring embedded WebApplicationContext
+2021-07-27 15:25:53,710 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext(prepareWebApplicationContext:290) - Root WebApplicationContext: initialization completed in 1475 ms
+2021-07-27 15:25:53,800 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:110) - HikariPool-1 - Starting...
+2021-07-27 15:25:54,318 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:123) - HikariPool-1 - Start completed.
+2021-07-27 15:25:54,407 [restartedMain] INFO  org.hibernate.jpa.internal.util.LogHelper(logPersistenceUnitInformation:31) - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-07-27 15:25:54,433 [restartedMain] INFO  org.hibernate.Version(logVersion:44) - HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-07-27 15:25:54,493 [restartedMain] INFO  org.hibernate.annotations.common.Version(<clinit>:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-07-27 15:25:54,536 [restartedMain] INFO  org.hibernate.dialect.Dialect(<init>:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2021-07-27 15:25:55,256 [restartedMain] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator(initiateService:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-07-27 15:25:55,262 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(buildNativeEntityManagerFactory:437) - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:25:55,366 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration(openEntityManagerInViewInterceptor:219) - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-07-27 15:25:56,389 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/login'] with []
+2021-07-27 15:25:56,390 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user'] with []
+2021-07-27 15:25:56,391 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/img/default'] with []
+2021-07-27 15:25:56,391 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/positions'] with []
+2021-07-27 15:25:56,392 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/projects'] with []
+2021-07-27 15:25:56,394 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/educations'] with []
+2021-07-27 15:25:56,395 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/stacks'] with []
+2021-07-27 15:25:56,425 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@184681a6, org.springframework.security.web.context.SecurityContextPersistenceFilter@7ae4fe54, org.springframework.security.web.header.HeaderWriterFilter@5017654f, org.springframework.security.web.authentication.logout.LogoutFilter@57ba6095, org.springframework.web.filter.CorsFilter@72aea491, com.limbae.pfy.jwt.JwtFilter@382f2e6b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@407c543c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3cd1699c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@47499afc, org.springframework.security.web.session.SessionManagementFilter@4bc9e00d, org.springframework.security.web.access.ExceptionTranslationFilter@171db62e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6c34dff0]
+2021-07-27 15:25:56,677 [restartedMain] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping(<init>:57) - Adding welcome page template: index
+2021-07-27 15:25:56,939 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer(startServer:58) - LiveReload server is running on port 35729
+2021-07-27 15:25:56,964 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Starting ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:25:57,036 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(start:220) - Tomcat started on port(s): 8080 (http) with context path ''
+2021-07-27 15:25:57,059 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarted:61) - Started PortForYouApplication in 5.226 seconds (JVM running for 11.398)
+2021-07-27 15:26:01,635 [http-nio-8080-exec-2] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-27 15:26:01,637 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:525) - Initializing Servlet 'dispatcherServlet'
+2021-07-27 15:26:01,644 [http-nio-8080-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:547) - Completed initialization in 6 ms
+2021-07-27 15:26:02,247 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:26:02,308 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:26:06,811 [http-nio-8080-exec-4] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:39:36,370 [http-nio-8080-exec-10] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:40:33,443 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:40:34,137 [http-nio-8080-exec-4] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:41:01,402 [SpringApplicationShutdownHook] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(destroy:651) - Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:41:01,432 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:350) - HikariPool-1 - Shutdown initiated...
+2021-07-27 15:41:01,595 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource(close:352) - HikariPool-1 - Shutdown completed.
+2021-07-27 15:41:11,137 [background-preinit] INFO  org.hibernate.validator.internal.util.Version(<clinit>:21) - HV000001: Hibernate Validator 6.2.0.Final
+2021-07-27 15:41:11,159 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarting:55) - Starting PortForYouApplication using Java 16.0.2 on im-yegwang-ui-MacBookAir.local with PID 50317 (/Users/lim/Desktop/study/PortForYou/build/classes/java/main started by lim in /Users/lim/Desktop/study/PortForYou)
+2021-07-27 15:41:11,163 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStartupProfileInfo:659) - No active profile set, falling back to default profiles: default
+2021-07-27 15:41:11,210 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-07-27 15:41:11,212 [restartedMain] INFO  org.springframework.boot.devtools.env.DevToolsPropertyDefaultsPostProcessor(logTo:255) - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-07-27 15:41:12,044 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:132) - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-07-27 15:41:12,152 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate(registerRepositoriesIn:201) - Finished Spring Data repository scanning in 99 ms. Found 11 JPA repository interfaces.
+2021-07-27 15:41:12,468 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@5a984e55' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:41:12,475 [restartedMain] INFO  org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker(postProcessAfterInitialization:376) - Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-07-27 15:41:12,758 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(initialize:108) - Tomcat initialized with port(s): 8080 (http)
+2021-07-27 15:41:12,765 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Initializing ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:41:12,765 [restartedMain] INFO  org.apache.catalina.core.StandardService(log:173) - Starting service [Tomcat]
+2021-07-27 15:41:12,765 [restartedMain] INFO  org.apache.catalina.core.StandardEngine(log:173) - Starting Servlet engine: [Apache Tomcat/9.0.46]
+2021-07-27 15:41:12,820 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring embedded WebApplicationContext
+2021-07-27 15:41:12,821 [restartedMain] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext(prepareWebApplicationContext:290) - Root WebApplicationContext: initialization completed in 1606 ms
+2021-07-27 15:41:12,915 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:110) - HikariPool-1 - Starting...
+2021-07-27 15:41:13,402 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource(getConnection:123) - HikariPool-1 - Start completed.
+2021-07-27 15:41:13,483 [restartedMain] INFO  org.hibernate.jpa.internal.util.LogHelper(logPersistenceUnitInformation:31) - HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-07-27 15:41:13,507 [restartedMain] INFO  org.hibernate.Version(logVersion:44) - HHH000412: Hibernate ORM core version 5.4.32.Final
+2021-07-27 15:41:13,568 [restartedMain] INFO  org.hibernate.annotations.common.Version(<clinit>:56) - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-07-27 15:41:13,611 [restartedMain] INFO  org.hibernate.dialect.Dialect(<init>:175) - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2021-07-27 15:41:14,337 [restartedMain] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator(initiateService:52) - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-07-27 15:41:14,343 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean(buildNativeEntityManagerFactory:437) - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-07-27 15:41:14,431 [restartedMain] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration(openEntityManagerInViewInterceptor:219) - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-07-27 15:41:15,166 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/login'] with []
+2021-07-27 15:41:15,167 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user'] with []
+2021-07-27 15:41:15,167 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/img/default'] with []
+2021-07-27 15:41:15,168 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/positions'] with []
+2021-07-27 15:41:15,169 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/projects'] with []
+2021-07-27 15:41:15,171 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/educations'] with []
+2021-07-27 15:41:15,172 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure Ant [pattern='/api/user/portfolio/stacks'] with []
+2021-07-27 15:41:15,193 [restartedMain] INFO  org.springframework.security.web.DefaultSecurityFilterChain(<init>:51) - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@26122216, org.springframework.security.web.context.SecurityContextPersistenceFilter@14f484db, org.springframework.security.web.header.HeaderWriterFilter@556d2865, org.springframework.security.web.authentication.logout.LogoutFilter@4cbfbb9c, org.springframework.web.filter.CorsFilter@7190b4bf, com.limbae.pfy.jwt.JwtFilter@7c606fce, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5fc27037, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6379b75, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4b83d45b, org.springframework.security.web.session.SessionManagementFilter@25c19b6a, org.springframework.security.web.access.ExceptionTranslationFilter@663c6e56, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5afaf0eb]
+2021-07-27 15:41:15,376 [restartedMain] INFO  org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping(<init>:57) - Adding welcome page template: index
+2021-07-27 15:41:15,623 [restartedMain] INFO  org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer(startServer:58) - LiveReload server is running on port 35729
+2021-07-27 15:41:15,644 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol(log:173) - Starting ProtocolHandler ["http-nio-8080"]
+2021-07-27 15:41:15,658 [restartedMain] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer(start:220) - Tomcat started on port(s): 8080 (http) with context path ''
+2021-07-27 15:41:15,672 [restartedMain] INFO  com.limbae.pfy.PortForYouApplication(logStarted:61) - Started PortForYouApplication in 4.887 seconds (JVM running for 11.009)
+2021-07-27 15:41:20,599 [http-nio-8080-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/](log:173) - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-07-27 15:41:20,600 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:525) - Initializing Servlet 'dispatcherServlet'
+2021-07-27 15:41:20,623 [http-nio-8080-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet(initServletBean:547) - Completed initialization in 23 ms
+2021-07-27 15:41:21,116 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:41:27,930 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:47:19,137 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:50:41,598 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool(run:780) - HikariPool-1 - Retrograde clock change detected (housekeeper delta=27s919ms), soft-evicting connections from pool.
+2021-07-27 15:51:57,668 [http-nio-8080-exec-4] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:04,264 [http-nio-8080-exec-6] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:04,435 [http-nio-8080-exec-9] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:07,115 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:19,856 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:22,230 [http-nio-8080-exec-9] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:22,367 [http-nio-8080-exec-4] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:26,753 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:27,903 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:28,024 [http-nio-8080-exec-7] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:28,687 [http-nio-8080-exec-9] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:28,737 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:32,963 [http-nio-8080-exec-6] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:33,143 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:35,511 [http-nio-8080-exec-7] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:42,349 [http-nio-8080-exec-10] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:56,834 [http-nio-8080-exec-9] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:53:56,886 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:45,968 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:47,239 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:47,287 [http-nio-8080-exec-1] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:51,970 [http-nio-8080-exec-10] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:52,014 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:53,251 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:56:53,292 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:57:27,333 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:57:27,438 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:57:27,511 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:57:30,323 [http-nio-8080-exec-8] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:57:30,378 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:58:40,894 [http-nio-8080-exec-2] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:58:41,561 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:58:46,836 [http-nio-8080-exec-10] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:58:46,947 [http-nio-8080-exec-7] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:59:01,740 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:59:01,831 [http-nio-8080-exec-1] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:59:16,293 [http-nio-8080-exec-5] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:59:16,385 [http-nio-8080-exec-7] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file
+2021-07-27 15:59:17,957 [http-nio-8080-exec-3] WARN  com.limbae.pfy.util.ImageUtil(getImageByteFromImageVO:36) - There is no such file

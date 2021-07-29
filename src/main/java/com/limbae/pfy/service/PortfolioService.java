@@ -56,7 +56,7 @@ public class PortfolioService {
         Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
         if(education.isEmpty()) return null;
 
-        Set<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
+        List<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
                         i -> ProjectVO.builder()
                                 .title(i.getTitle())
@@ -64,10 +64,10 @@ public class PortfolioService {
                                 .stack(i.getStack() != null ?
                                         i.getStack().stream().map(
                                                 t -> stackRepository.findOneByIdx(t.getIdx()).get()
-                                        ).collect(Collectors.toSet())
+                                        ).collect(Collectors.toList())
                                         : null)
                                 .build()
-                ).collect(Collectors.toSet()) : null;
+                ).collect(Collectors.toList()) : null;
 
         Set<PositionVO> positionVOS = portfolioDTO.getPositions() != null ?
                 portfolioDTO.getPositions().stream().map(
@@ -106,7 +106,7 @@ public class PortfolioService {
         Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
         if(education.isEmpty()) return null;
 
-        Set<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
+        List<ProjectVO> projectList = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
                         i -> ProjectVO.builder()
                                 .idx(i.getIdx())
@@ -115,10 +115,10 @@ public class PortfolioService {
                                 .stack(i.getStack() != null ?
                                         i.getStack().stream().map(
                                                 t -> stackRepository.findOneByIdx(t.getIdx()).get()
-                                        ).collect(Collectors.toSet())
+                                        ).collect(Collectors.toList())
                                         : null)
                                 .build()
-                ).collect(Collectors.toSet()) : null;
+                ).collect(Collectors.toList()) : null;
 
         Set<PositionVO> positionVOS = portfolioDTO.getPositions() != null ?
                 portfolioDTO.getPositions().stream().map(
@@ -140,7 +140,7 @@ public class PortfolioService {
                     .user(uvo.get())
                     .title(portfolioDTO.getTitle())
                     .content(portfolioDTO.getContent())
-                    .project(projectSet)
+                    .project(projectList)
                     .tech(techVOS)
                     .position(positionVOS)
                     .education(education.get())
@@ -153,7 +153,7 @@ public class PortfolioService {
         PortfolioVO portfolioVO = portfolioRepository.getById(portfolioDTO.getIdx());
         portfolioVO.setTitle(portfolioDTO.getTitle());
         portfolioVO.setContent(portfolioDTO.getContent());
-        portfolioVO.setProject(projectSet);
+        portfolioVO.setProject(projectList);
         portfolioVO.setTech(techVOS);
         portfolioVO.setPosition(positionVOS);
         portfolioVO.setEducation(education.get());
