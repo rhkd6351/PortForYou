@@ -1,2 +1,0 @@
-2021-07-26 12:36:46,914 [http-nio-8080-exec-10] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
-2021-07-26 12:36:46,993 [http-nio-8080-exec-10] INFO  com.limbae.pfy.jwt.TokenProvider(validateToken:86) - 만료된 jwtt 토큰입니다.
