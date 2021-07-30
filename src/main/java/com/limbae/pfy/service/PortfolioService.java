@@ -4,9 +4,11 @@ import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.repository.*;
 import com.limbae.pfy.util.SecurityUtil;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.message.AuthException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class PortfolioService {
+public class PortfolioService implements PortfolioServiceInterface {
 
     public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository) {
         this.portfolioRepository = portfolioRepository;
@@ -31,79 +33,32 @@ public class PortfolioService {
     EducationRepository educationRepository;
 
 
-    public Optional<PortfolioVO> getPortfolioByIdx(Long idx) {
-        return portfolioRepository.findOneByIdx(idx);
+    public PortfolioVO getPortfolioByIdx(Long idx) throws NotFoundException {
+        Optional<PortfolioVO> portfolio = portfolioRepository.findOneByIdx(idx);
+
+        if(portfolio.isPresent())
+            return portfolio.get();
+        else
+            throw new NotFoundException("invalid portfolio idx");
     }
 
-    public boolean checkPossessionOfPortfolio(PortfolioVO pfvo,
-                                              List<PortfolioListDTO> pfList) {
-        PortfolioListDTO any = null;
-
-        for (PortfolioListDTO dto : pfList)
-            if (dto.getIdx() == pfvo.getIdx()) any = dto;
-
-        return any != null;
-    }
-
-    public void deletePortfolio(PortfolioVO vo){ //TODO delete 리턴타입 다시정하기
+    public void deletePortfolio(PortfolioVO vo){
         portfolioRepository.delete(vo);
     }
 
-    public PortfolioVO savePortfolio(PortfolioDTO portfolioDTO) {
-        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-        if(uvo.isEmpty()) return null;
-        Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
-        if(education.isEmpty()) return null;
-
-        List<ProjectVO> projectSet = portfolioDTO.getProject() != null ?
-                portfolioDTO.getProject().stream().map(
-                        i -> ProjectVO.builder()
-                                .title(i.getTitle())
-                                .content(i.getContent())
-                                .stack(i.getStack() != null ?
-                                        i.getStack().stream().map(
-                                                t -> stackRepository.findOneByIdx(t.getIdx()).get()
-                                        ).collect(Collectors.toList())
-                                        : null)
-                                .build()
-                ).collect(Collectors.toList()) : null;
-
-        Set<PositionVO> positionVOS = portfolioDTO.getPositions() != null ?
-                portfolioDTO.getPositions().stream().map(
-                        i -> positionRepository.findOneByIdx(i.getIdx()).get()
-                ).collect(Collectors.toSet()) : null;
-
-        Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
-                portfolioDTO.getTech().stream().map(
-                        i -> TechVO.builder()
-                                .content(i.getContent())
-                                .ability(i.getAbility())
-                                .stack(stackRepository.getById(i.getStackIdx()))
-                                .build()
-                ).collect(Collectors.toSet()) : null);
-
-
-        PortfolioVO portfolioVO = PortfolioVO.builder()
-                .user(uvo.get())
-                .title(portfolioDTO.getTitle())
-                .content(portfolioDTO.getContent())
-                .project(projectSet)
-                .tech(techVOS)
-                .position(positionVOS)
-                .education(education.get())
-                .build();
-
-        portfolioRepository.save(portfolioVO);
-        return portfolioVO;
-    }
-
-    public PortfolioVO updatePortfolio(PortfolioDTO portfolioDTO) {
+    public PortfolioVO updatePortfolio(PortfolioDTO portfolioDTO) throws NotFoundException, AuthException {
 
         Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-        if(uvo.isEmpty()) return null;
+        if(uvo.isEmpty()) throw new AuthException("Invalid Token");
 
         Optional<EducationVO> education = educationRepository.findById(portfolioDTO.getEducation().getIdx());
-        if(education.isEmpty()) return null;
+        if(education.isEmpty()) throw new NotFoundException("Invalid Education Idx");
+
+        Optional<PositionVO> position = positionRepository.findOneByIdx(portfolioDTO.getPosition().getIdx());
+        if(position.isEmpty()) throw new NotFoundException("Invalid Position Idx");
+
+        // 프로젝트, 테크 변경전 데이터랑 변경후 데이터 비교해서 삭제된 데이터 삭제쿼리 날리기
+        // -> entity의 column 속성으로 orphanRemoval(고아 객체 제거) 추가하여 위 기능 구현
 
         List<ProjectVO> projectList = portfolioDTO.getProject() != null ?
                 portfolioDTO.getProject().stream().map(
@@ -113,16 +68,12 @@ public class PortfolioService {
                                 .content(i.getContent())
                                 .stack(i.getStack() != null ?
                                         i.getStack().stream().map(
-                                                t -> stackRepository.findOneByIdx(t.getIdx()).get()
+                                                t -> stackRepository.findOneByIdx(t.getIdx()).orElse(null)
                                         ).collect(Collectors.toList())
                                         : null)
                                 .build()
                 ).collect(Collectors.toList()) : null;
 
-        Set<PositionVO> positionVOS = portfolioDTO.getPositions() != null ?
-                portfolioDTO.getPositions().stream().map(
-                        i -> positionRepository.findOneByIdx(i.getIdx()).get()
-                ).collect(Collectors.toSet()) : null;
 
         Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
                 portfolioDTO.getTech().stream().map(
@@ -141,7 +92,7 @@ public class PortfolioService {
                     .content(portfolioDTO.getContent())
                     .project(projectList)
                     .tech(techVOS)
-                    .position(positionVOS)
+                    .position(position.get())
                     .education(education.get())
                     .build();
 
@@ -154,7 +105,7 @@ public class PortfolioService {
         portfolioVO.setContent(portfolioDTO.getContent());
         portfolioVO.setProject(projectList);
         portfolioVO.setTech(techVOS);
-        portfolioVO.setPosition(positionVOS);
+        portfolioVO.setPosition(position.get());
         portfolioVO.setEducation(education.get());
 
         portfolioRepository.save(portfolioVO);
@@ -162,42 +113,10 @@ public class PortfolioService {
         return portfolioVO;
     }
 
-    public List<PortfolioListDTO> getMyPortfolios() {
-        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-        if (uvo.isPresent()) {
-            Optional<List<PortfolioVO>> portfolioList = portfolioRepository.findByUserUid(uvo.get().getUid());
-            return portfolioList.map(portfolioVOS -> portfolioVOS.stream()
-                    .map(i -> {
-                        List<String> stacks = new ArrayList<>();
-                        for (TechVO vo : i.getTech()) stacks.add(vo.getStack().getName());
-
-                        return PortfolioListDTO.builder()
-                                .title(i.getTitle())
-                                .content(i.getContent())
-                                .reg_date(i.getRegDate())
-                                .idx(i.getIdx())
-                                .position(i.getPosition() != null
-                                        ? i.getPosition().stream().map(
-                                        k -> PositionDTO.builder()
-                                                .idx(k.getIdx())
-                                                .name(k.getName())
-                                                .build()
-                                ).collect(Collectors.toList()) : null)
-                                .stack(stacks.stream().map(
-                                        p -> StackDTO.builder()
-                                                .name(p)
-                                                .build()
-                                ).collect(Collectors.toList()))
-                                .education(EducationDTO.builder()
-                                        .name(i.getEducation().getName())
-                                        .idx(i.getEducation().getIdx())
-                                        .build())
-
-                                .build();
-
-                    }).collect(Collectors.toList())).orElse(null);
-        } else {
-            return null;
-        }
+    public List<PortfolioVO> getPortfoliosByUid(Long uid) {
+        Optional<List<PortfolioVO>> portfolios = portfolioRepository.findByUserUid(uid);
+        return portfolios.orElse(new ArrayList<PortfolioVO>());
     }
+
+
 }

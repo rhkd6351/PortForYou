@@ -37,10 +37,11 @@ public class ProjectVO {
 
 
     //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "project_stack",
             joinColumns = {@JoinColumn(name = "project_idx", referencedColumnName = "idx")},
             inverseJoinColumns = {@JoinColumn(name = "stack_idx", referencedColumnName = "idx")})
-    List<StackVO> stack;
+    List<StackVO> stack = new ArrayList<>();
 }

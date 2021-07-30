@@ -29,7 +29,7 @@ public class PortfolioDTO {
 
     List<ProjectDTO> project;
 
-    List<PositionDTO> positions;
+    PositionDTO position;
 
     List<TechDTO> tech;
 

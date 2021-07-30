@@ -10,6 +10,7 @@ import com.limbae.pfy.service.PortfolioService;
 import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.ImageUtil;
 
+import javassist.NotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.security.auth.message.AuthException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,17 +33,18 @@ import java.util.Optional;
 @RequestMapping("/api/img")
 public class ImageController {
 
-    @Autowired
     ImageService imageService;
-
-    @Autowired
     ImageUtil imageUtil;
-
-    @Autowired
     UserService userService;
-
-    @Autowired
     PortfolioService portfolioService;
+
+    public ImageController(ImageService imageService, ImageUtil imageUtil,
+                           UserService userService, PortfolioService portfolioService) {
+        this.imageService = imageService;
+        this.imageUtil = imageUtil;
+        this.userService = userService;
+        this.portfolioService = portfolioService;
+    }
 
     @GetMapping(
             value = "/default",
@@ -70,14 +73,15 @@ public class ImageController {
     )
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> saveUserProfile(
-            @RequestParam("profile") MultipartFile multipartFile) throws IOException {
-        Optional<UserVO> user = userService.getMyUserWithAuthorities();
+            @RequestParam("profile") MultipartFile multipartFile) throws IOException, AuthException {
+        UserVO user = userService.getMyUserWithAuthorities();
 
         int i = multipartFile.getOriginalFilename().lastIndexOf(".");
         String extension = multipartFile.getOriginalFilename().substring(i);
 
         //파일 확장자 제한
-        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".gif")))
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg")
+                || extension.equals(".png") || extension.equals(".gif")))
             return new ResponseEntity<ResponseObjectDTO>(
                     ResponseObjectDTO.builder().message("wrong file extension").build(),
                     HttpStatus.BAD_REQUEST
@@ -90,7 +94,7 @@ public class ImageController {
                     HttpStatus.BAD_REQUEST
             );
 
-        String saveName = user.get().getUid() + "_profile_img";
+        String saveName = user.getUid() + "_profile_img";
 
         try {
             imageUtil.saveImage(multipartFile, saveName + extension, "/user/profile");
@@ -126,12 +130,11 @@ public class ImageController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> savePortfolioImg(
             @RequestParam("img") MultipartFile multipartFile,
-            @RequestParam("portfolio_idx") Long portfolioIdx) throws IOException {
-        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioIdx);
-        Optional<UserVO> myUserWithAuthorities = userService.getMyUserWithAuthorities();
+            @RequestParam("portfolio_idx") Long portfolioIdx) throws AuthException, NotFoundException {
+        PortfolioVO portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioIdx);
+        UserVO myUserWithAuthorities = userService.getMyUserWithAuthorities();
 
-        if(portfolioByIdx.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if(myUserWithAuthorities.isEmpty() || (portfolioByIdx.get().getUser() != myUserWithAuthorities.get()))
+        if((portfolioByIdx.getUser() != myUserWithAuthorities))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
 
@@ -139,7 +142,8 @@ public class ImageController {
         String extension = multipartFile.getOriginalFilename().substring(i);
 
         //파일 확장자 제한
-        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".gif")))
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg")
+                || extension.equals(".png") || extension.equals(".gif")))
             return new ResponseEntity<ResponseObjectDTO>(
                     ResponseObjectDTO.builder().message("wrong file extension").build(),
                     HttpStatus.BAD_REQUEST

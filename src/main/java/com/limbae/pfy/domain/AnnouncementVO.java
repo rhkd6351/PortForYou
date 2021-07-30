@@ -45,7 +45,8 @@ public class AnnouncementVO {
     @JoinColumn(name = "study_idx")
     StudyVO study;
 
-    @OneToMany(mappedBy = "announcement")
-    List<DemandPositionVO> demandPosition;
+    @Builder.Default
+    @OneToMany(mappedBy = "announcement", orphanRemoval = true)
+    List<DemandPositionVO> demandPosition = new ArrayList<>();
 
 }

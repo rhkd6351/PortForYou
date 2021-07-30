@@ -2,19 +2,24 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.domain.PortfolioVO;
+import com.limbae.pfy.domain.StackVO;
 import com.limbae.pfy.domain.UiImageVO;
+import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.repository.EducationRepository;
 import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.message.AuthException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,101 +55,74 @@ public class PortfolioController {
 
     @GetMapping("/portfolios")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<List<PortfolioListDTO>> getPortfolioList() {
-        return ResponseEntity.ok(portfolioService.getMyPortfolios());
+    public ResponseEntity<List<PortfolioDTO>> getPortfolioList()
+            throws AuthException {
+        //it can throw AuthException
+        UserVO user = userService.getMyUserWithAuthorities();
+
+        List<PortfolioVO> portfolios = portfolioService.getPortfoliosByUid(user.getUid());
+        List<PortfolioDTO> portfoliosDTO = portfolios.stream().
+                map(entityUtil::convertPortfolioVoToDto).collect(Collectors.toList());
+
+        //response
+        return ResponseEntity.ok(portfoliosDTO);
     }
 
-
-
-    @GetMapping("/portfolio")
+    @GetMapping("/portfolio/{portfolio-idx}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(@RequestParam(value = "portfolio_idx") Long idx){
+    public ResponseEntity<PortfolioDTO> getMyPortfolioByIdx(
+            @PathVariable(value = "portfolio-idx") Long idx) throws NotFoundException, AuthException {
+        //it can throw AuthException
+        UserVO user = userService.getMyUserWithAuthorities();
 
-        Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
+        //It can throw NotFoundException
+        PortfolioVO portfolio = portfolioService.getPortfolioByIdx(idx);
 
-        if(opvo.isEmpty()) return new ResponseEntity<PortfolioDTO>(HttpStatus.NOT_FOUND);
-        PortfolioVO getvo = opvo.get();
+        //소유권 확인
+        if(portfolio.getUser() != user)
+            throw new AuthException("not owned portfolio");
 
-        if(getvo.getUser() != userService.getMyUserWithAuthorities().get())
-            return ResponseEntity.badRequest().build();
-        //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
+        PortfolioDTO portfolioDTO = entityUtil.convertPortfolioVoToDto(portfolio);
 
-        PortfolioDTO portfolioDTO = entityUtil.convertPortfolioVoToDto(getvo);
+        //이미지 주소 연결
         Optional<UiImageVO> uiImageWithName = imageService.getUiImageWithName(portfolioDTO.getIdx() + "_portfolio_img");
         if(uiImageWithName.isPresent()){
             String uri = serverUri + "/api/img/default?name=" + uiImageWithName.get().getName();
             portfolioDTO.setImg(uri);
         }
+        //response
         return ResponseEntity.ok(portfolioDTO);
     }
 
-//    @PostMapping("/portfolio")
-//    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-//    public ResponseEntity<PortfolioDTO> savePortfolio(
-//            @RequestBody PortfolioDTO portfolioDTO){
-//        try{
-//            PortfolioVO pvo = portfolioService.savePortfolio(portfolioDTO);
-//            return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
-//        }catch (Exception e){
-//            log.warn(e.getMessage());
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//    }
-
-    @DeleteMapping("/portfolio")
+    @DeleteMapping("/portfolio/{portfolio-idx}")
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<ResponseObjectDTO> deletePortfolioByIdx(@RequestParam(value = "portfolio_idx") Long idx){
+    public ResponseEntity<ResponseObjectDTO> deletePortfolioByIdx(
+            @PathVariable(value = "portfolio-idx") Long idx) throws NotFoundException, AuthException {
 
-        Optional<PortfolioVO> opvo = portfolioService.getPortfolioByIdx(idx);
+        //it can throw AuthException
+        UserVO user = userService.getMyUserWithAuthorities();
 
-        if(opvo.isEmpty()) return new ResponseEntity<ResponseObjectDTO>(HttpStatus.NOT_FOUND);
-        PortfolioVO getvo = opvo.get();
+        //It can throw NotFoundException
+        PortfolioVO portfolio = portfolioService.getPortfolioByIdx(idx);
 
-        if(getvo.getUser() != userService.getMyUserWithAuthorities().get())
-            return ResponseEntity.badRequest().build();
-        //위까지 idx 포트폴리오가 토큰유저 소유 포트폴리오인지 검사
+        //소유권 확인
+        if(portfolio.getUser() != user)
+            throw new AuthException("not owned portfolio");
 
-        portfolioService.deletePortfolio(getvo);
-        return ResponseEntity.ok(ResponseObjectDTO.builder().message("success").build());
+        portfolioService.deletePortfolio(portfolio);
 
+        //response 204 -> no content (delete success)
+        return new ResponseEntity<ResponseObjectDTO>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/portfolio", method = {RequestMethod.POST, RequestMethod.PUT})
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<PortfolioDTO> updatePortfolio(
-            @RequestBody PortfolioDTO portfolioDTO){
-        try{
-            PortfolioVO pvo = portfolioService.updatePortfolio(portfolioDTO);
-            return ResponseEntity.ok(entityUtil.convertPortfolioVoToDto(pvo));
-        }catch (Exception e){
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-    }
+            @RequestBody PortfolioDTO portfolioDTO) throws NotFoundException, AuthException {
 
-    @GetMapping("/portfolio/stacks")
-    public ResponseEntity<List<StackDTO>> getStackList() {
-        List<StackDTO> stackList = stackService.getStackList().stream().map(
-                entityUtil::convertStackVoToDto
-        ).collect(Collectors.toList());
+        //it can throw AuthException, NotFoundException
+        PortfolioVO pvo = portfolioService.updatePortfolio(portfolioDTO);
 
-        return ResponseEntity.ok(stackList);
-    }
-
-    @GetMapping("/portfolio/positions")
-    public ResponseEntity<List<PositionDTO>> getPositionList() {
-        List<PositionDTO> positionList = positionService.getPositionList().stream().map(
-                entityUtil::convertPositionVoToDto
-        ).collect(Collectors.toList());
-        return ResponseEntity.ok(positionList);
-    }
-
-    @GetMapping("/portfolio/educations")
-    public ResponseEntity<List<EducationDTO>> getEducationList() {
-        List<EducationDTO> educationList = educationRepository.findAll().stream().map(
-                entityUtil::convertEducationVoToDto
-        ).collect(Collectors.toList());
-        return ResponseEntity.ok(educationList);
+        return new ResponseEntity<PortfolioDTO>(entityUtil.convertPortfolioVoToDto(pvo),HttpStatus.CREATED);
     }
 }

@@ -4,6 +4,7 @@ import com.limbae.pfy.domain.PositionVO;
 import com.limbae.pfy.domain.StackVO;
 import com.limbae.pfy.repository.PositionRepository;
 import com.limbae.pfy.repository.StackRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,13 @@ public class PositionService {
         return positionRepository.findAll();
     }
 
-    public Optional<PositionVO> getPositionByIdx(Long idx) { return positionRepository.findById(idx);}
+    public PositionVO getPositionByIdx(Long idx) throws NotFoundException {
+        Optional<PositionVO> position = positionRepository.findById(idx);
+        if(position.isEmpty())
+            throw new NotFoundException("invalid position idx");
+        return position.get();
+
+
+    }
 
 }

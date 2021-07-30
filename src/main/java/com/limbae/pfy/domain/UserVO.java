@@ -51,13 +51,19 @@ public class UserVO {
     @Column(name = "activated")
     boolean activated; // 0 or 1
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    List<MemberVO> members = new ArrayList<>();
+
+
     //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
-    List<AuthorityVO> authorities;
+    List<AuthorityVO> authorities = new ArrayList<>();
 }
 
 

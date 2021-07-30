@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -47,21 +44,29 @@ public class PortfolioVO {
     @JoinColumn(name = "education_idx")
     EducationVO education;
 
-    @OneToMany(mappedBy = "portfolio")
-    List<ProjectVO> project;
+    @Builder.Default
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true) //orphanRemoval = 고아객체 제거
+    List<ProjectVO> project = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio")
-    Set<TechVO> tech;
+    @Builder.Default
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<TechVO> tech = new HashSet<>();
 
-    @OneToMany(mappedBy = "portfolio")
-    List<StudyApplicationVO> studyApplications;
+    @Builder.Default
+    @OneToMany(mappedBy = "portfolio", orphanRemoval = true) // TODO 필요한지 검증하고 삭제할것
+    List<StudyApplicationVO> studyApplications = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "position_idx")
+    PositionVO position;
 
-    //ManyToMany 비효율성 -> 하지만 연결테이블에 아무런 데이터가 없으므로 추후 연결테이블에 데이터 추가시 수정할것
-    @ManyToMany
-    @JoinTable(
-            name = "portfolio_position",
-            joinColumns = {@JoinColumn(name = "portfolio_idx", referencedColumnName = "idx")},
-            inverseJoinColumns = {@JoinColumn(name = "position_idx", referencedColumnName = "idx")})
-    Set<PositionVO> position;
+    public void addProject(ProjectVO project){
+        this.project.add(project);
+        project.setPortfolio(this);
+    }
+
+    public void addTech(TechVO tech){
+        this.tech.add(tech);
+        tech.setPortfolio(this);
+    }
 }

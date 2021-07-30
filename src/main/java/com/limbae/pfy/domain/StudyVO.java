@@ -43,6 +43,7 @@ public class StudyVO {
     @JoinColumn(name="study_category_idx")
     StudyCategoryVO studyCategory;
 
+    @Builder.Default
     @OneToMany(mappedBy = "study")
-    List<MemberVO> members;
+    List<MemberVO> members = new ArrayList<>();
 }

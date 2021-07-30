@@ -4,14 +4,16 @@ import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.UserDTO;
 import com.limbae.pfy.repository.UserRepository;
 import com.limbae.pfy.util.SecurityUtil;
+import javassist.bytecode.DuplicateMemberException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.security.auth.message.AuthException;
 import java.util.*;
 
 @Service
-public class UserService {
+public class UserService implements UserServiceInterface{
+
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
@@ -20,11 +22,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //    @Transactional
-    public UserVO signup(UserDTO userDto){
-        if(userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null){
-            throw new RuntimeException("이미 가입되어있는 유저입니다.");
-        }
+    public UserVO signUp(UserDTO userDto) throws DuplicateMemberException{
+        if(userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null)
+            throw new DuplicateMemberException("duplicated");
 
         AuthorityVO authorityVO =   AuthorityVO.builder()
                 .authority(Authority.ROLE_USER)
@@ -43,29 +43,10 @@ public class UserService {
         return userRepository.save(userVO);
     }
 
-
-
-//    @Transactional(readOnly = true)
-//    public Optional<UserVO> getUserWithAuthorities(String username){
-//        return userRepository.findOneWithAuthoritiesByUsername(username);
-//    }
-
-
-    public Optional<UserVO> getUserWithPortfoliosByUsername(String username){
-        return userRepository.findOneWithPortfolioByUsername(username);
-    }
-
-    public Optional<UserVO> getUserByUid(Long uid){
-        return userRepository.findById(uid);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<UserVO> getMyUserWithAuthorities(){
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<UserVO> getMyUserWithPortfolios(){
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithPortfolioByUsername);
+    public UserVO getMyUserWithAuthorities() throws AuthException{
+        Optional<UserVO> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        if(user.isEmpty())
+            throw new AuthException("invalid token");
+        return user.get();
     }
 }

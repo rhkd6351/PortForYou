@@ -41,13 +41,9 @@ public class AuthController {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
 
         String jwt = tokenProvider.createToken(authentication);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        return new ResponseEntity<>(new ResponseObjectDTO(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseObjectDTO(jwt), HttpStatus.OK);
     }
 }

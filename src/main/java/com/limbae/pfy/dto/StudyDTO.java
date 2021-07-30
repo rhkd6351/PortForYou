@@ -22,5 +22,5 @@ public class StudyDTO {
 
     StudyCategoryDTO studyCategory;
 
-    int members;
+    int numberOfMembers;
 }

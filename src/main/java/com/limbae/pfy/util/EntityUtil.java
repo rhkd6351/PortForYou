@@ -5,6 +5,7 @@ import com.limbae.pfy.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,12 +24,7 @@ public class EntityUtil {
     }
 
     public PortfolioDTO convertPortfolioVoToDto(PortfolioVO vo){
-        List<PositionDTO> positionDTO = vo.getPosition().stream().map(
-                i -> PositionDTO.builder()
-                        .idx(i.getIdx())
-                        .name(i.getName())
-                        .build()
-        ).collect(Collectors.toList());
+        PositionDTO positionDTO = convertPositionVoToDto(vo.getPosition());
 
         List<ProjectDTO> projectDTO = vo.getProject().stream().map(
                 i -> ProjectDTO.builder()
@@ -64,14 +60,13 @@ public class EntityUtil {
                 .idx(vo.getIdx())
                 .content(vo.getContent())
                 .project(projectDTO)
-                .positions(positionDTO)
+                .position(positionDTO)
                 .title(vo.getTitle())
                 .regDate(vo.getRegDate())
                 .education(educationDTO)
                 .tech(techDTOSet)
                 .build();
     }
-
 
     public StackDTO convertStackVoToDto(StackVO vo){
 
@@ -173,7 +168,7 @@ public class EntityUtil {
         List<DemandPositionVO> demandPosition = announcementDTO.getDemandPosition().stream().map(
                 i -> DemandPositionVO.builder()
                         .demand(i.getDemand())
-                        .announcement(null) // 일단 0으로 저장
+//                        .announcement(null) // 일단 0으로 저장
                         .position(PositionVO.builder()
                                 .idx(i.getPosition().getIdx())
                                 .name(i.getPosition().getName())
@@ -219,10 +214,22 @@ public class EntityUtil {
 
     public UserDTO convertUserVoToDto(UserVO vo){
         return UserDTO.builder()
+                .username(vo.getUsername())
                 .uid(vo.getUid())
                 .name(vo.getName())
                 .phone(vo.getPhone())
                 .site(vo.getSite())
                 .build();
     }
+
 }
+
+
+
+
+
+
+
+
+
+

@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.message.AuthException;
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,217 +22,120 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = {"/api/user"})
+@RequestMapping(value = {"/api"})
 @Slf4j
 public class StudyController {
 
     UserService userService;
-    PortfolioService portfolioService;
     EntityUtil entityUtil;
-    StackService stackService;
-    PositionService positionService;
     StudyService studyService;
-    StudyApplicationService studyApplicationService;
     AnnouncementService announcementService;
-    StudyCategoryService studyCategoryService;
 
-    public StudyController(UserService userService, PortfolioService portfolioService,
-                           EntityUtil entityUtil, StackService stackService,
-                           PositionService positionService, StudyService studyService,
-                           StudyApplicationService studyApplicationService,
-                           AnnouncementService announcementService, StudyCategoryService studyCategoryService) {
+    public StudyController(UserService userService, EntityUtil entityUtil, StudyService studyService, AnnouncementService announcementService) {
         this.userService = userService;
-        this.portfolioService = portfolioService;
         this.entityUtil = entityUtil;
-        this.stackService = stackService;
-        this.positionService = positionService;
         this.studyService = studyService;
-        this.studyApplicationService = studyApplicationService;
         this.announcementService = announcementService;
-        this.studyCategoryService = studyCategoryService;
     }
 
-    @GetMapping("/study/categories")
-    public ResponseEntity<List<StudyCategoryDTO>> getCategoryList() {
-        List<StudyCategoryVO> categoryList = studyCategoryService.getCategoryList();
-
-        List<StudyCategoryDTO> studyCategoryDTOList = categoryList.stream().map(
-                i -> entityUtil.convertStudyCategoryVoToDto(i)
-        ).collect(Collectors.toList());
-
-        return ResponseEntity.ok(studyCategoryDTOList);
-    }
-    @GetMapping("/studies")
+    @GetMapping("/user/studies")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<StudyDTO>> getMyStudyList(@RequestParam(required = false) boolean applied) {
+    public ResponseEntity<List<StudyDTO>> getMyStudyList(
+            @RequestParam(required = false) boolean applied) throws AuthException {
+
+        //it can throw auth exception
+        UserVO user = userService.getMyUserWithAuthorities();
+
+        // applied = true -> 가입 스터디
         if(applied){
-            return ResponseEntity.ok(studyService.getMyAppliedStudyList().stream().map(
+            return ResponseEntity.ok(studyService.getAppliedStudiesByUid(user.getUid()).stream().map(
                     i -> {
                         StudyDTO studyDTO = entityUtil.convertStudyVoToDto(i);
-                        studyDTO.setMembers(i.getMembers().size());
+                        studyDTO.setNumberOfMembers(i.getMembers().size() + 1);
                         return studyDTO;
                     }
             ).collect(Collectors.toList()));
         }
-        return studyService.getMyStudyList() != null ?
-                ResponseEntity.ok(studyService.getMyStudyList().stream().map(
+
+        //관리 스터디
+        return ResponseEntity.ok(studyService.getStudiesByUid(user.getUid()).stream().map(
                         i -> {
                             StudyDTO studyDTO = entityUtil.convertStudyVoToDto(i);
-                            studyDTO.setMembers(i.getMembers().size() + 1);
+                            studyDTO.setNumberOfMembers(i.getMembers().size() + 1);
                             return studyDTO;
                         }
-                ).collect(Collectors.toList())) : ResponseEntity.badRequest().build();
+                ).collect(Collectors.toList()));
     }
 
-    @GetMapping("/study")
+    @GetMapping("/study/{study-idx}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<StudyDTO> getMyStudyByIdx(@RequestParam(name = "studyIdx") Long studyIdx) {
-        StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
+    public ResponseEntity<StudyDTO> getStudyByIdx(
+            @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        if(studyByIdx == null) //NOT FOUND
-            return new ResponseEntity<StudyDTO>(HttpStatus.NOT_FOUND);
+        //it can throw NotFoundException
+        StudyVO study = studyService.getStudyByIdx(studyIdx);
 
-        if((studyByIdx.getUser() != userService.getMyUserWithAuthorities().get())) //UNAUTHORIZED
-            return new ResponseEntity<StudyDTO>(HttpStatus.UNAUTHORIZED);
+        //it can throw AuthException
+        UserVO user = userService.getMyUserWithAuthorities();
 
-        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyByIdx));
+        if(study.getUser() != user)
+            throw new AuthException("not owned Study");
+
+        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(study));
     }
 
     @PostMapping("/study")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<StudyDTO> saveStudy(
-            @RequestBody StudyDTO studyDTO) {
-        StudyVO studyVO = null;
-        try {
-            studyVO = studyService.saveStudy(studyDTO);
-        } catch (NotFoundException e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+            @RequestBody StudyDTO studyDTO) throws NotFoundException, AuthException {
 
-        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(studyVO));
+        //it can throw NotFound, Auth Exception
+        StudyVO study = studyService.saveStudy(studyDTO);
+
+        return ResponseEntity.ok(entityUtil.convertStudyVoToDto(study));
     }
 
-    @DeleteMapping("/study")
+    @DeleteMapping("/study/{study-idx}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> deleteStudy(
-            @RequestParam Long studyIdx
-    ){
-        StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
-        if(studyByIdx == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        if(studyByIdx.getUser() != userService.getMyUserWithAuthorities().get())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        if(studyService.deleteStudy(studyByIdx)){
-            return ResponseEntity.ok(new ResponseObjectDTO("delete success"));
-        }else{
-            return ResponseEntity.badRequest().build();
-        }
+        //it can throw NotFoundException
+        StudyVO study = studyService.getStudyByIdx(studyIdx);
 
-    }
+        //it can throw AuthException
+        UserVO user = userService.getMyUserWithAuthorities();
 
+        if(study.getUser() != user)
+            throw new AuthException("not owned Study");
 
-    @GetMapping("/study/announcements")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList(
-            @RequestParam(name = "studyIdx") Long studyIdx) {
-        StudyVO studyWithAnnouncementsByIdx = studyService.getStudyWithAnnouncementsByIdx(studyIdx);
+        studyService.deleteStudy(study);
 
-        if(studyWithAnnouncementsByIdx == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        if(studyWithAnnouncementsByIdx.getUser() != userService.getMyUserWithAuthorities().get())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
-        return new ResponseEntity<>(announcementService.getAnnouncementByStudyIdx(studyWithAnnouncementsByIdx.getIdx()).stream().map(
-                i -> entityUtil.convertAnnouncementVoToDto(i)
-        ).collect(Collectors.toList()), HttpStatus.OK);
-    }
-
-    @GetMapping("/announcements")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList(
-            @RequestParam(name = "kind") String kind){
-
-        List<AnnouncementDTO> dto = null;
-
-        if(kind.equals("new")){
-            dto = announcementService.getAnnouncementOrderByDesc().stream().map(entityUtil::convertAnnouncementVoToDto)
-                    .collect(Collectors.toList());
-        }
-
-        return ResponseEntity.ok(dto);
-    }
-
-    @GetMapping("/study/announcement")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<AnnouncementDTO> getAnnouncement(@RequestParam(name = "announcementIdx") Long announcementIdx){
-        AnnouncementVO announcementVO = announcementService.getAnnouncementByIdx(announcementIdx);
-
-        if(announcementVO == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(entityUtil.convertAnnouncementVoToDto(announcementVO),HttpStatus.OK);
+        //response 204 -> no content (delete success)
+        return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
 
     }
 
-    @PostMapping("/study/announcement")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<AnnouncementDTO> saveAnnouncement(
-            @RequestBody AnnouncementDTO announcementDTO) {
-        AnnouncementVO announcementVO = null;
-        try{
-            announcementVO = studyService.saveAnnouncement(announcementDTO);
-        }catch (Exception e){
-            log.warn(e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-
-        if(announcementVO == null)
-            return ResponseEntity.badRequest().build();
-        else
-            return ResponseEntity.ok(entityUtil.convertAnnouncementVoToDto(announcementVO));
-    }
-
-    @DeleteMapping("/study/announcement")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<ResponseObjectDTO> deleteAnnouncement(
-            @RequestParam(value = "announcementIdx") Long announcementIdx){
-        AnnouncementVO announcementVO = announcementService.getAnnouncementByIdx(announcementIdx);
-
-        if(announcementVO == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        //소유 announcement 확인
-        if(announcementVO.getStudy().getUser() != userService.getMyUserWithAuthorities().get())
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
-        if(announcementService.deleteAnnouncement(announcementVO))
-            return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.OK);
-        else
-            return ResponseEntity.badRequest().build();
-
-    }
-
-    @GetMapping("/study/members")
+    @GetMapping("/study/{study-idx}/members")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<MemberDTO>> getMembersByStudyIdx(
-            @RequestParam("studyIdx") Long studyIdx){
+            @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        StudyVO studyByIdx = studyService.getStudyByIdx(studyIdx);
-        if(studyByIdx == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        //it can throw Auth, NotFound Exception
+        StudyVO study = studyService.getStudyByIdx(studyIdx);
 
-        List<MemberVO> membersInfo = studyByIdx.getMembers();
-        UserVO manager = studyByIdx.getUser();
+        //it can throw Auth, NotFound Exception
+        UserVO loginUser = userService.getMyUserWithAuthorities();
 
-        UserVO loginUser = userService.getMyUserWithAuthorities().get();
-        if(!(loginUser == manager || membersInfo.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(loginUser)))
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        UserVO manager = study.getUser();
+        List<MemberVO> members = study.getMembers();
+
+        if(!(loginUser == manager || members.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(loginUser)))
+            throw new AuthException("not belong to study");
 
         List<MemberDTO> membersWithManager = new ArrayList<>();
         membersWithManager.add(MemberDTO.builder().user(entityUtil.convertUserVoToDto(manager)).build());
-        membersWithManager.addAll(membersInfo.stream().map(i ->
+        membersWithManager.addAll(members.stream().map(i ->
                 MemberDTO.builder()
                         .user(entityUtil.convertUserVoToDto(i.getUser()))
                         .position(entityUtil.convertPositionVoToDto(i.getPosition()))
@@ -240,6 +145,7 @@ public class StudyController {
         return new ResponseEntity<>(membersWithManager, HttpStatus.OK);
 
     }
+
 }
 
 

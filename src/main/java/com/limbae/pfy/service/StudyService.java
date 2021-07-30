@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.message.AuthException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -39,54 +41,41 @@ public class StudyService {
 
     }
 
-    public List<StudyVO> getMyStudyList() {
-        Optional<UserVO> userVO;
-        if (SecurityUtil.getCurrentUsername().isPresent()) {
-            userVO = userRepository.findOneWithAuthoritiesByUsername(SecurityUtil.getCurrentUsername().get());
-        } else {
-            return null;
-        }
-        return userVO.map(vo -> studyRepository.findWithMembersByUserUid(vo.getUid())).orElse(null);
+    public List<StudyVO> getStudiesByUid(Long uid) {
+        // 여기서 uid는 이미 검증된 번호이므로 (영속성에서 가져온 유저정보의 uid가 파라미터로 넘어옴)
+        // uid 검증과 예외처리는 생략한다.
+        return studyRepository.findByUserUid(uid);
     }
 
-    public List<StudyVO> getMyAppliedStudyList() {
-        Optional<UserVO> userVO;
-        if (SecurityUtil.getCurrentUsername().isPresent()) {
-            userVO = userRepository.findOneWithStudyByUsername(SecurityUtil.getCurrentUsername().get());
-        } else {
-            return null;
-        }
-
-        return studyRepository.findByUserUid(userVO.get().getUid());
+    public List<StudyVO> getAppliedStudiesByUid(Long uid) {
+        UserVO user = userRepository.getById(uid);
+        List<StudyVO> studies = user.getMembers().stream().map(MemberVO::getStudy).collect(Collectors.toList());
+        return studies;
     }
 
-    public StudyVO getStudyByIdx(Long idx) {
-        Optional<StudyVO> studyVO = studyRepository.findById(idx);
-        return studyVO.orElse(null);
+    public StudyVO getStudyByIdx(Long idx) throws NotFoundException {
+        Optional<StudyVO> study = studyRepository.findById(idx);
+        if(study.isEmpty())
+            throw new NotFoundException("invalid study idx");
+
+        return study.get();
     }
 
-    public StudyVO getStudyWithAnnouncementsByIdx(Long idx) {
-        Optional<StudyVO> studyVO = studyRepository.findWithAnnouncementsByIdx(idx);
-        return studyVO.orElse(null);
-    }
+    public StudyVO saveStudy(StudyDTO dto) throws NotFoundException, AuthException {
 
-    public StudyVO saveStudy(StudyDTO dto) throws NotFoundException {
-        Optional<UserVO> userVO;
-        if (SecurityUtil.getCurrentUsername().isPresent()) {
-            userVO = userRepository.findOneWithAuthoritiesByUsername(SecurityUtil.getCurrentUsername().get());
-        } else {
-            return null;
-        }
+        Optional<UserVO> user = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+        if(user.isEmpty())
+            throw new AuthException("invalid token");
 
-        Optional<StudyCategoryVO> categoryRepositoryById = studyCategoryRepository.findById(dto.getStudyCategory().getIdx());
-        if(categoryRepositoryById.isEmpty())
-            throw new NotFoundException("invalid category");
+        Optional<StudyCategoryVO> studyCategory = studyCategoryRepository.findById(dto.getStudyCategory().getIdx());
+        if(studyCategory.isEmpty())
+            throw new NotFoundException("invalid studyCategoryIdx");
 
-        StudyVO studyVO = entityUtil.convertStudyDtoToVo(dto);
-        studyVO.setStudyCategory(categoryRepositoryById.get());
+        StudyVO study = entityUtil.convertStudyDtoToVo(dto);
+        study.setStudyCategory(studyCategory.get());
+        study.setUser(user.get());
 
-        userVO.ifPresent(studyVO::setUser);
-        return studyRepository.save(studyVO);
+        return studyRepository.save(study);
     }
 
     public boolean deleteStudy(StudyVO vo){
@@ -97,52 +86,6 @@ public class StudyService {
             log.warn(e.getMessage());
             return false;
         }
-    }
-
-    public Optional<List<AnnouncementVO>> getAnnouncementListByStudyIdx(Long studyIdx) {
-        Optional<UserVO> userVO;
-        if (SecurityUtil.getCurrentUsername().isPresent()) {
-            userVO = userRepository.findOneWithAuthoritiesByUsername(SecurityUtil.getCurrentUsername().get());
-        } else {
-            return Optional.empty();
-        }
-
-        Optional<StudyVO> studyVO = studyRepository.findById(studyIdx);
-        if (studyVO.isPresent() && userVO.isPresent()) {
-            if (studyVO.get().getUser() != userVO.get()) {
-                return Optional.empty();
-            }
-
-            return Optional.ofNullable(announcementRepository.findByStudyIdx(studyVO.get().getIdx()));
-        } else {
-            return null;
-        }
-    }
-
-    public AnnouncementVO saveAnnouncement(AnnouncementDTO announcementDTO) {
-
-        Optional<UserVO> uvo = SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
-        Optional<StudyVO> studyVO = studyRepository.findById(announcementDTO.getStudy().getIdx());
-
-        if (uvo.isPresent() && studyVO.isPresent()) {
-            if (uvo.get() != studyVO.get().getUser())
-                return null; //소유권 확인
-        } else
-            return null;
-
-        AnnouncementVO announcementVO = entityUtil.convertAnnouncementDtoToVo(announcementDTO);
-        announcementVO.setStudy(studyRepository.findById(announcementDTO.getStudy().getIdx()).get());
-        AnnouncementVO savedAnnouncement = announcementRepository.save(announcementVO);
-
-        for (DemandPositionVO vo : savedAnnouncement.getDemandPosition()){
-            vo.setAnnouncement(savedAnnouncement);
-            demandPositionRepository.save(vo);
-        }
-        savedAnnouncement.setEndDate(savedAnnouncement.getRegDate().plusDays(7)); //7일 뒤 마감
-        announcementRepository.save(savedAnnouncement);
-        //announcement 저장 뒤 idx를 가져와 announcement idx정보를 demandposition에 저장 후 재 커밋
-
-        return savedAnnouncement;
     }
 
 
