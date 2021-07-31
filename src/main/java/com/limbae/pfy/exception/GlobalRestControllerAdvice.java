@@ -10,11 +10,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.security.auth.message.AuthException;
+import javax.transaction.NotSupportedException;
+import java.io.IOException;
 import java.io.NotActiveException;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalRestControllerAdvice {
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ResponseObjectDTO> IOException(IOException e){
+        log.warn(e.getMessage());
+        return new ResponseEntity<>(new ResponseObjectDTO(e.getMessage()), HttpStatus.BAD_REQUEST); //TODO http status 변경할것
+    }
+
+    @ExceptionHandler(NotSupportedException.class)
+    public ResponseEntity<ResponseObjectDTO> NotSupportedException(NotSupportedException e){
+        log.warn(e.getMessage());
+        return new ResponseEntity<>(new ResponseObjectDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(NotActiveException.class)
     public ResponseEntity<ResponseObjectDTO> NotActiveException(NotActiveException e){

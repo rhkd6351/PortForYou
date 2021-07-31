@@ -1,8 +1,9 @@
 package com.limbae.pfy.service;
 
 
-import com.limbae.pfy.domain.UiImageVO;
-import com.limbae.pfy.repository.UiImageRepository;
+import com.limbae.pfy.domain.ImageVO;
+import com.limbae.pfy.repository.ImageRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +13,18 @@ import java.util.Optional;
 public class ImageService {
 
     @Autowired
-    UiImageRepository uiImageRepository;
+    ImageRepository imageRepository;
 
-    public Optional<UiImageVO> getUiImageWithName(String name){
-        return uiImageRepository.findOneByName(name);
+    public ImageVO getImageWithName(String name) throws NotFoundException{
+        Optional<ImageVO> image = imageRepository.findOneByName(name);
+        if(image.isEmpty())
+            throw new NotFoundException("invalid image nmae");
+
+        return image.get();
     }
 
-    public UiImageVO saveUiImage(UiImageVO uiImageVO){
-        return uiImageRepository.saveAndFlush(uiImageVO);
+    public void saveImage(ImageVO imageVO){
+        imageRepository.saveAndFlush(imageVO);
     }
 
 

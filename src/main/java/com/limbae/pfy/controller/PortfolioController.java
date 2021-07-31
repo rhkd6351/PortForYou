@@ -2,8 +2,7 @@ package com.limbae.pfy.controller;
 
 
 import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.domain.StackVO;
-import com.limbae.pfy.domain.UiImageVO;
+import com.limbae.pfy.domain.ImageVO;
 import com.limbae.pfy.domain.UserVO;
 import com.limbae.pfy.dto.*;
 import com.limbae.pfy.repository.EducationRepository;
@@ -19,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.message.AuthException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,13 +83,16 @@ public class PortfolioController {
         PortfolioDTO portfolioDTO = entityUtil.convertPortfolioVoToDto(portfolio);
 
         //이미지 주소 연결
-        Optional<UiImageVO> uiImageWithName = imageService.getUiImageWithName(portfolioDTO.getIdx() + "_portfolio_img");
-        if(uiImageWithName.isPresent()){
-            String uri = serverUri + "/api/img/default?name=" + uiImageWithName.get().getName();
+        try{
+            ImageVO image = imageService.getImageWithName(portfolioDTO.getIdx() + "_portfolio_img");
+            String uri = serverUri + "/api/img/default?name=" + image.getName();
             portfolioDTO.setImg(uri);
+        }catch (NotFoundException e){
+            portfolioDTO.setImg("not registered");
         }
-        //response
+
         return ResponseEntity.ok(portfolioDTO);
+
     }
 
     @DeleteMapping("/portfolio/{portfolio-idx}")
