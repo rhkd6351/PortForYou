@@ -69,4 +69,17 @@ public class PortfolioVO {
         this.tech.add(tech);
         tech.setPortfolio(this);
     }
+
+    public void setProject(List<ProjectVO> projects){
+        this.project.clear();
+        for (ProjectVO project : projects)
+            this.addProject(project);
+
+    }
+
+    public void setTech(Set<TechVO> techs){
+        this.tech.clear();
+        for (TechVO tech : techs)
+            this.addTech(tech);
+    }
 }

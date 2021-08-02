@@ -1,10 +1,7 @@
 package com.limbae.pfy.controller;
 
 
-import com.limbae.pfy.domain.AnnouncementVO;
-import com.limbae.pfy.domain.MemberVO;
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.AnnouncementDTO;
 import com.limbae.pfy.dto.MemberDTO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
@@ -15,14 +12,24 @@ import com.limbae.pfy.service.UserService;
 import com.limbae.pfy.util.EntityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.security.auth.message.AuthException;
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,6 +42,7 @@ public class AnnouncementController {
     StudyService studyService;
     AnnouncementService announcementService;
 
+    @Autowired
     public AnnouncementController(UserService userService, EntityUtil entityUtil, StudyService studyService, AnnouncementService announcementService) {
         this.userService = userService;
         this.entityUtil = entityUtil;
@@ -45,12 +53,21 @@ public class AnnouncementController {
     @GetMapping("/announcements")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList( //TODO kind required false로 바꾸고 default 쿼리 추가
-            @RequestParam(name = "kind") String kind){
+                                                                      @RequestParam(name = "kind", required = true) String kind,
+                                                                      @RequestParam(name = "pno", required = false) Integer pno,
+                                                                      @RequestParam(name = "query", required = false) String query) throws MissingRequestValueException {
 
         List<AnnouncementDTO> dto = null;
-
         if(kind.equals("new")){
             dto = announcementService.getAnnouncementOrderByDesc().stream()
+                    .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
+        }
+        if(kind.equals("search")){
+            if(query == null || pno == null)
+                throw new MissingRequestValueException("required parameter: null");
+            PageRequest pageRequest = PageRequest.of(pno - 1, 10, Sort.Direction.DESC, "idx");
+            List<AnnouncementVO> announcements = announcementService.getAnnouncementByQuery(query, pageRequest);
+            dto = announcements.stream()
                     .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
         }
 
@@ -94,17 +111,20 @@ public class AnnouncementController {
         return new ResponseEntity<>(announcementDTO,HttpStatus.OK);
     }
 
-    @PostMapping("/study/announcement")
+    @PostMapping("/study/{study-idx}/announcement")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<AnnouncementDTO> saveAnnouncement(
-            @RequestBody AnnouncementDTO announcementDTO) throws NotFoundException, AuthException {
+            @RequestBody AnnouncementDTO announcementDTO,
+            @PathVariable(value = "study-idx") Long studyIdx) throws NotFoundException, AuthException {
+
+        announcementDTO.setStudy(StudyDTO.builder().idx(studyIdx).build());
         //it can throw NotFound, Auth Exception
         AnnouncementVO announcementVO = announcementService.saveAnnouncement(announcementDTO);
 
         return ResponseEntity.ok(entityUtil.convertAnnouncementVoToDto(announcementVO));
     }
 
-    @DeleteMapping("/study/announcement/{announcement-idx}")
+    @DeleteMapping("/announcement/{announcement-idx}")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> deleteAnnouncement(
             @PathVariable(value = "announcement-idx") Long announcementIdx) throws AuthException, NotFoundException {
@@ -124,6 +144,8 @@ public class AnnouncementController {
         return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
 
     }
+
+
 }
 
 

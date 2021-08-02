@@ -9,10 +9,12 @@ import com.limbae.pfy.util.SecurityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;
 import javax.swing.text.html.parser.Entity;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,10 @@ public class AnnouncementService {
         this.studyRepository = studyRepository;
         this.entityUtil = entityUtil;
         this.demandPositionRepository = demandPositionRepository;
+    }
+
+    public List<AnnouncementVO> getAnnouncementByQuery(String query, Pageable pageable){
+        return announcementRepository.findByQuery(query,pageable);
     }
 
     public AnnouncementVO getAnnouncementByIdx(Long idx) throws NotFoundException{

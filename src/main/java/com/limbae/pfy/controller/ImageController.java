@@ -42,9 +42,9 @@ public class ImageController {
         this.portfolioService = portfolioService;
     }
 
-    @GetMapping(value = "/default", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/default/{name}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getDefaultImageWithName(
-            @RequestParam("name") String name) throws IOException, NotFoundException {
+            @PathVariable(value = "name") String name) throws IOException, NotFoundException {
 
         //it can throw NotFoundException
         ImageVO image = imageService.getImageWithName(name);
@@ -105,7 +105,7 @@ public class ImageController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<ResponseObjectDTO> savePortfolioImg(
             @RequestParam("img") MultipartFile multipartFile,
-            @RequestParam("portfolio_idx") Long portfolioIdx) throws AuthException, NotFoundException, NotSupportedException, IOException {
+            @RequestParam("portfolio-idx") Long portfolioIdx) throws AuthException, NotFoundException, NotSupportedException, IOException {
         PortfolioVO portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioIdx);
         UserVO myUserWithAuthorities = userService.getMyUserWithAuthorities();
 

@@ -18,12 +18,14 @@ import java.util.stream.Collectors;
 @Service
 public class PortfolioService implements PortfolioServiceInterface {
 
-    public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository) {
+    public PortfolioService(PortfolioRepository portfolioRepository, PositionRepository positionRepository, UserRepository userRepository, StackRepository stackRepository, EducationRepository educationRepository, ProjectRepository projectRepository, TechRepository techRepository) {
         this.portfolioRepository = portfolioRepository;
         this.positionRepository = positionRepository;
         this.userRepository = userRepository;
         this.stackRepository = stackRepository;
         this.educationRepository = educationRepository;
+        this.projectRepository = projectRepository;
+        this.techRepository = techRepository;
     }
 
     PortfolioRepository portfolioRepository;
@@ -31,6 +33,8 @@ public class PortfolioService implements PortfolioServiceInterface {
     UserRepository userRepository;
     StackRepository stackRepository;
     EducationRepository educationRepository;
+    ProjectRepository projectRepository;
+    TechRepository techRepository;
 
 
     public PortfolioVO getPortfolioByIdx(Long idx) throws NotFoundException {
@@ -73,6 +77,8 @@ public class PortfolioService implements PortfolioServiceInterface {
                                         : null)
                                 .build()
                 ).collect(Collectors.toList()) : null;
+        projectRepository.saveAll(projectList);
+
 
 
         Set<TechVO> techVOS = (portfolioDTO.getTech() != null ?
@@ -84,6 +90,8 @@ public class PortfolioService implements PortfolioServiceInterface {
                                 .stack(stackRepository.getById(i.getStackIdx()))
                                 .build()
                 ).collect(Collectors.toSet()) : null);
+        techRepository.saveAll(techVOS);
+
 
         if(portfolioDTO.getIdx() == null){
             PortfolioVO portfolioVO = PortfolioVO.builder()

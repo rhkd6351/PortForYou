@@ -80,7 +80,7 @@ public class ApplicationController {
         return ResponseEntity.ok(studyApplicationDTOS);
     }
 
-    @GetMapping("/applications")
+    @GetMapping("/user/applications")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<StudyApplicationDTO>> getMyApplicationList() throws AuthException {
 
