@@ -22,6 +22,8 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Lo
     @Query("select n from AnnouncementVO as n where n.title like concat('%',:query,'%') OR n.content like concat('%',:query,'%') order by n.idx desc")
     public List<AnnouncementVO> findByQuery(@Param(value = "query") String query, Pageable pageable);
 
+    @Query("select n from AnnouncementVO n where n.activated = true order by n.endDate asc")
+    public List<AnnouncementVO> findByOrderByEndDateDesc(Pageable pageable);
 
 
 }

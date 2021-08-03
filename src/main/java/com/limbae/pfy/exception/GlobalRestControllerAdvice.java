@@ -6,6 +6,7 @@ import javassist.bytecode.DuplicateMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,6 +18,13 @@ import java.io.NotActiveException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalRestControllerAdvice {
+
+    @ExceptionHandler(MissingRequestValueException.class)
+    public ResponseEntity<ResponseObjectDTO> MissingRequestValueException(MissingRequestValueException e){
+        log.warn(e.getMessage());
+        return new ResponseEntity<>(new ResponseObjectDTO(e.getMessage()), HttpStatus.BAD_REQUEST); //TODO http status 변경할것
+    }
+
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ResponseObjectDTO> IOException(IOException e){

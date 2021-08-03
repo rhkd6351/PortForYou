@@ -10,6 +10,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;
@@ -55,6 +56,11 @@ public class AnnouncementService {
 
     public List<AnnouncementVO> getAnnouncementOrderByDesc(){
         return announcementRepository.findTop50ByOrderByIdxDesc();
+    }
+
+    public List<AnnouncementVO> getImminentAnnouncement(){
+        PageRequest pageRequest = PageRequest.of(0, 50);
+        return announcementRepository.findByOrderByEndDateDesc(pageRequest);
     }
 
     public boolean deleteAnnouncement(AnnouncementVO announcementVO){

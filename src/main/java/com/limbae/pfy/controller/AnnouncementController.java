@@ -62,14 +62,21 @@ public class AnnouncementController {
             dto = announcementService.getAnnouncementOrderByDesc().stream()
                     .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
         }
-        if(kind.equals("search")){
-            if(query == null || pno == null)
-                throw new MissingRequestValueException("required parameter: null");
-            PageRequest pageRequest = PageRequest.of(pno - 1, 10, Sort.Direction.DESC, "idx");
+
+        else if(kind.equals("imminent")){
+            List<AnnouncementVO> imminent = announcementService.getImminentAnnouncement();
+            dto = imminent.stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
+        }
+
+        else if(kind.equals("search")){
+            if(query == null || pno == null) throw new MissingRequestValueException("param query or pno is null");
+            PageRequest pageRequest = PageRequest.of(pno - 1, 50, Sort.Direction.DESC, "idx");
             List<AnnouncementVO> announcements = announcementService.getAnnouncementByQuery(query, pageRequest);
             dto = announcements.stream()
                     .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
         }
+        else
+            throw new MissingRequestValueException("param kind is null");
 
         return ResponseEntity.ok(dto);
     }
@@ -144,6 +151,7 @@ public class AnnouncementController {
         return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
 
     }
+
 
 
 }
