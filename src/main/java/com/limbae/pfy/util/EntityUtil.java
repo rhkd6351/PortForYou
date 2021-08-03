@@ -52,6 +52,7 @@ public class EntityUtil {
                         .stackIdx(i.getStack().getIdx())
                         .ability(i.getAbility())
                         .content(i.getContent())
+                        .stackName(i.getStack().getName())
                         .build()
         ).collect(Collectors.toList());
 
