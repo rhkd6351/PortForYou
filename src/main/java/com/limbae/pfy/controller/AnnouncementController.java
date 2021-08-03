@@ -3,7 +3,6 @@ package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.AnnouncementDTO;
-import com.limbae.pfy.dto.MemberDTO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.dto.StudyDTO;
 import com.limbae.pfy.service.AnnouncementService;
@@ -13,23 +12,17 @@ import com.limbae.pfy.util.EntityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.security.auth.message.AuthException;
-import org.springframework.data.domain.Pageable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +41,17 @@ public class AnnouncementController {
         this.entityUtil = entityUtil;
         this.studyService = studyService;
         this.announcementService = announcementService;
+    }
+
+
+    @Scheduled(fixedDelay = 1000 * 60 * 10) //10분마다 announcement 마감처리
+    public void closeAnnouncementScheduler(){
+        List<AnnouncementVO> announcements = announcementService.getAnnouncementAfterEndDate();
+        for (AnnouncementVO announcement : announcements) {
+            announcement.setActivated(false);
+            announcementService.saveAnnouncement(announcement);
+        }
+        log.info("closeAnnouncementScheduler is called");
     }
 
     @GetMapping("/announcements")

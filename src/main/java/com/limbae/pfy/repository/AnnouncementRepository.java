@@ -25,5 +25,8 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Lo
     @Query("select n from AnnouncementVO n where n.activated = true order by n.endDate asc")
     public List<AnnouncementVO> findByOrderByEndDateDesc(Pageable pageable);
 
+    @Query("select n from AnnouncementVO n where n.endDate < current_timestamp And n.activated = true")
+    public List<AnnouncementVO> findByAfterEndDate();
+
 
 }

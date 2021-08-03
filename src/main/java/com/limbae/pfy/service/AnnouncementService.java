@@ -101,6 +101,14 @@ public class AnnouncementService {
         return announcement;
     }
 
+    public AnnouncementVO saveAnnouncement(AnnouncementVO announcementVO){
+        return announcementRepository.save(announcementVO);
+    }
+
+    public List<AnnouncementVO> getAnnouncementAfterEndDate(){
+        return announcementRepository.findByAfterEndDate();
+    }
+
 
 
 
