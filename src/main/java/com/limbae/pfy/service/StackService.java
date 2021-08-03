@@ -22,4 +22,7 @@ public class StackService {
         return stackRepository.getById(idx);
     }
 
+    public List<StackVO> getStackListByQuery(String query){
+        return stackRepository.findByQuery(query);
+    }
 }

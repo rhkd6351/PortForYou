@@ -38,8 +38,16 @@ public class ResourceController {
     }
 
     @GetMapping("/stacks")
-    public ResponseEntity<List<StackDTO>> getStackList() {
-        List<StackVO> stacks = stackService.getStackList();
+    public ResponseEntity<List<StackDTO>> getStackList(
+            @RequestParam(value = "query", required = false) String query) {
+
+        List<StackVO> stacks = null;
+
+        if(query != null){
+            stacks = stackService.getStackListByQuery(query);
+        }else{
+            stacks = stackService.getStackList();
+        }
 
         List<StackDTO> stackDTOs = stacks.stream().map(
                 entityUtil::convertStackVoToDto
