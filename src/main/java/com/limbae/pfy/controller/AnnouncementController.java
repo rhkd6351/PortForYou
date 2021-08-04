@@ -3,27 +3,33 @@ package com.limbae.pfy.controller;
 
 import com.limbae.pfy.domain.*;
 import com.limbae.pfy.dto.AnnouncementDTO;
+import com.limbae.pfy.dto.AnnouncementQueryResultDTO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
 import com.limbae.pfy.dto.StudyDTO;
-import com.limbae.pfy.service.AnnouncementService;
-import com.limbae.pfy.service.StudyService;
-import com.limbae.pfy.service.UserService;
+import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.message.AuthException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.DataFormatException;
 
 @RestController
 @RequestMapping(value = {"/api"})
@@ -34,15 +40,17 @@ public class AnnouncementController {
     EntityUtil entityUtil;
     StudyService studyService;
     AnnouncementService announcementService;
+    PortfolioService portfolioService;
+    DemandPositionService demandPositionService;
 
-    @Autowired
-    public AnnouncementController(UserService userService, EntityUtil entityUtil, StudyService studyService, AnnouncementService announcementService) {
+    public AnnouncementController(UserService userService, EntityUtil entityUtil, StudyService studyService, AnnouncementService announcementService, PortfolioService portfolioService, DemandPositionService demandPositionService) {
         this.userService = userService;
         this.entityUtil = entityUtil;
         this.studyService = studyService;
         this.announcementService = announcementService;
+        this.portfolioService = portfolioService;
+        this.demandPositionService = demandPositionService;
     }
-
 
     @Scheduled(fixedDelay = 1000 * 60 * 10) //10분마다 announcement 마감처리
     public void closeAnnouncementScheduler(){
@@ -56,31 +64,72 @@ public class AnnouncementController {
 
     @GetMapping("/announcements")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList( //TODO kind required false로 바꾸고 default 쿼리 추가
-                                                                      @RequestParam(name = "kind", required = true) String kind,
-                                                                      @RequestParam(name = "pno", required = false) Integer pno,
-                                                                      @RequestParam(name = "query", required = false) String query) throws MissingRequestValueException {
+    public ResponseEntity<AnnouncementQueryResultDTO> getAnnouncementList(
+            @RequestParam(name = "kind", required = true) String kind,
+            @RequestParam(name = "pno", required = true) Integer pno,
+            @RequestParam(name = "query", required = false) String query) throws MissingRequestValueException, AuthException, DataFormatException {
 
-        List<AnnouncementDTO> dto = null;
+        AnnouncementQueryResultDTO dto = new AnnouncementQueryResultDTO();
+        if(pno < 1) pno = 1; if(pno > 999) pno = 999;
+        dto.setPno(pno);
+
+        PageRequest pageRequest = PageRequest.of(pno - 1, 36);
+
         if(kind.equals("new")){
-            dto = announcementService.getAnnouncementOrderByDesc().stream()
-                    .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
+            Page<AnnouncementVO> announcements = announcementService.getAnnouncementOrderByDesc(pageRequest);
+            dto.setLastPno(announcements.getTotalPages());
+            if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
+            dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
+            dto.setLastPno(announcements.getTotalPages());
         }
 
         else if(kind.equals("imminent")){
-            List<AnnouncementVO> imminent = announcementService.getImminentAnnouncement();
-            dto = imminent.stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
+            Page<AnnouncementVO> announcements = announcementService.getImminentAnnouncement(pageRequest);
+            dto.setLastPno(announcements.getTotalPages());
+            if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
+            dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
+            dto.setLastPno(announcements.getTotalPages());
         }
 
         else if(kind.equals("search")){
-            if(query == null || pno == null) throw new MissingRequestValueException("param query or pno is null");
-            PageRequest pageRequest = PageRequest.of(pno - 1, 50, Sort.Direction.DESC, "idx");
-            List<AnnouncementVO> announcements = announcementService.getAnnouncementByQuery(query, pageRequest);
-            dto = announcements.stream()
-                    .map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList());
+            if(query == null) throw new MissingRequestValueException("param query is null");
+            Page<AnnouncementVO> announcements = announcementService.getAnnouncementByQuery(query, pageRequest);
+            dto.setLastPno(announcements.getTotalPages());
+            if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
+            dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
         }
+
+        // TODO 아직 포지션만 선택해서 추천하는 기능밖에 구현 안됨. 이후 announcement에 tech정보도 넣어서 추천하는 기능 구현할것
+        else if(kind.equals("recommend")){ // TODO 로직 서비스단으로 분리하는게 적합한가?
+            //it can throw auth exception
+            UserVO user = userService.getMyUserWithAuthorities();
+            List<PortfolioVO> portfolios = portfolioService.getPortfoliosByUid(user.getUid());
+            List<AnnouncementVO> announcements = new ArrayList<>();
+            Set<PositionVO> positions = new HashSet<>();
+
+            for (PortfolioVO portfolio : portfolios)
+                positions.add(portfolio.getPosition());
+
+            for (PositionVO position : positions){ // TODO 각 포지션별로 announcement 뽑아오는 과정에서 너무많은 쿼리 날라감.. sql상에서 바로 뽑아오는 쿼리 필요
+                announcements.addAll(
+                        demandPositionService
+                        .getByPosition(position)
+                                .stream()
+                                .map(DemandPositionVO::getAnnouncement)
+                                .collect(Collectors.toList()));
+            }
+
+            announcements = announcements.stream().distinct().collect(Collectors.toList());
+
+            dto.setLastPno((int) Math.ceil(announcements.size() / 36.)); // TODO 자체적으로 page 구현하였음. repository에서 받아오는방법으로 수정할것
+            if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
+            dto.setAnnouncements(
+                    announcements.subList(36 * (pno-1), Math.min(announcements.size(), 36 * pno))
+                            .stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
+        }
+
         else
-            throw new MissingRequestValueException("param kind is null");
+            throw new MissingRequestValueException("param kind is null or invalid");
 
         return ResponseEntity.ok(dto);
     }
@@ -155,9 +204,6 @@ public class AnnouncementController {
         return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
 
     }
-
-
-
 }
 
 

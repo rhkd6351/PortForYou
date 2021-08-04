@@ -14,10 +14,17 @@ import javax.security.auth.message.AuthException;
 import javax.transaction.NotSupportedException;
 import java.io.IOException;
 import java.io.NotActiveException;
+import java.util.zip.DataFormatException;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalRestControllerAdvice {
+
+    @ExceptionHandler(DataFormatException.class)
+    public ResponseEntity<ResponseObjectDTO> DataFormatException(DataFormatException e){
+        log.warn(e.getMessage());
+        return new ResponseEntity<>(new ResponseObjectDTO(e.getMessage()), HttpStatus.BAD_REQUEST); //TODO http status 변경할것
+    }
 
     @ExceptionHandler(MissingRequestValueException.class)
     public ResponseEntity<ResponseObjectDTO> MissingRequestValueException(MissingRequestValueException e){

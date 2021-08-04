@@ -41,7 +41,7 @@ public class AnnouncementService {
         this.demandPositionRepository = demandPositionRepository;
     }
 
-    public List<AnnouncementVO> getAnnouncementByQuery(String query, Pageable pageable){
+    public Page<AnnouncementVO> getAnnouncementByQuery(String query, Pageable pageable){
         return announcementRepository.findByQuery(query,pageable);
     }
 
@@ -54,13 +54,12 @@ public class AnnouncementService {
         return announcement.get();
     }
 
-    public List<AnnouncementVO> getAnnouncementOrderByDesc(){
-        return announcementRepository.findTop50ByOrderByIdxDesc();
+    public Page<AnnouncementVO> getAnnouncementOrderByDesc(Pageable pageable){
+        return announcementRepository.findByOrderByIdxDesc(pageable);
     }
 
-    public List<AnnouncementVO> getImminentAnnouncement(){
-        PageRequest pageRequest = PageRequest.of(0, 50);
-        return announcementRepository.findByOrderByEndDateDesc(pageRequest);
+    public Page<AnnouncementVO> getImminentAnnouncement(Pageable pageable){
+        return announcementRepository.findByOrderByEndDateDesc(pageable);
     }
 
     public boolean deleteAnnouncement(AnnouncementVO announcementVO){
@@ -107,6 +106,10 @@ public class AnnouncementService {
 
     public List<AnnouncementVO> getAnnouncementAfterEndDate(){
         return announcementRepository.findByAfterEndDate();
+    }
+
+    public int getCount(){
+        return announcementRepository.getCount();
     }
 
 

@@ -15,18 +15,20 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Lo
 
     public List<AnnouncementVO> findByStudyIdx(Long studyIdx);
 
-    public List<AnnouncementVO> findTop50ByOrderByIdxDesc();
+    public Page<AnnouncementVO> findByOrderByIdxDesc(Pageable pageable);
 
-//    public List<AnnouncementVO> findAllByTitleLike(String title, String content, Pageable pageable);
-
-    @Query("select n from AnnouncementVO as n where n.title like concat('%',:query,'%') OR n.content like concat('%',:query,'%') order by n.idx desc")
-    public List<AnnouncementVO> findByQuery(@Param(value = "query") String query, Pageable pageable);
+    @Query("select n from AnnouncementVO as n where (n.title like concat('%',:query,'%') OR n.content like concat('%',:query,'%')) And n.activated = true order by n.idx desc")
+    public Page<AnnouncementVO> findByQuery(@Param(value = "query") String query, Pageable pageable);
 
     @Query("select n from AnnouncementVO n where n.activated = true order by n.endDate asc")
-    public List<AnnouncementVO> findByOrderByEndDateDesc(Pageable pageable);
+    public Page<AnnouncementVO> findByOrderByEndDateDesc(Pageable pageable);
 
     @Query("select n from AnnouncementVO n where n.endDate < current_timestamp And n.activated = true")
     public List<AnnouncementVO> findByAfterEndDate();
+
+
+    @Query("select count(n.idx) from AnnouncementVO n")
+    public int getCount();
 
 
 }
