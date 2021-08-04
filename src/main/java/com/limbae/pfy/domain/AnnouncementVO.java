@@ -46,7 +46,7 @@ public class AnnouncementVO {
     StudyVO study;
 
     @Builder.Default
-    @OneToMany(mappedBy = "announcement", orphanRemoval = true)
+    @OneToMany( mappedBy = "announcement", orphanRemoval = true)
     List<DemandPositionVO> demandPosition = new ArrayList<>();
 
 }

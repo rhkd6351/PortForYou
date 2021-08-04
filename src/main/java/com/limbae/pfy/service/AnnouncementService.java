@@ -108,6 +108,10 @@ public class AnnouncementService {
         return announcementRepository.findByAfterEndDate();
     }
 
+    public List<AnnouncementVO> getAnnouncementByPosition(PositionVO positionVO){
+        return announcementRepository.findByPosition(positionVO);
+    }
+
     public int getCount(){
         return announcementRepository.getCount();
     }

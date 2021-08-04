@@ -110,16 +110,10 @@ public class AnnouncementController {
             for (PortfolioVO portfolio : portfolios)
                 positions.add(portfolio.getPosition());
 
-            for (PositionVO position : positions){ // TODO 각 포지션별로 announcement 뽑아오는 과정에서 너무많은 쿼리 날라감.. sql상에서 바로 뽑아오는 쿼리 필요
-                announcements.addAll(
-                        demandPositionService
-                        .getByPosition(position)
-                                .stream()
-                                .map(DemandPositionVO::getAnnouncement)
-                                .collect(Collectors.toList()));
-            }
+            for (PositionVO position : positions)
+                announcements.addAll(announcementService.getAnnouncementByPosition(position));
 
-            announcements = announcements.stream().distinct().collect(Collectors.toList());
+            announcements = announcements.stream().distinct().collect(Collectors.toList()); //중복 제거
 
             dto.setLastPno((int) Math.ceil(announcements.size() / 36.)); // TODO 자체적으로 page 구현하였음. repository에서 받아오는방법으로 수정할것
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
