@@ -59,7 +59,7 @@ public class UserController {
         //이미지 주소 연결
         try{
             ImageVO image = imageService.getImageWithName(userVO.getUid() + "_profile_img");
-            String uri = serverUri + "/api/img/default?name=" + image.getName();
+            String uri = serverUri + "/api/img/default/" + image.getName();
             userDTO.setImg(uri);
         }catch (NotFoundException e){
             userDTO.setImg("not registered");

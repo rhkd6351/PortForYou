@@ -85,7 +85,7 @@ public class PortfolioController {
         //이미지 주소 연결
         try{
             ImageVO image = imageService.getImageWithName(portfolioDTO.getIdx() + "_portfolio_img");
-            String uri = serverUri + "/api/img/default?name=" + image.getName();
+            String uri = serverUri + "/api/img/default/" + image.getName();
             portfolioDTO.setImg(uri);
         }catch (NotFoundException e){
             portfolioDTO.setImg("not registered");
