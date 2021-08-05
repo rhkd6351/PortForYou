@@ -1,15 +1,15 @@
-package com.limbae.pfy.controller;
+package com.limbae.pfy.controller.Board;
 
-import com.limbae.pfy.domain.MemberVO;
 import com.limbae.pfy.domain.StudyVO;
 import com.limbae.pfy.domain.UserVO;
-import com.limbae.pfy.domain.board.BoardDTO;
+import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
+import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
+import com.limbae.pfy.dto.board.PostDTO;
 import com.limbae.pfy.service.*;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,18 +26,13 @@ import java.util.stream.Collectors;
 public class BoardController {
 
     BoardServiceInterface boardService;
-    PostServiceInterface postService;
-    CommentServiceInterface commentService;
-    UserService userService;
     StudyService studyService;
-    EntityUtil entityUtil = new EntityUtil();
+    EntityUtil entityUtil;
 
-    public BoardController(BoardServiceInterface boardService, PostServiceInterface postService, CommentServiceInterface commentService, UserService userService, StudyService studyService) {
+    public BoardController(BoardServiceInterface boardService, StudyService studyService, EntityUtil entityUtil) {
         this.boardService = boardService;
-        this.postService = postService;
-        this.commentService = commentService;
-        this.userService = userService;
         this.studyService = studyService;
+        this.entityUtil = entityUtil;
     }
 
     @GetMapping("/study/{study-idx}/boards")
@@ -74,7 +69,13 @@ public class BoardController {
         StudyVO study = studyService.getStudyByIdx(studyIdx);
         studyService.memberCheck(study.getIdx());
 
-        BoardVO board = entityUtil.convertBoardDtoToVo(boardDTO);
+        BoardVO board = BoardVO.builder()
+                .idx(boardDTO.getIdx()) //it can be null: create
+                .name(boardDTO.getName())
+                .content(boardDTO.getContent())
+                .study(null)
+                .build();
+
         board.setStudy(study);
 
         boardService.update(board);
@@ -93,7 +94,6 @@ public class BoardController {
 
         return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
     }
-
 
 }
 

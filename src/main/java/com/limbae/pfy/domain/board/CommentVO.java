@@ -1,6 +1,7 @@
 package com.limbae.pfy.domain.board;
 
 import com.limbae.pfy.domain.StudyVO;
+import com.limbae.pfy.domain.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,5 +42,9 @@ public class CommentVO {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_idx")
     PostVO post;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uid")
+    UserVO user;
 
 }

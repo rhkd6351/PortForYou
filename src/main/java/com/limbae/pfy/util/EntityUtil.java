@@ -1,15 +1,17 @@
 package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.*;
-import com.limbae.pfy.domain.board.BoardDTO;
+import com.limbae.pfy.domain.board.CommentVO;
+import com.limbae.pfy.domain.board.PostVO;
+import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.dto.*;
+import com.limbae.pfy.dto.board.CommentDTO;
+import com.limbae.pfy.dto.board.PostDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -234,15 +236,29 @@ public class EntityUtil {
                 .build();
     }
 
-    public BoardVO convertBoardDtoToVo(BoardDTO dto){
-        return BoardVO.builder()
-                .idx(dto.getIdx() != null ? dto.getIdx() : null)
-                .name(dto.getName())
-                .content(dto.getContent())
-                .study(null)
+    public PostDTO convertPostVoToDto(PostVO vo){
+        return PostDTO.builder()
+                .idx(vo.getIdx())
+                .title(vo.getTitle())
+                .content(vo.getContent())
+                .regDate(vo.getRegDate())
+                .upDate(vo.getUpDate())
+                .delDate(vo.getDelDate())
+                .boardIdx(vo.getBoard().getIdx())
+                .username(vo.getUser().getUsername())
                 .build();
     }
 
+    public CommentDTO convertCommentVoToDto(CommentVO vo){
+        return CommentDTO.builder()
+                .idx(vo.getIdx())
+                .content(vo.getContent())
+                .regDate(vo.getRegDate())
+                .delDate(vo.getDelDate())
+                .upDate(vo.getUpDate())
+                .postId(vo.getPost().getIdx())
+                .build();
+    }
 }
 
 

@@ -1,4 +1,4 @@
-package com.limbae.pfy.domain.board;
+package com.limbae.pfy.dto.board;
 
 import com.limbae.pfy.domain.StudyVO;
 import com.limbae.pfy.dto.StudyDTO;
