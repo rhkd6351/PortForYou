@@ -72,13 +72,20 @@ public class PostController {
         studyService.memberCheck(board.getStudy().getIdx());
         UserVO user = userService.getMyUserWithAuthorities();
 
-        PostVO post = PostVO.builder()
-                .idx(postDTO.getIdx()) //it can be null: create
-                .title(postDTO.getTitle())
-                .content(postDTO.getContent())
-                .board(board)
-                .user(user)
-                .build();
+        PostVO post = null;
+        if(postDTO.getIdx() != null){
+            post = postService.getByIdx(postDTO.getIdx());
+            post.setTitle(postDTO.getTitle());
+            post.setContent(postDTO.getContent());
+        }else{
+            post = PostVO.builder()
+                    .idx(postDTO.getIdx()) //it can be null: create
+                    .title(postDTO.getTitle())
+                    .content(postDTO.getContent())
+                    .board(board)
+                    .user(user)
+                    .build();
+        }
 
         postService.update(post);
         return new ResponseEntity<>(entityUtil.convertPostVoToDto(post), HttpStatus.CREATED);

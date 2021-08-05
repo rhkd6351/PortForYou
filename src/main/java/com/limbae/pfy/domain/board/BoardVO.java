@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Data
@@ -29,5 +30,8 @@ public class BoardVO {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_idx")
     StudyVO study;
+
+    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    List<PostVO> posts;
 
 }

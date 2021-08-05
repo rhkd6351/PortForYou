@@ -69,14 +69,20 @@ public class BoardController {
         StudyVO study = studyService.getStudyByIdx(studyIdx);
         studyService.memberCheck(study.getIdx());
 
-        BoardVO board = BoardVO.builder()
-                .idx(boardDTO.getIdx()) //it can be null: create
-                .name(boardDTO.getName())
-                .content(boardDTO.getContent())
-                .study(null)
-                .build();
-
-        board.setStudy(study);
+        BoardVO board = null;
+        if(boardDTO.getIdx() != null){
+            board = boardService.getByIdx(boardDTO.getIdx());
+            board.setName(boardDTO.getName());
+            board.setContent(boardDTO.getContent());
+        }
+        else{
+            board = BoardVO.builder()
+                    .idx(boardDTO.getIdx()) //it can be null: create
+                    .name(boardDTO.getName())
+                    .content(boardDTO.getContent())
+                    .study(study)
+                    .build();
+        }
 
         boardService.update(board);
         return new ResponseEntity<>(entityUtil.convertBoardVoToDto(board), HttpStatus.CREATED);

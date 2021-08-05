@@ -76,12 +76,18 @@ public class CommentController {
         UserVO user = userService.getMyUserWithAuthorities();
         studyService.memberCheck(post.getBoard().getStudy().getIdx());
 
-        CommentVO comment = CommentVO.builder()
-                .idx(commentDTO.getIdx())
-                .content(commentDTO.getContent())
-                .user(user)
-                .post(post)
-                .build();
+        CommentVO comment = null;
+        if(commentDTO.getIdx() != null){
+            comment = commentService.getByIdx(commentDTO.getIdx());
+            comment.setContent(commentDTO.getContent());
+        } else{
+            comment = CommentVO.builder()
+                    .idx(commentDTO.getIdx())
+                    .content(commentDTO.getContent())
+                    .user(user)
+                    .post(post)
+                    .build();
+        }
 
         commentService.update(comment);
 

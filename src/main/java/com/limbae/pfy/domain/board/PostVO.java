@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -49,6 +50,9 @@ public class PostVO {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
     UserVO user;
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    List<CommentVO> comments;
 
 
 
