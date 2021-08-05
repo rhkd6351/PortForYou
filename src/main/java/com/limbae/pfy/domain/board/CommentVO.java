@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class CommentVO {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     @Lob
     String content;

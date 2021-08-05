@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class BoardVO {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     @Column(length = 100, nullable = false)
     String name;

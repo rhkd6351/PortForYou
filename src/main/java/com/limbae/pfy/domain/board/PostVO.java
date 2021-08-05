@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class PostVO {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int idx;
+    Long idx;
 
     @Column(length = 255, nullable = false)
     String title;
