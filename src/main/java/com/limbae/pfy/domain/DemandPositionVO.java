@@ -27,11 +27,11 @@ public class DemandPositionVO {
     @ColumnDefault(value = "0")
     int applied;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_idx", nullable = false)
     PositionVO position;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "study_announcement_idx", nullable = false)
     AnnouncementVO announcement;
 

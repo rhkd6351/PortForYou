@@ -35,7 +35,7 @@ public class StudyVO {
     @Column(name = "reg_date")
     LocalDateTime regDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uid")
     UserVO user;
 

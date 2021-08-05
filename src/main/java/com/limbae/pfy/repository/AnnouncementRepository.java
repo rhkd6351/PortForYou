@@ -32,7 +32,7 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Lo
     public List<AnnouncementVO> findByAfterEndDate();
 
     @EntityGraph(attributePaths = {"demandPosition"}, type = EntityGraph.EntityGraphType.LOAD)
-    @Query("select distinct n from AnnouncementVO n join n.demandPosition d where d.position = :position")
+    @Query("select distinct n from AnnouncementVO n join n.demandPosition d on d.position = :position")
     public List<AnnouncementVO> findByPosition(@Param(value = "position")PositionVO position);
 
     @Query("select count(n.idx) from AnnouncementVO n")

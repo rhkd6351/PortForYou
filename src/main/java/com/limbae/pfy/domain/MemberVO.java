@@ -29,15 +29,15 @@ public class MemberVO {
     @CreationTimestamp
     LocalDateTime regDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_uid")
     UserVO user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="study_idx")
     StudyVO study;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_idx")
     PositionVO position;
 }

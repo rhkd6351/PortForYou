@@ -25,11 +25,11 @@ public class TechVO {
 
     int ability;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stack_idx")
     StackVO stack;
 

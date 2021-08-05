@@ -41,7 +41,7 @@ public class AnnouncementVO {
     
     boolean activated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_idx")
     StudyVO study;
 

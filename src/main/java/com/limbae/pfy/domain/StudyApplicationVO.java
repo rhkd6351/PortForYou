@@ -31,15 +31,15 @@ public class StudyApplicationVO {
     @ColumnDefault("0")
     Long declined;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_announcement_idx")
     AnnouncementVO announcement;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_idx")
     PortfolioVO portfolio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_idx")
     PositionVO position;
 
