@@ -2,7 +2,6 @@ package com.limbae.pfy.service;
 
 import com.limbae.pfy.domain.PortfolioVO;
 import com.limbae.pfy.dto.PortfolioDTO;
-import javassist.NotFoundException;
 
 import java.util.List;
 
