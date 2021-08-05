@@ -28,18 +28,19 @@ public class StudyService {
     AnnouncementRepository announcementRepository;
     StudyCategoryRepository studyCategoryRepository;
     DemandPositionRepository demandPositionRepository;
+    UserService userService;
 
     @Autowired
-    public StudyService(StudyCategoryRepository studyCategoryRepository,
-                        DemandPositionRepository demandPositionRepository, StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository) {
+    public StudyService(StudyRepository studyRepository, UserRepository userRepository, EntityUtil entityUtil, AnnouncementRepository announcementRepository, StudyCategoryRepository studyCategoryRepository, DemandPositionRepository demandPositionRepository, UserService userService) {
         this.studyRepository = studyRepository;
         this.userRepository = userRepository;
         this.entityUtil = entityUtil;
         this.announcementRepository = announcementRepository;
         this.studyCategoryRepository = studyCategoryRepository;
         this.demandPositionRepository = demandPositionRepository;
-
+        this.userService = userService;
     }
+
 
     public List<StudyVO> getStudiesByUid(Long uid) {
         // 여기서 uid는 이미 검증된 번호이므로 (영속성에서 가져온 유저정보의 uid가 파라미터로 넘어옴)
@@ -86,6 +87,27 @@ public class StudyService {
             log.warn(e.getMessage());
             return false;
         }
+    }
+
+    public void memberCheck(Long idx) throws AuthException, NotFoundException {
+        StudyVO study = this.getStudyByIdx(idx);
+        UserVO user = userService.getMyUserWithAuthorities();
+
+        UserVO manager = study.getUser();
+        List<MemberVO> members = study.getMembers();
+
+        if(!(user == manager || members.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(user)))
+            throw new AuthException("not belong to study");
+    }
+
+    public void managerCheck(Long idx) throws NotFoundException, AuthException {
+        StudyVO study = this.getStudyByIdx(idx);
+        UserVO user = userService.getMyUserWithAuthorities();
+
+        UserVO manager = study.getUser();
+
+        if(!(user == manager))
+            throw new AuthException("not owned study");
     }
 
 

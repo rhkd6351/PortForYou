@@ -1,6 +1,8 @@
 package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.*;
+import com.limbae.pfy.domain.board.BoardDTO;
+import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -220,6 +222,24 @@ public class EntityUtil {
                 .name(vo.getName())
                 .phone(vo.getPhone())
                 .site(vo.getSite())
+                .build();
+    }
+
+    public BoardDTO convertBoardVoToDto(BoardVO vo){
+        return BoardDTO.builder()
+                .idx(vo.getIdx())
+                .name(vo.getName())
+                .content(vo.getContent())
+                .studyIdx(vo.getStudy().getIdx())
+                .build();
+    }
+
+    public BoardVO convertBoardDtoToVo(BoardDTO dto){
+        return BoardVO.builder()
+                .idx(dto.getIdx() != null ? dto.getIdx() : null)
+                .name(dto.getName())
+                .content(dto.getContent())
+                .study(null)
                 .build();
     }
 
