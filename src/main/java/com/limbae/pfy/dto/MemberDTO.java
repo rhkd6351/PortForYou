@@ -1,15 +1,9 @@
 package com.limbae.pfy.dto;
 
 
-import com.limbae.pfy.domain.PositionVO;
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @Setter

@@ -1,16 +1,16 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.user.UserVO;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.User;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<UserVO, Long> {
     @EntityGraph(attributePaths = "authorities")
-    Optional<UserVO> findOneWithAuthoritiesByUsername(String username);
+    Optional<UserVO> findWithAuthoritiesByUsername(String username);
+
+    Optional<UserVO> findByUid(Long uid);
 
     @EntityGraph(attributePaths = "study")
     Optional<UserVO> findOneWithStudyByUsername(String username);

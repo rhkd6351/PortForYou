@@ -1,8 +1,6 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.domain.PositionVO;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.limbae.pfy.domain.etc.PositionVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

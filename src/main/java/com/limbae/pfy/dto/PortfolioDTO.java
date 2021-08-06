@@ -1,16 +1,12 @@
 package com.limbae.pfy.dto;
 
-import com.limbae.pfy.domain.EducationVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder

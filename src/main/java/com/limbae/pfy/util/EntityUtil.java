@@ -1,8 +1,13 @@
 package com.limbae.pfy.util;
 
-import com.limbae.pfy.domain.*;
 import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
+import com.limbae.pfy.domain.etc.EducationVO;
+import com.limbae.pfy.domain.etc.PositionVO;
+import com.limbae.pfy.domain.etc.StackVO;
+import com.limbae.pfy.domain.study.*;
+import com.limbae.pfy.domain.user.PortfolioVO;
+import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.dto.*;
@@ -117,22 +122,6 @@ public class EntityUtil {
 
     }
 
-    public StudyVO convertStudyDtoToVo(StudyDTO vo){
-
-//        StudyCategoryVO studyCategoryVO = StudyCategoryVO.builder()
-//                .idx(vo.getIdx())
-//                .title(vo.getTitle())
-//                .content(vo.getContent())
-//                .build();
-
-        return StudyVO.builder()
-                .content(vo.getContent())
-                .title(vo.getTitle())
-//                .studyCategory(studyCategoryVO)
-                .build();
-
-    }
-
     public AnnouncementDTO convertAnnouncementVoToDto(AnnouncementVO announcementVO){
 
         StudyDTO studyDTO = StudyDTO.builder()
@@ -166,28 +155,6 @@ public class EntityUtil {
         }
 
         return announcementDTO;
-    }
-
-    public AnnouncementVO convertAnnouncementDtoToVo(AnnouncementDTO announcementDTO){
-
-        List<DemandPositionVO> demandPosition = announcementDTO.getDemandPosition().stream().map(
-                i -> DemandPositionVO.builder()
-                        .demand(i.getDemand())
-//                        .announcement(null) // 일단 0으로 저장
-                        .position(PositionVO.builder()
-                                .idx(i.getPosition().getIdx())
-                                .name(i.getPosition().getName())
-                                .build())
-                        .applied(0)
-                        .build()
-        ).collect(Collectors.toList());
-
-        return AnnouncementVO.builder()
-                .content(announcementDTO.getContent())
-                .title(announcementDTO.getTitle())
-                .demandPosition(demandPosition)
-                .activated(true)
-                .build();
     }
 
     public StudyApplicationDTO convertStudyApplicationVoToDto(StudyApplicationVO vo){

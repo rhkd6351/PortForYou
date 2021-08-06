@@ -1,7 +1,7 @@
 //package com.limbae.pfy.service;
 //
-//import com.limbae.pfy.domain.PortfolioVO;
-//import com.limbae.pfy.domain.StudyVO;
+//import com.limbae.pfy.domain.user.PortfolioVO;
+//import com.limbae.pfy.domain.study.StudyVO;
 //import com.limbae.pfy.dto.PortfolioDTO;
 //import com.limbae.pfy.dto.PortfolioListDTO;
 //import com.limbae.pfy.dto.ProjectDTO;

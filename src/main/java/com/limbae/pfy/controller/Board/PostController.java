@@ -1,13 +1,14 @@
 package com.limbae.pfy.controller.Board;
 
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
-import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.dto.board.PostDTO;
-import com.limbae.pfy.service.*;
+import com.limbae.pfy.service.board.BoardServiceInterface;
+import com.limbae.pfy.service.board.PostServiceInterface;
+import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
+import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,12 @@ public class PostController {
 
     BoardServiceInterface boardService;
     PostServiceInterface postService;
-    UserService userService;
-    StudyService studyService;
+    UserServiceInterfaceImpl userService;
+    StudyServiceInterfaceImpl studyService;
     EntityUtil entityUtil;
 
 
-    public PostController(BoardServiceInterface boardService, PostServiceInterface postService, UserService userService, StudyService studyService, EntityUtil entityUtil) {
+    public PostController(BoardServiceInterface boardService, PostServiceInterface postService, UserServiceInterfaceImpl userService, StudyServiceInterfaceImpl studyService, EntityUtil entityUtil) {
         this.boardService = boardService;
         this.postService = postService;
         this.userService = userService;
@@ -70,7 +71,7 @@ public class PostController {
 
         BoardVO board = boardService.getByIdx(boardIdx);
         studyService.memberCheck(board.getStudy().getIdx());
-        UserVO user = userService.getMyUserWithAuthorities();
+        UserVO user = userService.getByAuth();
 
         PostVO post = null;
         if(postDTO.getIdx() != null){
@@ -96,7 +97,7 @@ public class PostController {
     public ResponseEntity<ResponseObjectDTO> deletePost(
             @PathVariable(value = "post-idx") Long postIdx) throws Exception {
         PostVO post = postService.getByIdx(postIdx);
-        UserVO user = userService.getMyUserWithAuthorities();
+        UserVO user = userService.getByAuth();
         if(!(user == post.getUser()))
             throw new AuthException("not owned post");
 

@@ -1,7 +1,7 @@
 //package com.limbae.pfy.repository;
 //
-//import com.limbae.pfy.domain.ProjectVO;
-//import com.limbae.pfy.domain.StackVO;
+//import com.limbae.pfy.domain.etc.ProjectVO;
+//import com.limbae.pfy.domain.etc.StackVO;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;

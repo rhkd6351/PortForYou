@@ -1,7 +1,5 @@
 package com.limbae.pfy.dto.board;
 
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.dto.StudyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

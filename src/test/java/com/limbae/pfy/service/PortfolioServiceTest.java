@@ -1,42 +1,26 @@
 package com.limbae.pfy.service;
 
-import com.limbae.pfy.domain.PortfolioVO;
-import com.limbae.pfy.dto.EducationDTO;
-import com.limbae.pfy.dto.PortfolioDTO;
-import com.limbae.pfy.dto.PortfolioListDTO;
-import com.limbae.pfy.dto.ProjectDTO;
 import com.limbae.pfy.jwt.TokenProvider;
 import com.limbae.pfy.repository.PortfolioRepository;
 import com.limbae.pfy.repository.UserRepository;
+import com.limbae.pfy.service.user.PortfolioServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @SpringBootTest
 public class PortfolioServiceTest {
 
     PortfolioRepository portfolioRepository;
-    PortfolioService portfolioService;
+    PortfolioServiceInterfaceImpl portfolioService;
     UserRepository userRepository;
     AuthenticationManagerBuilder authenticationManagerBuilder;
     TokenProvider tokenProvider;
     EntityUtil entityUtil;
 
     @Autowired
-    public PortfolioServiceTest(PortfolioRepository portfolioRepository, PortfolioService portfolioService, UserRepository userRepository, AuthenticationManagerBuilder authenticationManagerBuilder, TokenProvider tokenProvider, EntityUtil entityUtil) {
+    public PortfolioServiceTest(PortfolioRepository portfolioRepository, PortfolioServiceInterfaceImpl portfolioService, UserRepository userRepository, AuthenticationManagerBuilder authenticationManagerBuilder, TokenProvider tokenProvider, EntityUtil entityUtil) {
         this.portfolioRepository = portfolioRepository;
         this.portfolioService = portfolioService;
         this.userRepository = userRepository;
@@ -52,7 +36,7 @@ public class PortfolioServiceTest {
 //        Optional<PortfolioVO> portfolioVO = portfolioRepository.findAll().stream().findAny();
 //
 //        //when
-//        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(portfolioVO.get().getIdx());
+//        Optional<PortfolioVO> portfolioByIdx = portfolioService.getByIdx(portfolioVO.get().getIdx());
 //
 //        //then
 //        Assertions.assertThat(portfolioByIdx).isNotEmpty();
@@ -88,7 +72,7 @@ public class PortfolioServiceTest {
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
 //
 //        List<PortfolioListDTO> myPortfolios = portfolioService.getMyPortfolios();
-//        PortfolioVO portfolioByIdx = portfolioService.getPortfolioByIdx(myPortfolios.stream().findAny().get().getIdx()).get();
+//        PortfolioVO portfolioByIdx = portfolioService.getByIdx(myPortfolios.stream().findAny().get().getIdx()).get();
 //
 //        //when
 //        boolean check = portfolioService.checkPossessionOfPortfolio(portfolioByIdx, myPortfolios);
@@ -138,12 +122,12 @@ public class PortfolioServiceTest {
 //        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
 //
-//        Optional<PortfolioVO> portfolioByIdx = portfolioService.getPortfolioByIdx(12L);
+//        Optional<PortfolioVO> portfolioByIdx = portfolioService.getByIdx(12L);
 //
 //        //when
 //        portfolioByIdx.get().setTitle("changed title");
 //        portfolioService.updatePortfolio(entityUtil.convertPortfolioVoToDto(portfolioByIdx.get()));
-//        Optional<PortfolioVO> portfolioByIdx1 = portfolioService.getPortfolioByIdx(12L);
+//        Optional<PortfolioVO> portfolioByIdx1 = portfolioService.getByIdx(12L);
 //
 //        //then
 //        Assertions.assertThat(portfolioByIdx1.get().getTitle()).isEqualTo("changed title");

@@ -1,6 +1,5 @@
 package com.limbae.pfy.dto;
 
-import com.limbae.pfy.domain.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
 //package com.limbae.pfy.repository;
 //
-//import com.limbae.pfy.domain.PortfolioVO;
-//import com.limbae.pfy.domain.PositionVO;
-//import com.limbae.pfy.domain.ProjectVO;
+//import com.limbae.pfy.domain.user.PortfolioVO;
+//import com.limbae.pfy.domain.etc.PositionVO;
+//import com.limbae.pfy.domain.etc.ProjectVO;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

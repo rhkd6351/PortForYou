@@ -1,8 +1,12 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.TechVO;
+import com.limbae.pfy.domain.etc.TechVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface TechRepository extends JpaRepository<TechVO, Long> {
+
+    public Optional<TechVO> findByIdx(Long idx);
 
 }

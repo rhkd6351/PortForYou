@@ -1,6 +1,6 @@
 package com.limbae.pfy.domain.board;
 
-import com.limbae.pfy.domain.StudyVO;
+import com.limbae.pfy.domain.study.StudyVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,13 +1,11 @@
 package com.limbae.pfy.controller.Board;
 
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.domain.UserVO;
+import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
-import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.dto.ResponseObjectDTO;
-import com.limbae.pfy.dto.board.PostDTO;
-import com.limbae.pfy.service.*;
+import com.limbae.pfy.service.board.BoardServiceInterface;
+import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.security.auth.message.AuthException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +23,10 @@ import java.util.stream.Collectors;
 public class BoardController {
 
     BoardServiceInterface boardService;
-    StudyService studyService;
+    StudyServiceInterfaceImpl studyService;
     EntityUtil entityUtil;
 
-    public BoardController(BoardServiceInterface boardService, StudyService studyService, EntityUtil entityUtil) {
+    public BoardController(BoardServiceInterface boardService, StudyServiceInterfaceImpl studyService, EntityUtil entityUtil) {
         this.boardService = boardService;
         this.studyService = studyService;
         this.entityUtil = entityUtil;
@@ -66,7 +63,7 @@ public class BoardController {
     public ResponseEntity<BoardDTO> saveBoard(
             @PathVariable(value = "study-idx") Long studyIdx,
             @RequestBody BoardDTO boardDTO) throws Exception{
-        StudyVO study = studyService.getStudyByIdx(studyIdx);
+        StudyVO study = studyService.getByIdx(studyIdx);
         studyService.memberCheck(study.getIdx());
 
         BoardVO board = null;

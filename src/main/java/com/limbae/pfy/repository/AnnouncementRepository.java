@@ -1,7 +1,7 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.AnnouncementVO;
-import com.limbae.pfy.domain.PositionVO;
+import com.limbae.pfy.domain.study.AnnouncementVO;
+import com.limbae.pfy.domain.etc.PositionVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AnnouncementRepository extends JpaRepository<AnnouncementVO, Long> {
 

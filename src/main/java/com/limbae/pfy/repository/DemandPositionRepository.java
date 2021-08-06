@@ -1,7 +1,7 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.DemandPositionVO;
-import com.limbae.pfy.domain.PositionVO;
+import com.limbae.pfy.domain.study.DemandPositionVO;
+import com.limbae.pfy.domain.etc.PositionVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

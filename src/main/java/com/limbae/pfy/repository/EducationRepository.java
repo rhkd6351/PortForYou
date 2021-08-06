@@ -1,11 +1,12 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.EducationVO;
-import com.limbae.pfy.domain.StackVO;
+import com.limbae.pfy.domain.etc.EducationVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
 public interface EducationRepository extends JpaRepository<EducationVO, Long> {
+
+    public Optional<EducationVO> findByIdx(Long idx);
 
 }

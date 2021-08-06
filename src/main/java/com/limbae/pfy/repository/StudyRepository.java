@@ -1,7 +1,6 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.StudyVO;
-import com.limbae.pfy.dto.StudyDTO;
+import com.limbae.pfy.domain.study.StudyVO;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 

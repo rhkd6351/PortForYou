@@ -1,6 +1,6 @@
 package com.limbae.pfy.repository;
 
-import com.limbae.pfy.domain.ImageVO;
+import com.limbae.pfy.domain.etc.ImageVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
