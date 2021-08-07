@@ -41,13 +41,11 @@ public class BoardServiceInterfaceImpl implements BoardServiceInterface{
     }
 
     @Override
-    public boolean deleteByIdx(Long idx) throws Exception {
+    public void deleteByIdx(Long idx) throws Exception {
         BoardVO board = this.getByIdx(idx);
         try{
             boardRepository.delete(board);
-            return true;
         }catch (Exception e){
-            return false;
         }
     }
 

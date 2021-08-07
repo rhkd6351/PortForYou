@@ -4,9 +4,12 @@ import com.limbae.pfy.domain.etc.PositionVO;
 import com.limbae.pfy.domain.study.AnnouncementVO;
 import com.limbae.pfy.domain.study.DemandPositionVO;
 import com.limbae.pfy.domain.study.StudyVO;
+import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.dto.AnnouncementDTO;
 import com.limbae.pfy.repository.*;
+import com.limbae.pfy.service.user.PortfolioServiceInterface;
+import com.limbae.pfy.service.user.PortfolioServiceInterfaceImpl;
 import com.limbae.pfy.service.user.UserServiceInterface;
 import com.limbae.pfy.util.EntityUtil;
 import com.limbae.pfy.util.SecurityUtil;
@@ -20,8 +23,7 @@ import javax.security.auth.message.AuthException;
 
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +34,8 @@ public class AnnouncementService implements AnnouncementServiceInterface {
 
     StudyServiceInterface studyService;
     DemandPositionService demandPositionService;
+    UserServiceInterface userService;
+    PortfolioServiceInterface portfolioService;
 
     @Autowired
     public AnnouncementService(AnnouncementRepository announcementRepository, StudyServiceInterface studyService, DemandPositionService demandPositionService) {
@@ -119,6 +123,22 @@ public class AnnouncementService implements AnnouncementServiceInterface {
 
     public Page<AnnouncementVO> getImminent(Pageable pageable){
         return announcementRepository.findByOrderByEndDateDesc(pageable);
+    }
+
+    public List<AnnouncementVO> getRecommend() throws Exception {
+        UserVO user = userService.getByAuth();
+        List<PortfolioVO> portfolios = portfolioService.getByUid(user.getUid());
+        Set<PositionVO> positions = new HashSet<>();
+        List<AnnouncementVO> announcements = new ArrayList<>();
+
+        for (PortfolioVO portfolio : portfolios)
+            positions.add(portfolio.getPosition());
+
+        for (PositionVO position : positions)
+            announcements.addAll(this.getByPosition(position));
+
+        announcements = announcements.stream().distinct().collect(Collectors.toList()); //중복 제거
+        return announcements;
     }
 
     public List<AnnouncementVO> getAfterEndDate(){

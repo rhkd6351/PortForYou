@@ -54,14 +54,7 @@ public class ApplicationController {
     public ResponseEntity<List<StudyApplicationDTO>> getStudyApplicationListByStudyIdx(
             @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        //Object user = Hibernate.unproxy(saVO.get(0).getPortfolio().getUser());
-        //Hibernate unproxy..? proxy로 묶여버린 entity 풀어주는 작업.. 이게 왜 필요하지
-        //근데 proxy 안해도 갑자기 들어감..뭐지
-
-        //it can throw NotFoundException
         StudyVO study = studyService.getByIdx(studyIdx);
-
-        //it can throw AuthException
         UserVO user = userService.getByAuth();
 
         if(user != study.getUser())
@@ -85,7 +78,6 @@ public class ApplicationController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<StudyApplicationDTO>> getMyApplicationList() throws Exception {
 
-        //it can throw AuthException
         UserVO user = userService.getByAuth();
 
         List<StudyApplicationVO> applicationLIstByUid = studyApplicationService.getByUid(user.getUid());

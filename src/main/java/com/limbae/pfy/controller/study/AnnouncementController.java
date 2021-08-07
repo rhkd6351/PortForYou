@@ -104,28 +104,15 @@ public class AnnouncementController {
         }
 
         // TODO 아직 포지션만 선택해서 추천하는 기능밖에 구현 안됨. 이후 announcement에 tech정보도 넣어서 추천하는 기능 구현할것
-        else if(kind.equals("recommend")){ // TODO 로직 서비스단으로 분리하는게 적합한가?
-            //it can throw auth exception
-            UserVO user = userService.getByAuth();
-            List<PortfolioVO> portfolios = portfolioService.getByUid(user.getUid());
-            List<AnnouncementVO> announcements = new ArrayList<>();
-            Set<PositionVO> positions = new HashSet<>();
-
-            for (PortfolioVO portfolio : portfolios)
-                positions.add(portfolio.getPosition());
-
-            for (PositionVO position : positions)
-                announcements.addAll(announcementService.getByPosition(position));
-
-            announcements = announcements.stream().distinct().collect(Collectors.toList()); //중복 제거
-
+        else if(kind.equals("recommend")){ // TODO 로직 서비스단으로 분리하는게 적합한가? 응 적합해
+            List<AnnouncementVO> announcements = announcementService.getRecommend();
             dto.setLastPno((int) Math.ceil(announcements.size() / 36.)); // TODO 자체적으로 page 구현하였음. repository에서 받아오는방법으로 수정할것
+
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
             dto.setAnnouncements(
                     announcements.subList(36 * (pno-1), Math.min(announcements.size(), 36 * pno))
                             .stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
         }
-
         else
             throw new MissingRequestValueException("param kind is null or invalid");
 
@@ -138,10 +125,7 @@ public class AnnouncementController {
     public ResponseEntity<List<AnnouncementDTO>> getAnnouncementList(
             @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        //it can throw Auth, NotFound Exception
         UserVO user = userService.getByAuth();
-
-        //it can throw NotFound Exception
         StudyVO study = studyService.getByIdx(studyIdx);
 
         if(study.getUser() != user)
@@ -161,9 +145,7 @@ public class AnnouncementController {
             @PathVariable(name = "announcement-idx") Long announcementIdx)
             throws NotFoundException {
 
-        //it can throw not found exception
         AnnouncementVO announcementVO = announcementService.getByIdx(announcementIdx);
-
         AnnouncementDTO announcementDTO = entityUtil.convertAnnouncementVoToDto(announcementVO);
 
         return new ResponseEntity<>(announcementDTO,HttpStatus.OK);
@@ -176,7 +158,6 @@ public class AnnouncementController {
             @PathVariable(value = "study-idx") Long studyIdx) throws NotFoundException, AuthException {
 
         announcementDTO.setStudy(StudyDTO.builder().idx(studyIdx).build());
-        //it can throw NotFound, Auth Exception
         AnnouncementVO announcementVO = announcementService.update(announcementDTO);
 
         return ResponseEntity.ok(entityUtil.convertAnnouncementVoToDto(announcementVO));
@@ -187,10 +168,7 @@ public class AnnouncementController {
     public ResponseEntity<ResponseObjectDTO> deleteAnnouncement(
             @PathVariable(value = "announcement-idx") Long announcementIdx) throws AuthException, NotFoundException {
 
-        //it can throw NotFoundException
         AnnouncementVO announcement = announcementService.getByIdx(announcementIdx);
-
-        //it can throw AuthException
         UserVO user = userService.getByAuth();
 
         if(announcement.getStudy().getUser() != user)
@@ -198,7 +176,6 @@ public class AnnouncementController {
 
         announcementService.delete(announcement);
 
-        //response 204 -> no content (delete success)
         return new ResponseEntity<>(new ResponseObjectDTO("delete success"), HttpStatus.NO_CONTENT);
 
     }

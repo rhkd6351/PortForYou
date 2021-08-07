@@ -12,6 +12,6 @@ public interface BoardServiceInterface {
 
     BoardVO getByIdx(Long idx) throws Exception;
 
-    boolean deleteByIdx(Long idx) throws Exception;
+    void deleteByIdx(Long idx) throws Exception;
 
 }
