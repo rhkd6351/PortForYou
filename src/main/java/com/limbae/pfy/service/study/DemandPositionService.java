@@ -19,6 +19,8 @@ public class DemandPositionService implements DemandPositionServiceInterface {
 
     @Autowired
     DemandPositionRepository demandPositionRepository;
+
+    @Autowired
     PositionService positionService;
 
     public DemandPositionVO getByIdx(Long idx) throws NotFoundException {

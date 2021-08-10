@@ -38,10 +38,12 @@ public class AnnouncementService implements AnnouncementServiceInterface {
     PortfolioServiceInterface portfolioService;
 
     @Autowired
-    public AnnouncementService(AnnouncementRepository announcementRepository, StudyServiceInterface studyService, DemandPositionService demandPositionService) {
+    public AnnouncementService(AnnouncementRepository announcementRepository, StudyServiceInterface studyService, DemandPositionService demandPositionService, UserServiceInterface userService, PortfolioServiceInterface portfolioService) {
         this.announcementRepository = announcementRepository;
         this.studyService = studyService;
         this.demandPositionService = demandPositionService;
+        this.userService = userService;
+        this.portfolioService = portfolioService;
     }
 
     public AnnouncementVO getByIdx(Long idx) throws NotFoundException{
@@ -88,11 +90,12 @@ public class AnnouncementService implements AnnouncementServiceInterface {
             announcement = AnnouncementVO.builder()
                     .content(dto.getContent())
                     .title(dto.getTitle())
-                    .demandPosition(demandPosition)
                     .activated(true)
                     .study(study)
                     .endDate(LocalDateTime.now().plusDays(7))
                     .build();
+
+            announcement.setDemandPosition(demandPosition);
         }
 
         announcementRepository.save(announcement);

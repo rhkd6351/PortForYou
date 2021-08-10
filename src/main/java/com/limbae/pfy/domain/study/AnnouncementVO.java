@@ -43,7 +43,17 @@ public class AnnouncementVO {
     StudyVO study;
 
     @Builder.Default
-    @OneToMany( mappedBy = "announcement", orphanRemoval = true)
+    @OneToMany( mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
     List<DemandPositionVO> demandPosition = new ArrayList<>();
 
+    public void setDemandPosition(List<DemandPositionVO> demandPosition) {
+        this.demandPosition.clear();
+        for (DemandPositionVO vo : demandPosition)
+            this.addDemandPosition(vo);
+    }
+
+    public void addDemandPosition(DemandPositionVO vo) {
+        this.demandPosition.add(vo);
+        vo.setAnnouncement(this);
+    }
 }

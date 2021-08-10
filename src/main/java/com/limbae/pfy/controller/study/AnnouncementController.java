@@ -81,7 +81,7 @@ public class AnnouncementController {
 
         if(kind.equals("new")){
             Page<AnnouncementVO> announcements = announcementService.getOrderByDesc(pageRequest);
-            dto.setLastPno(announcements.getTotalPages());
+            dto.setLastPno(Math.max(announcements.getTotalPages(), 1));
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
             dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
             dto.setLastPno(announcements.getTotalPages());
@@ -89,7 +89,7 @@ public class AnnouncementController {
 
         else if(kind.equals("imminent")){
             Page<AnnouncementVO> announcements = announcementService.getImminent(pageRequest);
-            dto.setLastPno(announcements.getTotalPages());
+            dto.setLastPno(Math.max(announcements.getTotalPages(), 1));
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
             dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
             dto.setLastPno(announcements.getTotalPages());
@@ -98,7 +98,7 @@ public class AnnouncementController {
         else if(kind.equals("search")){
             if(query == null) throw new MissingRequestValueException("param query is null");
             Page<AnnouncementVO> announcements = announcementService.getByQuery(query, pageRequest);
-            dto.setLastPno(announcements.getTotalPages());
+            dto.setLastPno(Math.max(announcements.getTotalPages(), 1));
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
             dto.setAnnouncements(announcements.getContent().stream().map(entityUtil::convertAnnouncementVoToDto).collect(Collectors.toList()));
         }
@@ -106,7 +106,7 @@ public class AnnouncementController {
         // TODO 아직 포지션만 선택해서 추천하는 기능밖에 구현 안됨. 이후 announcement에 tech정보도 넣어서 추천하는 기능 구현할것
         else if(kind.equals("recommend")){ // TODO 로직 서비스단으로 분리하는게 적합한가? 응 적합해
             List<AnnouncementVO> announcements = announcementService.getRecommend();
-            dto.setLastPno((int) Math.ceil(announcements.size() / 36.)); // TODO 자체적으로 page 구현하였음. repository에서 받아오는방법으로 수정할것
+            dto.setLastPno(Math.max((int) Math.ceil(announcements.size() / 36.), 1)); // TODO 자체적으로 page 구현하였음. repository에서 받아오는방법으로 수정할것
 
             if(pno > dto.getLastPno()) throw new DataFormatException("pno is too big");
             dto.setAnnouncements(

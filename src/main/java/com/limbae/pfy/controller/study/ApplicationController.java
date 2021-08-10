@@ -96,6 +96,7 @@ public class ApplicationController {
             @PathVariable(value = "announcement-idx")Long announcementIdx) throws Exception{
 
         dto.setAnnouncement(AnnouncementDTO.builder().idx(announcementIdx).build());
+
         StudyApplicationVO studyApplication = studyApplicationService.save(dto);
 
         return new ResponseEntity<>(entityUtil.convertStudyApplicationVoToDto(studyApplication),HttpStatus.CREATED);
