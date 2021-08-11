@@ -5,6 +5,7 @@ import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.etc.EducationVO;
 import com.limbae.pfy.domain.etc.PositionVO;
+import com.limbae.pfy.domain.etc.ProjectVO;
 import com.limbae.pfy.domain.etc.StackVO;
 import com.limbae.pfy.domain.study.*;
 import com.limbae.pfy.domain.user.PortfolioVO;
@@ -49,24 +50,10 @@ public class EntityUtil {
         PositionDTO positionDTO = convertPositionVoToDto(vo.getPosition());
 
         List<ProjectDTO> projectDTO = vo.getProject().stream().map(
-                i -> ProjectDTO.builder()
-                        .idx(i.getIdx())
-                        .title(i.getTitle())
-                        .content(i.getContent())
-                        .stack(i.getStack().stream().map(
-                                t -> StackDTO.builder()
-                                        .idx(t.getIdx())
-                                        .name(t.getName())
-                                        .content(t.getContent())
-                                        .build()
-                        ).collect(Collectors.toList()))
-                        .build()
+                this::convertProjectVoToDto
         ).collect(Collectors.toList());
 
-        EducationDTO educationDTO = EducationDTO.builder()
-                .idx(vo.getEducation().getIdx())
-                .name(vo.getEducation().getName())
-                .build();
+        EducationDTO educationDTO = this.convertEducationVoToDto(vo.getEducation());
 
         List<TechDTO> techDTOSet = vo.getTech().stream().map(
                 i -> TechDTO.builder()
@@ -78,6 +65,8 @@ public class EntityUtil {
                         .build()
         ).collect(Collectors.toList());
 
+        UserDTO userDTO = this.convertUserVoToDto(vo.getUser());
+
 
         return PortfolioDTO.builder()
                 .idx(vo.getIdx())
@@ -88,6 +77,7 @@ public class EntityUtil {
                 .regDate(vo.getRegDate())
                 .education(educationDTO)
                 .tech(techDTOSet)
+                .user(userDTO)
                 .build();
     }
 
@@ -170,6 +160,18 @@ public class EntityUtil {
         return announcementDTO;
     }
 
+    public ProjectDTO convertProjectVoToDto(ProjectVO vo){
+        return ProjectDTO.builder()
+                .idx(vo.getIdx())
+                .content(vo.getContent())
+                .site(vo.getSite())
+                .title(vo.getTitle())
+                .stack(vo.getStack().stream().map(
+                        this::convertStackVoToDto
+                ).collect(Collectors.toList()))
+                .build();
+    }
+
     public StudyApplicationDTO convertStudyApplicationVoToDto(StudyApplicationVO vo){
 
 
@@ -180,14 +182,7 @@ public class EntityUtil {
                         .title(vo.getAnnouncement().getTitle())
                         .activated(vo.getAnnouncement().isActivated())
                         .build())
-                .portfolio(PortfolioDTO.builder()
-                        .idx(vo.getPortfolio().getIdx())
-                        .title(vo.getPortfolio().getTitle())
-                        .tech(vo.getPortfolio().getTech().stream().map(
-                                i -> TechDTO.builder().stackIdx(i.getStack().getIdx()).build()
-                        ).collect(Collectors.toList()))
-                        .user(this.convertUserVoToDto(vo.getPortfolio().getUser()))
-                        .build())
+                .portfolio(this.convertPortfolioVoToDto(vo.getPortfolio()))
                 .position(PositionDTO.builder()
                         .idx(vo.getPosition().getIdx())
                         .name(vo.getPosition().getName())

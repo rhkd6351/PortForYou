@@ -69,12 +69,24 @@ public class ApplicationController {
                 .map(entityUtil::convertStudyApplicationVoToDto)
                 .collect(Collectors.toList());
 
-        //dto.portfolio.tech에 vo.portfolio.tech 주입
-        for(StudyApplicationDTO dto : studyApplicationDTOS)
-            for(TechDTO techDTO : dto.getPortfolio().getTech())
-                techDTO.setStackName(stackService.getByIdx(techDTO.getStackIdx()).getName());
 
         return ResponseEntity.ok(studyApplicationDTOS);
+    }
+
+    @GetMapping("/study/announcement/application/{application-idx}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<StudyApplicationDTO> getApplicationByIdx(
+            @PathVariable(value = "application-idx") Long applicationIdx) throws NotFoundException, AuthException {
+        StudyApplicationVO application = studyApplicationService.getByIdx(applicationIdx);
+        UserVO user = userService.getByAuth();
+
+        if(application.getPortfolio().getUser() != user){
+            if(application.getAnnouncement().getStudy().getUser() != user)
+                throw new AuthException("not owned study or not owned application");
+        }
+
+
+        return ResponseEntity.ok(entityUtil.convertStudyApplicationVoToDto(application));
     }
 
     @GetMapping("/user/applications")
