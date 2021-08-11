@@ -1,7 +1,7 @@
 package com.limbae.pfy.service.user;
 
 import com.limbae.pfy.domain.user.PortfolioVO;
-import com.limbae.pfy.dto.PortfolioDTO;
+import com.limbae.pfy.dto.user.PortfolioDTO;
 
 import java.util.List;
 

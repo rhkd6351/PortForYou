@@ -7,13 +7,12 @@ import com.limbae.pfy.domain.study.MemberVO;
 import com.limbae.pfy.domain.study.StudyApplicationVO;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.StudyApplicationDTO;
-import com.limbae.pfy.repository.*;
+import com.limbae.pfy.dto.study.StudyApplicationDTO;
+import com.limbae.pfy.repository.study.StudyApplicationRepository;
 import com.limbae.pfy.service.etc.PositionService;
 import com.limbae.pfy.service.user.PortfolioServiceInterface;
 import com.limbae.pfy.service.user.UserServiceInterface;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;

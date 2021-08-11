@@ -1,15 +1,13 @@
 package com.limbae.pfy.controller.study;
 
 
-import com.limbae.pfy.domain.etc.PositionVO;
 import com.limbae.pfy.domain.study.AnnouncementVO;
 import com.limbae.pfy.domain.study.StudyVO;
-import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.AnnouncementDTO;
-import com.limbae.pfy.dto.AnnouncementQueryResultDTO;
-import com.limbae.pfy.dto.ResponseObjectDTO;
-import com.limbae.pfy.dto.StudyDTO;
+import com.limbae.pfy.dto.study.AnnouncementDTO;
+import com.limbae.pfy.dto.study.AnnouncementQueryResultDTO;
+import com.limbae.pfy.dto.etc.ResponseObjectDTO;
+import com.limbae.pfy.dto.study.StudyDTO;
 import com.limbae.pfy.service.study.AnnouncementService;
 import com.limbae.pfy.service.study.DemandPositionService;
 import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
@@ -28,10 +26,7 @@ import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.message.AuthException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.DataFormatException;
 

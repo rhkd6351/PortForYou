@@ -48,7 +48,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/portfolio/positions",
                         "/api/user/portfolio/projects",
                         "/api/user/portfolio/educations",
-                        "/api/user/portfolio/stacks"
+                        "/api/user/portfolio/stacks",
+                        "/pub/**",
+                        "/sub/**",
+                        "/pfy/**"
                 );
     }
 

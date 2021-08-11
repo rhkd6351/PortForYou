@@ -2,7 +2,7 @@ package com.limbae.pfy.service.etc;
 
 
 import com.limbae.pfy.domain.etc.ImageVO;
-import com.limbae.pfy.repository.ImageRepository;
+import com.limbae.pfy.repository.etc.ImageRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

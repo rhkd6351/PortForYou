@@ -2,7 +2,7 @@ package com.limbae.pfy.service.board;
 
 import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.domain.board.BoardVO;
-import com.limbae.pfy.repository.BoardRepository;
+import com.limbae.pfy.repository.board.BoardRepository;
 import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

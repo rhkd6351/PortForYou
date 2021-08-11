@@ -1,8 +1,8 @@
 package com.limbae.pfy.service;
 
 import com.limbae.pfy.jwt.TokenProvider;
-import com.limbae.pfy.repository.PortfolioRepository;
-import com.limbae.pfy.repository.UserRepository;
+import com.limbae.pfy.repository.user.PortfolioRepository;
+import com.limbae.pfy.repository.user.UserRepository;
 import com.limbae.pfy.service.user.PortfolioServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
 import org.springframework.beans.factory.annotation.Autowired;

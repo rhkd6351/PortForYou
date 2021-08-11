@@ -2,15 +2,14 @@ package com.limbae.pfy.service.study;
 
 import com.limbae.pfy.domain.etc.PositionVO;
 import com.limbae.pfy.domain.study.DemandPositionVO;
-import com.limbae.pfy.dto.DemandPositionDTO;
-import com.limbae.pfy.repository.DemandPositionRepository;
+import com.limbae.pfy.dto.study.DemandPositionDTO;
+import com.limbae.pfy.repository.study.DemandPositionRepository;
 import com.limbae.pfy.service.etc.PositionService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

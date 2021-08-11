@@ -1,7 +1,7 @@
 package com.limbae.pfy.service.user;
 
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.UserDTO;
+import com.limbae.pfy.dto.user.UserDTO;
 import javassist.bytecode.DuplicateMemberException;
 
 import javax.security.auth.message.AuthException;

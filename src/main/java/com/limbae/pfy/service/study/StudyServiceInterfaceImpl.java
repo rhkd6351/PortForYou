@@ -4,15 +4,12 @@ import com.limbae.pfy.domain.study.MemberVO;
 import com.limbae.pfy.domain.study.StudyCategoryVO;
 import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.StudyDTO;
-import com.limbae.pfy.repository.*;
+import com.limbae.pfy.dto.study.StudyDTO;
+import com.limbae.pfy.repository.study.StudyRepository;
 import com.limbae.pfy.service.etc.StudyCategoryService;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
-import com.limbae.pfy.util.EntityUtil;
-import com.limbae.pfy.util.SecurityUtil;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.message.AuthException;

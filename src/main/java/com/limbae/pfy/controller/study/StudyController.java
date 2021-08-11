@@ -4,7 +4,11 @@ package com.limbae.pfy.controller.study;
 import com.limbae.pfy.domain.study.MemberVO;
 import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.*;
+import com.limbae.pfy.dto.Channel.RoomDTO;
+import com.limbae.pfy.dto.etc.ResponseObjectDTO;
+import com.limbae.pfy.dto.study.MemberDTO;
+import com.limbae.pfy.dto.study.StudyDTO;
+import com.limbae.pfy.service.channel.RoomServiceInterface;
 import com.limbae.pfy.service.study.AnnouncementService;
 import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
@@ -30,12 +34,14 @@ public class StudyController {
     EntityUtil entityUtil;
     StudyServiceInterfaceImpl studyService;
     AnnouncementService announcementService;
+    RoomServiceInterface roomService;
 
-    public StudyController(UserServiceInterfaceImpl userService, EntityUtil entityUtil, StudyServiceInterfaceImpl studyService, AnnouncementService announcementService) {
+    public StudyController(UserServiceInterfaceImpl userService, EntityUtil entityUtil, StudyServiceInterfaceImpl studyService, AnnouncementService announcementService, RoomServiceInterface roomService) {
         this.userService = userService;
         this.entityUtil = entityUtil;
         this.studyService = studyService;
         this.announcementService = announcementService;
+        this.roomService = roomService;
     }
 
     @GetMapping("/user/studies")
@@ -72,10 +78,7 @@ public class StudyController {
     public ResponseEntity<StudyDTO> getStudyByIdx(
             @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        //it can throw NotFoundException
         StudyVO study = studyService.getByIdx(studyIdx);
-
-        //it can throw AuthException
         UserVO user = userService.getByAuth();
 
         if(study.getUser() != user)
@@ -89,8 +92,9 @@ public class StudyController {
     public ResponseEntity<StudyDTO> saveStudy(
             @RequestBody StudyDTO studyDTO) throws NotFoundException, AuthException {
 
-        //it can throw NotFound, Auth Exception
         StudyVO study = studyService.update(studyDTO);
+        roomService.update(RoomDTO.builder().study(StudyDTO.builder().idx(study.getIdx()).build()).build()); //이후 리팩토링
+
 
         return ResponseEntity.ok(entityUtil.convertStudyVoToDto(study));
     }

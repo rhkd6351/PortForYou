@@ -1,6 +1,6 @@
 package com.limbae.pfy.service.study;
 import com.limbae.pfy.domain.study.StudyVO;
-import com.limbae.pfy.dto.StudyDTO;
+import com.limbae.pfy.dto.study.StudyDTO;
 import javassist.NotFoundException;
 import javax.security.auth.message.AuthException;
 import java.util.List;

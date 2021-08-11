@@ -1,6 +1,7 @@
 package com.limbae.pfy.domain.study;
 
 
+import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.user.UserVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +47,9 @@ public class StudyVO {
     @Builder.Default
     @OneToMany(mappedBy = "study")
     List<MemberVO> members = new ArrayList<>();
+
+    @OneToOne(mappedBy = "study")
+    RoomVO room;
+
+
 }

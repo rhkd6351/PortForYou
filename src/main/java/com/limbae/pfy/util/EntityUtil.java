@@ -2,17 +2,22 @@ package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
+import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.etc.EducationVO;
 import com.limbae.pfy.domain.etc.PositionVO;
 import com.limbae.pfy.domain.etc.StackVO;
 import com.limbae.pfy.domain.study.*;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
+import com.limbae.pfy.dto.Channel.RoomDTO;
 import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
-import com.limbae.pfy.dto.*;
 import com.limbae.pfy.dto.board.CommentDTO;
 import com.limbae.pfy.dto.board.PostDTO;
+import com.limbae.pfy.dto.etc.*;
+import com.limbae.pfy.dto.study.*;
+import com.limbae.pfy.dto.user.PortfolioDTO;
+import com.limbae.pfy.dto.user.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +29,14 @@ import java.util.stream.Collectors;
 public class EntityUtil {
 
 
+    public RoomDTO convertRoomVoToDto(RoomVO vo){
+        StudyDTO studyDTO = StudyDTO.builder().idx(vo.getStudy().getIdx()).build();
+        return RoomDTO.builder()
+                .idx(vo.getIdx())
+                .study(studyDTO)
+                .rid(vo.getRid())
+                .build();
+    }
     public StudyCategoryDTO convertStudyCategoryVoToDto(StudyCategoryVO vo){
         return StudyCategoryDTO.builder()
                 .idx(vo.getIdx())

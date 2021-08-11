@@ -1,7 +1,7 @@
 package com.limbae.pfy.service.user;
 
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.repository.UserRepository;
+import com.limbae.pfy.repository.user.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

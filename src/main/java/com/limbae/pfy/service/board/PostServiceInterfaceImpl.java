@@ -2,7 +2,7 @@ package com.limbae.pfy.service.board;
 
 import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.domain.board.PostVO;
-import com.limbae.pfy.repository.PostRepository;
+import com.limbae.pfy.repository.board.PostRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

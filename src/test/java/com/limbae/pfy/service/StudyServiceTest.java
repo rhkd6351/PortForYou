@@ -2,13 +2,13 @@
 //
 //import com.limbae.pfy.domain.user.PortfolioVO;
 //import com.limbae.pfy.domain.study.StudyVO;
-//import com.limbae.pfy.dto.PortfolioDTO;
-//import com.limbae.pfy.dto.PortfolioListDTO;
-//import com.limbae.pfy.dto.ProjectDTO;
-//import com.limbae.pfy.dto.StudyDTO;
+//import com.limbae.pfy.dto.user.PortfolioDTO;
+//import com.limbae.pfy.dto.user.PortfolioListDTO;
+//import com.limbae.pfy.dto.etc.ProjectDTO;
+//import com.limbae.pfy.dto.study.StudyDTO;
 //import com.limbae.pfy.jwt.TokenProvider;
-//import com.limbae.pfy.repository.PortfolioRepository;
-//import com.limbae.pfy.repository.UserRepository;
+//import com.limbae.pfy.repository.user.PortfolioRepository;
+//import com.limbae.pfy.repository.user.UserRepository;
 //import com.limbae.pfy.util.EntityUtil;
 //import org.assertj.core.api.Assertions;
 //import org.junit.jupiter.api.DisplayName;

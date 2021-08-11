@@ -2,8 +2,8 @@ package com.limbae.pfy.service.etc;
 
 import com.limbae.pfy.domain.etc.StackVO;
 import com.limbae.pfy.domain.etc.TechVO;
-import com.limbae.pfy.dto.TechDTO;
-import com.limbae.pfy.repository.TechRepository;
+import com.limbae.pfy.dto.etc.TechDTO;
+import com.limbae.pfy.repository.etc.TechRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

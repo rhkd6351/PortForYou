@@ -1,7 +1,7 @@
 package com.limbae.pfy.service.etc;
 
 import com.limbae.pfy.domain.etc.EducationVO;
-import com.limbae.pfy.repository.EducationRepository;
+import com.limbae.pfy.repository.etc.EducationRepository;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

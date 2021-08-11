@@ -1,6 +1,6 @@
 package com.limbae.pfy.exception;
 
-import com.limbae.pfy.dto.ResponseObjectDTO;
+import com.limbae.pfy.dto.etc.ResponseObjectDTO;
 import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 import lombok.extern.slf4j.Slf4j;

@@ -2,7 +2,7 @@ package com.limbae.pfy.service.board;
 
 import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
-import com.limbae.pfy.repository.CommentRepository;
+import com.limbae.pfy.repository.board.CommentRepository;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

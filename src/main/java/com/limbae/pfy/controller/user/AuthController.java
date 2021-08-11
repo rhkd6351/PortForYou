@@ -1,11 +1,10 @@
 package com.limbae.pfy.controller.user;
 
-import com.limbae.pfy.dto.LoginDTO;
-import com.limbae.pfy.dto.ResponseObjectDTO;
+import com.limbae.pfy.dto.user.LoginDTO;
+import com.limbae.pfy.dto.etc.ResponseObjectDTO;
 import com.limbae.pfy.jwt.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

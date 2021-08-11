@@ -4,7 +4,7 @@ package com.limbae.pfy.controller.etc;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.etc.ImageVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.ResponseObjectDTO;
+import com.limbae.pfy.dto.etc.ResponseObjectDTO;
 import com.limbae.pfy.service.etc.ImageService;
 import com.limbae.pfy.service.user.PortfolioServiceInterfaceImpl;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
