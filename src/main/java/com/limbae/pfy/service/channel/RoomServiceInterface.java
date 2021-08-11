@@ -14,4 +14,6 @@ public interface RoomServiceInterface {
 
     public RoomVO getByStudyIdx(Long idx) throws NotFoundException;
 
+    public RoomVO getByRid(String rid) throws NotFoundException;
+
 }

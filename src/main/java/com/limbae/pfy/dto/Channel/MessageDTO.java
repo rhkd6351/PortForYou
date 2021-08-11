@@ -2,6 +2,7 @@ package com.limbae.pfy.dto.Channel;
 
 import com.limbae.pfy.domain.channel.MessageType;
 import com.limbae.pfy.domain.user.UserVO;
+import com.limbae.pfy.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class MessageDTO {
 
     RoomDTO room;
 
-    UserVO user;
+    UserDTO user;
 
     String message;
 

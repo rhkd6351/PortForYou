@@ -4,10 +4,12 @@ package com.limbae.pfy.controller.channel;
 import com.limbae.pfy.domain.channel.MessageType;
 import com.limbae.pfy.domain.channel.MessageVO;
 import com.limbae.pfy.domain.channel.RoomVO;
+import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.dto.Channel.MessageDTO;
 import com.limbae.pfy.dto.Channel.RoomDTO;
 import com.limbae.pfy.service.channel.MessageServiceInterface;
 import com.limbae.pfy.service.channel.RoomServiceInterface;
+import com.limbae.pfy.service.user.UserServiceInterface;
 import com.limbae.pfy.util.EntityUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -33,16 +35,24 @@ public class ChannelController {
     @Autowired
     EntityUtil entityUtil;
 
+    @Autowired
+    UserServiceInterface userService;
+
     private final SimpMessageSendingOperations messagingTemplate;
 
     @MessageMapping("/chat/message")
     public void message(MessageDTO messageDTO) throws Exception {
+        System.out.println("messageDTO = " + messageDTO);
+
+        UserVO user = userService.getByUid(messageDTO.getUser().getUid());
+
         if(MessageType.ENTER.equals(messageDTO.getType()))
-            messageDTO.setMessage("Entered");
+            messageDTO.setMessage(user.getName() + " Entered");
 
         MessageVO message = messageService.update(messageDTO);
 
-        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoom().getRid(), message);
+        messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoom().getRid(),
+                entityUtil.convertMessageVoToDto(message));
     }
 
     @GetMapping("/study/{study-idx}/room")

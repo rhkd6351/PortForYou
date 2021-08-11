@@ -9,6 +9,7 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,5 +58,13 @@ public class RoomServiceInterfaceImpl implements RoomServiceInterface{
     public RoomVO getByStudyIdx(Long idx) throws NotFoundException {
         StudyVO study = studyService.getByIdx(idx);
         return study.getRoom();
+    }
+
+    @Override
+    public RoomVO getByRid(String rid) throws NotFoundException {
+        List<RoomVO> roomList = roomRepository.findByRid(rid);
+        if(roomList.size() == 0)
+            throw new NotFoundException("invalid rid");
+        return roomList.stream().findAny().get();
     }
 }

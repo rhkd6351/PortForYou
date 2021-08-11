@@ -31,8 +31,9 @@ public class MessageServiceInterfaceImpl implements MessageServiceInterface{
 
     @Override
     public MessageVO update(MessageDTO dto) throws Exception {
-        //        UserVO user = userServiceInterface.getByAuth();
-        RoomVO room = roomServiceInterface.getByIdx(dto.getRoom().getIdx());
+//        UserVO user = userServiceInterface.getByAuth();
+        RoomVO room = roomServiceInterface.getByRid(dto.getRoom().getRid());
+//        RoomVO room = roomServiceInterface.getByIdx(dto.getRoom().getIdx());
         UserVO user = userServiceInterface.getByUid(dto.getUser().getUid());
 
         MessageVO message = null;

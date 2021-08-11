@@ -2,6 +2,7 @@ package com.limbae.pfy.util;
 
 import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
+import com.limbae.pfy.domain.channel.MessageVO;
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.etc.EducationVO;
 import com.limbae.pfy.domain.etc.PositionVO;
@@ -10,6 +11,7 @@ import com.limbae.pfy.domain.etc.StackVO;
 import com.limbae.pfy.domain.study.*;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
+import com.limbae.pfy.dto.Channel.MessageDTO;
 import com.limbae.pfy.dto.Channel.RoomDTO;
 import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
@@ -171,6 +173,18 @@ public class EntityUtil {
                 ).collect(Collectors.toList()))
                 .build();
     }
+
+    public MessageDTO convertMessageVoToDto(MessageVO vo){
+        return MessageDTO.builder()
+                .idx(vo.getIdx())
+                .room(this.convertRoomVoToDto(vo.getRoom()))
+                .user(this.convertUserVoToDto(vo.getUser()))
+                .message(vo.getMessage())
+                .type(vo.getType())
+                .sendDate(vo.getSendDate())
+                .build();
+    }
+
 
     public StudyApplicationDTO convertStudyApplicationVoToDto(StudyApplicationVO vo){
 
