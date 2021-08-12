@@ -32,14 +32,15 @@ public class CommentController {
     CommentServiceInterface commentService;
     UserServiceInterfaceImpl userService;
     StudyServiceInterfaceImpl studyService;
-    EntityUtil entityUtil = new EntityUtil();
+    EntityUtil entityUtil;
 
-    public CommentController(BoardServiceInterface boardService, PostServiceInterface postService, CommentServiceInterface commentService, UserServiceInterfaceImpl userService, StudyServiceInterfaceImpl studyService) {
+    public CommentController(BoardServiceInterface boardService, PostServiceInterface postService, CommentServiceInterface commentService, UserServiceInterfaceImpl userService, StudyServiceInterfaceImpl studyService, EntityUtil entityUtil) {
         this.boardService = boardService;
         this.postService = postService;
         this.commentService = commentService;
         this.userService = userService;
         this.studyService = studyService;
+        this.entityUtil = entityUtil;
     }
 
     @GetMapping("/study/board/post/{post-idx}/comments")

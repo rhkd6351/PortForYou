@@ -11,6 +11,7 @@ import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingRequestValueException;
 
 import javax.security.auth.message.AuthException;
 import java.util.*;
@@ -18,8 +19,8 @@ import java.util.*;
 @Service
 public class UserServiceInterfaceImpl implements UserServiceInterface{
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceInterfaceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -28,31 +29,59 @@ public class UserServiceInterfaceImpl implements UserServiceInterface{
     }
 
     @Override
-    public UserVO save(UserDTO userDto) throws DuplicateMemberException{
-        if(userRepository.findWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null)
-            throw new DuplicateMemberException("duplicated");
+    public UserVO update(UserDTO userDto) throws Exception {
 
         AuthorityVO authorityVO =   AuthorityVO.builder()
                 .authority(Authority.ROLE_USER)
                 .idx(1)
                 .build();
 
-        UserVO userVO = UserVO.builder()
-                .username(userDto.getUsername())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .name(userDto.getName())
-                .phone(userDto.getPhone())
-                .authorities(Collections.singletonList(authorityVO))
-                .activated(true)
-                .build();
+        UserVO user = null;
 
+        if(userDto.getUid() != null){
+            user = this.getByAuth();
+
+            if(userDto.getPassword() != null)
+                user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            else if(userDto.getName() != null)
+                user.setName(userDto.getName());
+            else if(userDto.getPhone() != null)
+                user.setPhone(userDto.getPhone());
+            else if(userDto.getSite() != null)
+                user.setSite(userDto.getSite());
+            else
+                throw new MissingRequestValueException("no data find");
+
+        }else{
+            if(userRepository.findWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null)
+                throw new DuplicateMemberException("duplicated");
+            user = UserVO.builder()
+                    .username(userDto.getUsername())
+                    .password(passwordEncoder.encode(userDto.getPassword()))
+                    .name(userDto.getName())
+                    .phone(userDto.getPhone())
+                    .authorities(Collections.singletonList(authorityVO))
+                    .activated(true)
+                    .build();
+        }
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserVO update(UserVO userVO) throws Exception {
         return userRepository.save(userVO);
     }
 
     @Override
-    public UserVO save(UserVO userVO) throws Exception {
-        return userRepository.save(userVO);
+    public void delete(String password) throws Exception {
+        UserVO user = this.getByAuth();
+        if(!passwordEncoder.matches(password,user.getPassword()))
+            throw new AuthException("invalid password");
+
+        userRepository.delete(user);
     }
+
 
     @Override
     public UserVO getByAuth() throws AuthException{

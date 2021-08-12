@@ -10,6 +10,7 @@ import com.limbae.pfy.util.EntityUtil;
 import javassist.NotFoundException;
 import javassist.bytecode.DuplicateMemberException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +39,35 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<ResponseObjectDTO> signup(
-            @Valid @RequestBody UserDTO userDto) throws DuplicateMemberException {
+    public ResponseEntity<ResponseObjectDTO> save(
+            @Valid @RequestBody UserDTO userDto) throws Exception {
 
-        //it can throw DuplicateMemberException
-        userService.save(userDto);
+        userService.update(userDto);
 
         return new ResponseEntity<>(new ResponseObjectDTO("signup success"),  HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/userInfo")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> delete(
+            @Valid @RequestBody UserDTO userDTO) throws Exception {
+
+        userService.delete(userDTO.getPassword());
+
+        return ResponseEntity.ok(new ResponseObjectDTO("delete success"));
+    }
+
+    @PostMapping("/userInfo")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> update(
+            @Valid @RequestBody UserDTO userDto) throws Exception {
+
+        UserVO user = userService.getByAuth();
+        userDto.setUid(user.getUid());
+
+        UserVO updated = userService.update(userDto);
+
+        return new ResponseEntity<>(new ResponseObjectDTO("update success"),  HttpStatus.CREATED);
     }
 
     @GetMapping("/userInfo")

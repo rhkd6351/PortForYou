@@ -49,5 +49,10 @@ public class StudyVO {
     @OneToOne(mappedBy = "study")
     RoomVO room;
 
+    public void addMember(MemberVO member){
+        this.members.add(member);
+        member.setStudy(this);
+    }
+
 
 }

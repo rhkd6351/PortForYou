@@ -10,6 +10,7 @@ import com.limbae.pfy.dto.study.MemberDTO;
 import com.limbae.pfy.dto.study.StudyDTO;
 import com.limbae.pfy.service.channel.RoomServiceInterface;
 import com.limbae.pfy.service.study.AnnouncementService;
+import com.limbae.pfy.service.study.MemberService;
 import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
@@ -134,15 +135,13 @@ public class StudyController {
         if(!(loginUser == manager || members.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(loginUser)))
             throw new AuthException("not belong to study");
 
-        List<MemberDTO> membersWithManager = new ArrayList<>();
-        membersWithManager.add(MemberDTO.builder().user(entityUtil.convertUserVoToDto(manager)).build());
-
-        membersWithManager.addAll(members.stream().map(i ->
+        List<MemberDTO> membersWithManager = members.stream().map(i ->
                 MemberDTO.builder()
                         .user(entityUtil.convertUserVoToDto(i.getUser()))
                         .position(entityUtil.convertPositionVoToDto(i.getPosition()))
+                        .regDate(i.getRegDate())
                         .build()
-        ).collect(Collectors.toList()));
+        ).collect(Collectors.toList());
 
         return new ResponseEntity<>(membersWithManager, HttpStatus.OK);
 

@@ -4,10 +4,7 @@ import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.domain.channel.MessageVO;
 import com.limbae.pfy.domain.channel.RoomVO;
-import com.limbae.pfy.domain.etc.EducationVO;
-import com.limbae.pfy.domain.etc.PositionVO;
-import com.limbae.pfy.domain.etc.ProjectVO;
-import com.limbae.pfy.domain.etc.StackVO;
+import com.limbae.pfy.domain.etc.*;
 import com.limbae.pfy.domain.study.*;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
@@ -21,9 +18,13 @@ import com.limbae.pfy.dto.etc.*;
 import com.limbae.pfy.dto.study.*;
 import com.limbae.pfy.dto.user.PortfolioDTO;
 import com.limbae.pfy.dto.user.UserDTO;
+import com.limbae.pfy.service.etc.ImageService;
+import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EntityUtil {
 
+    private final String serverUri;
+    ImageService imageService;
+
+    public EntityUtil(@Value("${server.uri}")String serverUri,
+                      ImageService imageService) {
+        this.serverUri = serverUri;
+        this.imageService = imageService;
+    }
 
     public RoomDTO convertRoomVoToDto(RoomVO vo){
         StudyDTO studyDTO = StudyDTO.builder().idx(vo.getStudy().getIdx()).build();
@@ -207,13 +216,24 @@ public class EntityUtil {
     }
 
     public UserDTO convertUserVoToDto(UserVO vo){
-        return UserDTO.builder()
+
+        UserDTO userDTO = UserDTO.builder()
                 .username(vo.getUsername())
                 .uid(vo.getUid())
                 .name(vo.getName())
                 .phone(vo.getPhone())
                 .site(vo.getSite())
                 .build();
+
+        try{
+            ImageVO image = imageService.getByName(vo.getUid() + "_profile_img");
+            String uri = serverUri + "/api/img/default/" + image.getName();
+            userDTO.setImg(uri);
+        }catch (NotFoundException e){
+            userDTO.setImg("not registered");
+        }
+
+        return userDTO;
     }
 
     public BoardDTO convertBoardVoToDto(BoardVO vo){

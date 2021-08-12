@@ -47,7 +47,7 @@ public class ChannelController {
         UserVO user = userService.getByUid(messageDTO.getUser().getUid());
 
         if(MessageType.ENTER.equals(messageDTO.getType()))
-            messageDTO.setMessage(user.getName() + " Entered");
+            messageDTO.setMessage(user.getUsername() + " Entered");
 
         MessageVO message = messageService.update(messageDTO);
 

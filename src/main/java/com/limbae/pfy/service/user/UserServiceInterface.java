@@ -8,9 +8,11 @@ import javax.security.auth.message.AuthException;
 
 public interface UserServiceInterface {
 
-    UserVO save(UserDTO userDto) throws DuplicateMemberException;
+    UserVO update(UserDTO userDto) throws Exception;
 
-    UserVO save(UserVO userVO) throws Exception;
+    UserVO update(UserVO userVO) throws Exception;
+
+    void delete(String password) throws Exception;
 
     UserVO getByAuth() throws AuthException;
 

@@ -6,6 +6,7 @@ import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.dto.study.StudyDTO;
 import com.limbae.pfy.repository.study.StudyRepository;
+import com.limbae.pfy.service.etc.PositionService;
 import com.limbae.pfy.service.etc.StudyCategoryService;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
 import javassist.NotFoundException;
@@ -25,11 +26,15 @@ public class StudyServiceInterfaceImpl implements StudyServiceInterface {
 
     UserServiceInterfaceImpl userService;
     StudyCategoryService studyCategoryService;
+    MemberService memberService;
+    PositionService positionService;
 
-    public StudyServiceInterfaceImpl(StudyRepository studyRepository, UserServiceInterfaceImpl userService, StudyCategoryService studyCategoryService) {
+    public StudyServiceInterfaceImpl(StudyRepository studyRepository, UserServiceInterfaceImpl userService, StudyCategoryService studyCategoryService, MemberService memberService, PositionService positionService) {
         this.studyRepository = studyRepository;
         this.userService = userService;
         this.studyCategoryService = studyCategoryService;
+        this.memberService = memberService;
+        this.positionService = positionService;
     }
 
     public List<StudyVO> getByUid(Long uid) throws Exception {
@@ -73,7 +78,18 @@ public class StudyServiceInterfaceImpl implements StudyServiceInterface {
                     .user(user)
                     .build();
         }
-        return studyRepository.save(study);
+
+        StudyVO studyVO = studyRepository.save(study);
+
+        MemberVO manager = MemberVO.builder()
+                .study(studyVO)
+                .user(user)
+                .position(positionService.getByIdx(8L)) //Manager position
+                .build();
+
+        memberService.save(manager);
+
+        return studyVO;
     }
 
     public void delete(StudyVO vo){
