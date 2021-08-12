@@ -125,13 +125,10 @@ public class StudyController {
     public ResponseEntity<List<MemberDTO>> getMembersByStudyIdx(
             @PathVariable(name = "study-idx") Long studyIdx) throws AuthException, NotFoundException {
 
-        //it can throw Auth, NotFound Exception
         StudyVO study = studyService.getByIdx(studyIdx);
-
-        //it can throw Auth, NotFound Exception
         UserVO loginUser = userService.getByAuth();
-
         UserVO manager = study.getUser();
+
         List<MemberVO> members = study.getMembers();
 
         if(!(loginUser == manager || members.stream().map(MemberVO::getUser).collect(Collectors.toSet()).contains(loginUser)))
@@ -139,6 +136,7 @@ public class StudyController {
 
         List<MemberDTO> membersWithManager = new ArrayList<>();
         membersWithManager.add(MemberDTO.builder().user(entityUtil.convertUserVoToDto(manager)).build());
+
         membersWithManager.addAll(members.stream().map(i ->
                 MemberDTO.builder()
                         .user(entityUtil.convertUserVoToDto(i.getUser()))

@@ -1,14 +1,12 @@
 package com.limbae.pfy.domain.channel;
 
 import com.limbae.pfy.domain.study.StudyVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -20,7 +18,7 @@ public class RoomVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idx;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="study_idx")
     StudyVO study;
 

@@ -3,10 +3,7 @@ package com.limbae.pfy.domain.study;
 
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.user.UserVO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,10 +11,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "study")
 public class StudyVO {
