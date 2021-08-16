@@ -2,6 +2,7 @@ package com.limbae.pfy.domain.user;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.limbae.pfy.domain.channel.MessageVO;
 import com.limbae.pfy.domain.study.MemberVO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -63,6 +64,9 @@ public class UserVO {
             joinColumns = {@JoinColumn(name = "user_uid", referencedColumnName = "uid")},
             inverseJoinColumns = {@JoinColumn(name = "authority_idx", referencedColumnName = "idx")})
     List<AuthorityVO> authorities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    List<MessageVO> messages = new ArrayList<>();
 }
 
 

@@ -60,6 +60,7 @@ public class RoomServiceInterfaceImpl implements RoomServiceInterface{
         return study.getRoom();
     }
 
+
     @Override
     public RoomVO getByRid(String rid) throws NotFoundException {
         List<RoomVO> roomList = roomRepository.findByRid(rid);

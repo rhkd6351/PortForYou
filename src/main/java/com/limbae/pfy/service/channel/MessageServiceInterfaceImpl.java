@@ -8,8 +8,11 @@ import com.limbae.pfy.repository.channel.MessageRepository;
 import com.limbae.pfy.service.user.UserServiceInterface;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,5 +62,17 @@ public class MessageServiceInterfaceImpl implements MessageServiceInterface{
         if(message.isEmpty())
             throw new NotFoundException("invalid message idx");
         return message.get();
+    }
+
+    @Override
+    public List<MessageVO> get30Entity(RoomVO room, Pageable pageable) throws Exception {
+        String rid = room.getRid();
+        return messageRepository.findByRid(rid, pageable);
+    }
+
+    @Override
+    public List<MessageVO> get30Entity(RoomVO room, long idx, Pageable pageable) throws Exception {
+        String rid = room.getRid();
+        return messageRepository.findByRid(rid, idx, pageable);
     }
 }

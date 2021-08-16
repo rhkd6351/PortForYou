@@ -6,6 +6,7 @@ import javassist.bytecode.DuplicateMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +20,12 @@ import java.util.zip.DataFormatException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalRestControllerAdvice {
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ResponseObjectDTO> BadCredentialsException(BadCredentialsException e){
+        log.warn(e.getMessage());
+        return new ResponseEntity<>(new ResponseObjectDTO(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(DataFormatException.class)
     public ResponseEntity<ResponseObjectDTO> DataFormatException(DataFormatException e){

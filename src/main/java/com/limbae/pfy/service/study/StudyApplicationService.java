@@ -61,6 +61,8 @@ public class StudyApplicationService {
 
         if(!announcement.isActivated()) throw new NotActiveException("announcement is closed");
 
+        if(user == announcement.getStudy().getUser()) throw new AuthException("can't apply owned study");
+
         StudyApplicationVO studyApplication = StudyApplicationVO.builder()
                 .announcement(announcement)
                 .portfolio(portfolio)
