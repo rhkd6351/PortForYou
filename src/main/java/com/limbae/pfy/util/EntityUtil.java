@@ -254,7 +254,7 @@ public class EntityUtil {
                 .upDate(vo.getUpDate())
                 .delDate(vo.getDelDate())
                 .boardIdx(vo.getBoard().getIdx())
-                .username(vo.getUser().getUsername())
+                .user(this.convertUserVoToDto(vo.getUser()))
                 .build();
     }
 
@@ -266,6 +266,7 @@ public class EntityUtil {
                 .delDate(vo.getDelDate())
                 .upDate(vo.getUpDate())
                 .postId(vo.getPost().getIdx())
+                .user(this.convertUserVoToDto(vo.getUser()))
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.limbae.pfy.dto.board;
 
+import com.limbae.pfy.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +29,5 @@ public class PostDTO {
 
     Long boardIdx;
 
-    String username;
+    UserDTO user;
 }

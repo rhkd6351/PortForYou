@@ -1,6 +1,7 @@
 package com.limbae.pfy.dto.board;
 
 import com.limbae.pfy.domain.board.PostVO;
+import com.limbae.pfy.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +30,6 @@ public class CommentDTO {
     LocalDateTime upDate;
 
     Long postId;
+
+    UserDTO user;
 }
