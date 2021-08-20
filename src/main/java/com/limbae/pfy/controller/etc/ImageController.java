@@ -12,6 +12,7 @@ import com.limbae.pfy.util.ImageUtil;
 
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.security.auth.message.AuthException;
 import javax.transaction.NotSupportedException;
 import java.io.IOException;
+import java.util.UUID;
 
 
 @RestController
@@ -32,14 +34,17 @@ public class ImageController {
     ImageUtil imageUtil;
     UserServiceInterfaceImpl userService;
     PortfolioServiceInterfaceImpl portfolioService;
+    private final String serverUri;
 
     @Autowired
     public ImageController(ImageService imageService, ImageUtil imageUtil,
-                           UserServiceInterfaceImpl userService, PortfolioServiceInterfaceImpl portfolioService) {
+                           UserServiceInterfaceImpl userService, PortfolioServiceInterfaceImpl portfolioService,
+                           @Value("${server.uri}")String serverUri) {
         this.imageService = imageService;
         this.imageUtil = imageUtil;
         this.userService = userService;
         this.portfolioService = portfolioService;
+        this.serverUri = serverUri;
     }
 
     @GetMapping(value = "/default/{name}", produces = MediaType.IMAGE_PNG_VALUE)
@@ -148,6 +153,54 @@ public class ImageController {
         }
 
         return ResponseEntity.ok(ResponseObjectDTO.builder().message("success").build());
+
+    }
+
+    @PostMapping("/board/post")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ResponseObjectDTO> savePostImage(
+            @RequestParam("img") MultipartFile mf) throws NotSupportedException, IOException {
+
+        int i = mf.getOriginalFilename().lastIndexOf(".");
+        String extension = mf.getOriginalFilename().substring(i);
+
+        //파일 확장자 제한
+        if(!(extension.equals(".jpg") || extension.equals(".jpeg") || extension.equals(".png") || extension.equals(".gif")))
+            throw new NotSupportedException("not supported extension : " + extension);
+
+        //파일 용량 제한
+        if(mf.getSize() > (7 * 1000 * 1000))
+            throw new NotSupportedException("exceed supported file size");
+
+        UUID saveName = UUID.randomUUID(); //중복될 가능성 = 집에서 자다가 트럭에 받쳐서 사망할 가능성, 나중에 수정 필요..? 고려해볼것
+
+        imageUtil.saveImage(mf, saveName + extension, "/board/post");
+
+        ImageVO image = null;
+        try {
+            image = imageService.getByName(saveName.toString());
+            image.setSaveName(saveName + extension);
+            image.setSize(mf.getSize());
+            image.setOriginalName(mf.getOriginalFilename());
+            image.setUploadPath("/board/post");
+        }catch (NotFoundException e) {
+            image = ImageVO.builder()
+                    .name(saveName.toString())
+                    .saveName(saveName + extension)
+                    .originalName(mf.getOriginalFilename())
+                    .size(mf.getSize())
+                    .uploadPath("/board/post")
+                    .build();
+        }finally {
+            imageService.save(image);
+        }
+
+
+        return ResponseEntity.ok(ResponseObjectDTO.builder().message(serverUri + "/api/img/default/" + image.getName()).build());
+
+
+
+
 
     }
 }

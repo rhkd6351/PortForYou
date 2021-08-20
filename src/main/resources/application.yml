@@ -20,8 +20,8 @@ spring:
       enabled: true
       max-file-size: 100MB
       max-request-size: 100MB
-#      location: /Users/lim/Desktop/pfy/temp
-      location: /home/ubuntu/Users/lim/Desktop/pfy/temp
+      location: /Users/lim/Desktop/pfy/temp
+#      location: /home/ubuntu/Users/lim/Desktop/pfy/temp
 
 jwt:
   header: Authorization
@@ -30,13 +30,13 @@ jwt:
 
 
 img:
-  path: /home/ubuntu/Users/lim/Desktop/pfy/static/img
-#  path: /Users/lim/Desktop/pfy/static/img
+#  path: /home/ubuntu/Users/lim/Desktop/pfy/static/img
+  path: /Users/lim/Desktop/pfy/static/img
 
 logging:
   config: classpath:log4j2.xml
 
 server:
   port: 8080
-  uri: "http://3.37.208.251:8080"
-#  uri: "http://localhost:8080"
+#  uri: "http://3.37.208.251:8080"
+  uri: "http://localhost:8080"
