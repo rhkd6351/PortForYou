@@ -1,13 +1,10 @@
-package com.limbae.pfy.dto.Channel;
+package com.limbae.pfy.dto.channel;
 
-import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.dto.study.StudyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Data
 @AllArgsConstructor

@@ -1,5 +1,6 @@
 package com.limbae.pfy.util;
 
+import com.limbae.pfy.domain.board.CalendarVO;
 import com.limbae.pfy.domain.board.CommentVO;
 import com.limbae.pfy.domain.board.PostVO;
 import com.limbae.pfy.domain.channel.MessageVO;
@@ -8,8 +9,9 @@ import com.limbae.pfy.domain.etc.*;
 import com.limbae.pfy.domain.study.*;
 import com.limbae.pfy.domain.user.PortfolioVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.Channel.MessageDTO;
-import com.limbae.pfy.dto.Channel.RoomDTO;
+import com.limbae.pfy.dto.board.CalendarDTO;
+import com.limbae.pfy.dto.channel.MessageDTO;
+import com.limbae.pfy.dto.channel.RoomDTO;
 import com.limbae.pfy.dto.board.BoardDTO;
 import com.limbae.pfy.domain.board.BoardVO;
 import com.limbae.pfy.dto.board.CommentDTO;
@@ -24,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -267,6 +268,20 @@ public class EntityUtil {
                 .upDate(vo.getUpDate())
                 .postId(vo.getPost().getIdx())
                 .user(this.convertUserVoToDto(vo.getUser()))
+                .build();
+    }
+
+    public CalendarDTO convertCalendarVoToDto(CalendarVO vo){
+        return CalendarDTO.builder()
+                .user(this.convertUserVoToDto(vo.getUser()))
+                .study(null)
+                .fromDate(vo.getFromDate())
+                .toDate(vo.getToDate())
+                .modDate(vo.getModDate())
+                .regDate(vo.getRegDate())
+                .title(vo.getTitle())
+                .content(vo.getContent())
+                .idx(vo.getIdx())
                 .build();
     }
 }

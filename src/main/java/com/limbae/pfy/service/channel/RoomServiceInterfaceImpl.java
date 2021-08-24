@@ -2,7 +2,7 @@ package com.limbae.pfy.service.channel;
 
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.study.StudyVO;
-import com.limbae.pfy.dto.Channel.RoomDTO;
+import com.limbae.pfy.dto.channel.RoomDTO;
 import com.limbae.pfy.repository.channel.RoomRepository;
 import com.limbae.pfy.service.study.StudyServiceInterface;
 import javassist.NotFoundException;

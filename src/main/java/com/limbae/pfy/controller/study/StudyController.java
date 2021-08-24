@@ -4,13 +4,12 @@ package com.limbae.pfy.controller.study;
 import com.limbae.pfy.domain.study.MemberVO;
 import com.limbae.pfy.domain.study.StudyVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.Channel.RoomDTO;
+import com.limbae.pfy.dto.channel.RoomDTO;
 import com.limbae.pfy.dto.etc.ResponseObjectDTO;
 import com.limbae.pfy.dto.study.MemberDTO;
 import com.limbae.pfy.dto.study.StudyDTO;
 import com.limbae.pfy.service.channel.RoomServiceInterface;
 import com.limbae.pfy.service.study.AnnouncementService;
-import com.limbae.pfy.service.study.MemberService;
 import com.limbae.pfy.service.study.StudyServiceInterfaceImpl;
 import com.limbae.pfy.service.user.UserServiceInterfaceImpl;
 import com.limbae.pfy.util.EntityUtil;
@@ -22,7 +21,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.security.auth.message.AuthException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

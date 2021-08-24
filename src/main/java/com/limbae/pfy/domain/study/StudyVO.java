@@ -1,6 +1,7 @@
 package com.limbae.pfy.domain.study;
 
 
+import com.limbae.pfy.domain.board.CalendarVO;
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.user.UserVO;
 import lombok.*;
@@ -48,6 +49,9 @@ public class StudyVO {
 
     @OneToOne(mappedBy = "study")
     RoomVO room;
+
+    @OneToMany(mappedBy = "study")
+    List<CalendarVO> calendars;
 
     public void addMember(MemberVO member){
         this.members.add(member);

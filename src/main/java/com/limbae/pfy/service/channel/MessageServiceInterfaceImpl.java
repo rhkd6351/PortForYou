@@ -3,7 +3,7 @@ package com.limbae.pfy.service.channel;
 import com.limbae.pfy.domain.channel.MessageVO;
 import com.limbae.pfy.domain.channel.RoomVO;
 import com.limbae.pfy.domain.user.UserVO;
-import com.limbae.pfy.dto.Channel.MessageDTO;
+import com.limbae.pfy.dto.channel.MessageDTO;
 import com.limbae.pfy.repository.channel.MessageRepository;
 import com.limbae.pfy.service.user.UserServiceInterface;
 import javassist.NotFoundException;

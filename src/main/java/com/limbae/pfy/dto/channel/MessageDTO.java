@@ -1,15 +1,12 @@
-package com.limbae.pfy.dto.Channel;
+package com.limbae.pfy.dto.channel;
 
 import com.limbae.pfy.domain.channel.MessageType;
-import com.limbae.pfy.domain.user.UserVO;
 import com.limbae.pfy.dto.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data

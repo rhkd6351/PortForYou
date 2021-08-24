@@ -1,7 +1,7 @@
 package com.limbae.pfy.service.channel;
 
 import com.limbae.pfy.domain.channel.RoomVO;
-import com.limbae.pfy.dto.Channel.RoomDTO;
+import com.limbae.pfy.dto.channel.RoomDTO;
 import javassist.NotFoundException;
 
 public interface RoomServiceInterface {
