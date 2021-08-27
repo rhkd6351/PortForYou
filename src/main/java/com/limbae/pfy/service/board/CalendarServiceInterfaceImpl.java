@@ -42,10 +42,6 @@ public class CalendarServiceInterfaceImpl implements CalendarServiceInterface{
         CalendarVO calendar = null;
         if(dto.getIdx() != null){
             calendar = this.getByIdx(dto.getIdx());
-
-            if(calendar.getUser() != user)
-                throw new AuthException("not owned calendar");
-
             calendar.setTitle(dto.getTitle());
             calendar.setContent(dto.getContent());
             calendar.setFromDate(dto.getFromDate());
@@ -72,11 +68,7 @@ public class CalendarServiceInterfaceImpl implements CalendarServiceInterface{
 
     @Override
     public List<CalendarVO> getByStudyIdx(Long studyIdx) throws NotFoundException, AuthException {
-        UserVO user = userService.getByAuth();
         StudyVO study = studyService.getByIdx(studyIdx);
-
-        studyService.memberCheck(user.getUid());
-
         return study.getCalendars();
     }
 
